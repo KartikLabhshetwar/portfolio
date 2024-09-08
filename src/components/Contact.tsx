@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,10 @@ const Contact: React.FC = () => {
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
 
   const form = useRef<HTMLFormElement>(null);
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -44,12 +49,12 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-gray-100">
+    <section id="contact" ref={ref} className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <motion.h2 
-          className="text-3xl font-bold text-center mb-8"
+          className="text-4xl font-bold text-center mb-8 text-primary"
           initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
         >
           Contact Me
@@ -59,11 +64,11 @@ const Contact: React.FC = () => {
           onSubmit={handleSubmit} 
           className="max-w-lg mx-auto"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <div className="mb-4">
-            <label htmlFor="from_name" className="block text-gray-700 font-bold mb-2">
+            <label htmlFor="from_name" className="block text-text-light font-bold mb-2">
               Name
             </label>
             <input
@@ -72,12 +77,12 @@ const Contact: React.FC = () => {
               name="from_name"
               value={formData.from_name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-text-light text-background border border-text rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="from_email" className="block text-gray-700 font-bold mb-2">
+            <label htmlFor="from_email" className="block text-text-light font-bold mb-2">
               Email
             </label>
             <input
@@ -86,12 +91,12 @@ const Contact: React.FC = () => {
               name="from_email"
               value={formData.from_email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-text-light text-background border border-text rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="message" className="block text-gray-700 font-bold mb-2">
+            <label htmlFor="message" className="block text-text-light font-bold mb-2">
               Message
             </label>
             <textarea
@@ -100,13 +105,13 @@ const Contact: React.FC = () => {
               value={formData.message}
               onChange={handleChange}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-text-light text-background border border-text rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               required
             ></textarea>
           </div>
           <motion.button
             type="submit"
-            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+            className="w-full bg-primary text-text-light font-bold py-2 px-4 rounded-md hover:bg-secondary transition duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             disabled={isSubmitting}
@@ -114,10 +119,10 @@ const Contact: React.FC = () => {
             {isSubmitting ? 'Sending...' : 'Send Message'}
           </motion.button>
           {submitStatus === 'success' && (
-            <p className="mt-4 text-green-600">Message sent successfully!</p>
+            <p className="mt-4 text-green-400">Message sent successfully!</p>
           )}
           {submitStatus === 'error' && (
-            <p className="mt-4 text-red-600">Failed to send message. Please try again.</p>
+            <p className="mt-4 text-red-400">Failed to send message. Please try again.</p>
           )}
         </motion.form>
       </div>

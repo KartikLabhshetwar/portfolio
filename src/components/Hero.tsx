@@ -1,111 +1,104 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import TerminalCommand from './TerminalCommand';
+import AnimatedBackground from './AnimatedBackground';
+
+const buttonVariants = {
+  hover: { scale: 1.05 },
+  tap: { scale: 0.95 }
+};
 
 const Hero: React.FC = () => {
-  const technologies = ['HTML', 'CSS', 'JS', 'React', 'Vue', 'Angular', 'Tailwind', 'SASS', 'TypeScript', 'Webpack'];
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        staggerChildren: 0.3,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 }
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.5,
+        staggerChildren: 0.08
+      }
+    }
+  };
+
+  const letterVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { type: 'spring', damping: 12, stiffness: 200 }
+    }
+  };
+
+  const title = "Hi, I'm Kartik 👋";
 
   return (
-    <section className="relative h-screen flex items-center justify-center bg-gray-900 text-white overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100%" height="100%" fill="#1a202c" />
-          {technologies.map((tech, index) => (
-            <motion.text
-              key={tech}
-              x={Math.random() * 100 + '%'}
-              y={Math.random() * 100 + '%'}
-              fill="rgba(255,255,255,0.1)"
-              fontSize="24"
-              fontFamily="monospace"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ 
-                opacity: [0, 1, 0],
-                scale: [0, 1, 0],
-                x: `${Math.random() * 100}%`,
-                y: `${Math.random() * 100}%`,
-              }}
-              transition={{
-                duration: Math.random() * 10 + 10,
-                repeat: Infinity,
-                delay: index * 0.5,
-              }}
-            >
-              {tech}
-            </motion.text>
+    <section ref={ref} className="relative min-h-screen flex items-center justify-center bg-background text-text-light overflow-hidden">
+      <AnimatedBackground />
+      <motion.div 
+        className="text-center z-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate={inView ? "visible" : "hidden"}
+      >
+        <motion.h1 className="text-5xl md:text-6xl font-bold mb-4" variants={titleVariants}>
+          {title.split('').map((char, index) => (
+            <motion.span key={index} variants={letterVariants}>
+              {char === ' ' ? '\u00A0' : char}
+            </motion.span>
           ))}
-        </svg>
-      </div>
-      
-      <div className="relative z-10 text-center">
-        <motion.h1 
-          className="text-5xl md:text-6xl font-bold mb-4"
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-          Hi, I'm <motion.span 
-            className="text-blue-400"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.3 }}
-          >Kartik</motion.span>
         </motion.h1>
-        <motion.p 
-          className="text-xl md:text-2xl mb-8"
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-        >
-          Full-Stack Developer | Building Scalable | High-Performance Solutions
+        <motion.p variants={itemVariants} className="text-xl md:text-2xl mb-8 text-text">
+          Building Scalable Full-Stack Applications
         </motion.p>
-        <motion.div 
-          className="flex justify-center space-x-4"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1.2 }}
-        >
+        {/* <motion.p variants={itemVariants} className="text-lg mb-8 text-text max-w-2xl mx-auto">
+          Crafting robust web applications with modern technologies.
+          Proficient in JavaScript, TypeScript, and Java.
+        </motion.p> */}
+        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
           <motion.a
             href="#projects"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full transition duration-300"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-transparent border-2 border-text-light text-text-light rounded-full font-semibold text-lg transition-colors duration-300 hover:bg-text-light hover:text-background"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
           >
             View My Work
           </motion.a>
           <motion.a
             href="#contact"
-            className="bg-transparent hover:bg-white hover:text-gray-900 text-white font-bold py-2 px-6 rounded-full border-2 border-white transition duration-300"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-transparent border-2 border-text-light text-text-light rounded-full font-semibold text-lg transition-colors duration-300 hover:bg-text-light hover:text-background"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
           >
             Contact Me
           </motion.a>
         </motion.div>
-      </div>
-      
-      <motion.div 
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-      >
-        <motion.a 
-          href="#about" 
-          className="animate-bounce"
-          whileHover={{ scale: 1.2 }}
-        >
-          <svg
-            className="w-6 h-6 text-white"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-          </svg>
-        </motion.a>
+        <motion.div variants={itemVariants} className="mt-12">
+          <TerminalCommand />
+        </motion.div>
       </motion.div>
     </section>
   );

@@ -1,58 +1,80 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
 interface ProjectCardProps {
-  title: string;
-  description: string;
-  technologies: string[];
-  imageUrl: string;
-  liveUrl: string;
-  githubUrl: string;
+  project: {
+    title: string;
+    description: string;
+    technologies: string[];
+    imageUrl: string;
+    liveUrl: string;
+    githubUrl: string;
+  };
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({
-  title,
-  description,
-  technologies,
-  imageUrl,
-  liveUrl,
-  githubUrl
-}) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
-      <img src={imageUrl} alt={title} className="w-full h-48 object-cover" />
+    <motion.div 
+      className="bg-text-light rounded-lg shadow-lg overflow-hidden"
+      whileHover={{ 
+        scale: 1.05,
+        boxShadow: "0px 10px 30px rgba(255,255,255,0.1)",
+      }}
+      transition={{ duration: 0.3 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+    >
+      <div className="relative">
+        <img src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover" />
+        <motion.div 
+          className="absolute inset-0 bg-primary bg-opacity-80 flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="flex space-x-4">
+            <motion.a 
+              href={project.liveUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-secondary text-text-light p-3 rounded-full"
+              whileHover={{ scale: 1.1, backgroundColor: "#3B82F6" }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaExternalLinkAlt />
+            </motion.a>
+            <motion.a 
+              href={project.githubUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-text text-background p-3 rounded-full"
+              whileHover={{ scale: 1.1, backgroundColor: "#D1D5DB" }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaGithub />
+            </motion.a>
+          </div>
+        </motion.div>
+      </div>
       <div className="p-6">
-        <h3 className="text-xl font-bold mb-2">{title}</h3>
-        <p className="text-gray-600 mb-4">{description}</p>
-        <div className="mb-4">
-          {technologies.map((tech, index) => (
-            <span 
+        <h3 className="text-xl font-bold mb-2 text-background">{project.title}</h3>
+        <p className="text-background mb-4">{project.description}</p>
+        <div className="mb-4 flex flex-wrap">
+          {project.technologies.map((tech, index) => (
+            <motion.span 
               key={index} 
-              className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+              className="inline-block bg-primary text-text-light rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
+              whileHover={{ scale: 1.1, backgroundColor: "#3B82F6" }}
             >
               {tech}
-            </span>
+            </motion.span>
           ))}
         </div>
-        <div className="flex justify-between">
-          <a 
-            href={liveUrl} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-blue-500 hover:text-blue-600 transition duration-300"
-          >
-            Live Demo
-          </a>
-          <a 
-            href={githubUrl} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-gray-500 hover:text-gray-600 transition duration-300"
-          >
-            GitHub Repo
-          </a>
-        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

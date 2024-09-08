@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import React from 'react';
+import { motion} from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import ProjectCard from './ProjectCard';
+import AnimatedBackground from './AnimatedBackground';
+import learnx from '../assets/learnx.png';
+import paytmClone from '../assets/paytm.png';
+import textToSpeechApp from '../assets/texttospeech.png';
+import emiCalculator from '../assets/emi.png';
+
 
 interface Project {
   id: number;
@@ -15,102 +22,56 @@ interface Project {
 const projects: Project[] = [
   {
     id: 1,
-    title: "E-commerce Platform",
-    description: "A full-stack e-commerce solution with user authentication, product management, and payment integration.",
-    technologies: ["React", "Node.js", "Express", "MongoDB", "Stripe"],
-    imageUrl: "/images/ecommerce-project.jpg",
-    liveUrl: "https://example-ecommerce.com",
-    githubUrl: "https://github.com/yourusername/ecommerce-project"
+    title: "LearnX",
+    description: "A comprehensive course selling platform with secure payment integration, JWT-based authentication, and optimized performance.",
+    technologies: ["React.js", "Node.js", "Express.js", "MongoDB", "Razorpay API", "JWT", "Tailwind"],
+    imageUrl: learnx,
+    liveUrl: "https://learnx-frontend.onrender.com/",
+    githubUrl: "https://github.com/KartikLabhshetwar/LearnX"
   },
   {
     id: 2,
-    title: "Task Management App",
-    description: "A responsive web application for managing tasks and projects with real-time updates.",
-    technologies: ["React", "Firebase", "Tailwind CSS"],
-    imageUrl: "/images/task-management-app.jpg",
-    liveUrl: "https://example-task-app.com",
-    githubUrl: "https://github.com/yourusername/task-management-app"
+    title: "Paytm Clone",
+    description: "A comprehensive clone of Paytm with user authentication, money transfers, and profile management.",
+    technologies: ["React", "Node.js", "Express", "MongoDB", "RESTful APIs", "Tailwind CSS"],
+    imageUrl: paytmClone,
+    liveUrl: "https://paytm-clone-frontend.onrender.com/",
+    githubUrl: "https://github.com/KartikLabhshetwar/Paytm-Clone"
   },
-  // Add more projects as needed
+  {
+    id: 3,
+    title: "Text-To-Speech Application",
+    description: "A web application that converts text to speech using Web Speech API, supporting multiple voices and pause/resume functionality.",
+    technologies: ["JavaScript", "HTML", "CSS"],
+    imageUrl: textToSpeechApp,
+    liveUrl: "https://text-to-speech-app-henna.vercel.app/",
+    githubUrl: "https://github.com/KartikLabhshetwar/Text-To-Speech-App"
+  },
+  {
+    id: 4,
+    title: "EMI Calculator",
+    description: "A React-based EMI calculator with real-time calculations, loan analysis, and print functionality.",
+    technologies: ["React", "Bootstrap", "react-to-print"],
+    imageUrl: emiCalculator,
+    liveUrl: "https://emi-calculator-mocha.vercel.app/",
+    githubUrl: "https://github.com/KartikLabhshetwar/EMI-Calculator"
+  }
 ];
 
-const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div 
-      className="bg-white rounded-lg shadow-md overflow-hidden"
-      whileHover={{ 
-        scale: 1.05,
-        transition: { duration: 0.2 }
-      }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
-      <div className="relative">
-        <img src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover" />
-        <AnimatePresence>
-          {isHovered && (
-            <motion.div 
-              className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="flex space-x-4">
-                <motion.a 
-                  href={project.liveUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="bg-blue-500 text-white p-2 rounded-full"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <FaExternalLinkAlt />
-                </motion.a>
-                <motion.a 
-                  href={project.githubUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="bg-gray-800 text-white p-2 rounded-full"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <FaGithub />
-                </motion.a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-      <div className="p-6">
-        <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-        <p className="text-gray-600 mb-4">{project.description}</p>
-        <div className="mb-4 flex flex-wrap">
-          {project.technologies.map((tech, index) => (
-            <motion.span 
-              key={index} 
-              className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              whileHover={{ scale: 1.1, backgroundColor: "#3B82F6", color: "#FFFFFF" }}
-            >
-              {tech}
-            </motion.span>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
 const Projects: React.FC = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
   return (
-    <section id="projects" className="py-20 bg-gray-50">
+    <section id="projects" ref={ref} className="py-20 bg-background">
+        <AnimatedBackground />
       <div className="container mx-auto px-4">
         <motion.h2 
-          className="text-4xl font-bold text-center mb-12"
+          className="text-4xl font-bold text-center mb-12 text-primary"
           initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
         >
           My Projects
@@ -118,14 +79,14 @@ const Projects: React.FC = () => {
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           {projects.map((project, index) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <ProjectCard project={project} />
