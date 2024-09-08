@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion} from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FaJava, FaPython, FaNodeJs, FaGitAlt, FaGithub } from 'react-icons/fa';
@@ -33,9 +33,7 @@ const skills: Skill[] = [
   { name: 'Git', icon: FaGitAlt, color: '#F05032' },
   { name: 'GitHub', icon: FaGithub, color: '#181717' },
 ];
-
 const SkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -48,8 +46,6 @@ const SkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
     >
       <motion.div 
         className="flex flex-col items-center justify-center p-6 bg-text-light rounded-xl shadow-lg transition-all duration-300 ease-in-out"
