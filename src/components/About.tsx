@@ -86,7 +86,7 @@ const About: React.FC = () => {
             </motion.p>
             <motion.div className="flex flex-wrap gap-4" variants={itemVariants}>
               <a 
-                href="https://drive.google.com/file/d/1wNL7rrATnQDiwSMYbVJYbV5mReriGUKx/view?usp=sharing" 
+                href="https://drive.google.com/file/d/14C2Yoa1yDk8tCuoKHt9-jtLJlAXWu7Dg/view?usp=sharing" 
                 className="flex items-center bg-primary text-text-light px-4 py-2 rounded-full hover:bg-secondary transition duration-300"
                 target="_blank"
                 rel="noopener noreferrer"
