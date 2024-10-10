@@ -19,7 +19,7 @@ const Header: React.FC = () => {
     };
   }, []);
 
-  const resumeLink = "https://drive.google.com/file/d/1wNL7rrATnQDiwSMYbVJYbV5mReriGUKx/view?usp=sharing";
+  const resumeLink = "https://drive.google.com/file/d/14C2Yoa1yDk8tCuoKHt9-jtLJlAXWu7Dg/view?usp=sharing";
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-background shadow-md' : 'bg-transparent'}`}>
