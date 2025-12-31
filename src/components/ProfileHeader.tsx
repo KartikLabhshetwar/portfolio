@@ -20,14 +20,14 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({
-  name = "Kartik Labhshetwar",
-  age = "21",
-  title = "engineer • developer • builder",
+  name = "Shivam Singh",
+  age = "22",
+  title = "AI Engineer • Multi-Agent Systems • Production ML",
   profileImage = "/pfp.jpg",
   socialLinks = {
-    twitter: "https://x.com/code_kartik",
-    github: "https://github.com/KartikLabhshetwar",
-    linkedin: "https://www.linkedin.com/in/kartikcode/",
+    twitter: "https://x.com/shivam909058",
+    github: "https://github.com/Shivam909058",
+    linkedin: "https://linkedin.com/in/shivam-singh-94835224a",
     resume: "https://drive.google.com/file/d/1U8450r8Qsf9Xo1IcQhMdSrdzFY2__JXP/view?usp=sharing",
   }
 }: ProfileHeaderProps) {

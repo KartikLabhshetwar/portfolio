@@ -22,19 +22,19 @@ const instrumentSerif = Instrument_Serif({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://kartik017.vercel.app'),
-  title: 'Kartik Labhshetwar',
-  description: 'I build products that solve real problems. Available for new opportunities.',
+  metadataBase: new URL('https://ingineerpro.tech'),
+  title: 'Shivam Singh - AI Engineer',
+  description: 'AI Engineer specializing in multi-agent systems, financial AI, and production ML. Building intelligent systems with 95%+ accuracy and 90%+ uptime.',
   openGraph: {
-    url: 'https://kartik017.vercel.app/',
-    siteName: 'Kartik Labhshetwar Portfolio',
+    url: 'https://ingineerpro.tech/',
+    siteName: 'Shivam Singh Portfolio',
     locale: 'en_US',
     type: 'website',
     images: [{
       url: '/open-graph.png',
       width: 1200,
       height: 630,
-      alt: 'Kartik Labhshetwar - Portfolio'
+      alt: 'Shivam Singh - AI Engineer Portfolio'
     }],
   },
 };

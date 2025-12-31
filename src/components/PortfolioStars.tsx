@@ -10,7 +10,7 @@ export default function PortfolioStars() {
   useEffect(() => {
     const fetchStars = async () => {
       try {
-        const response = await fetch('/api/github-stars?owner=KartikLabhshetwar&repo=portfolio')
+        const response = await fetch('/api/github-stars?owner=Shivam909058&repo=portfoliotest')
         const data = await response.json()
         
         if (data.success) {
@@ -32,7 +32,7 @@ export default function PortfolioStars() {
 
   return (
     <GitHubStars 
-      repo="KartikLabhshetwar/portfolio" 
+      repo="Shivam909058/portfoliotest" 
       stargazersCount={starCount} 
     />
   )

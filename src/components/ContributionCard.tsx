@@ -29,7 +29,7 @@ export default function OpenSourceContributionsCard() {
       try {
         setLoading(true)
         
-        const response = await fetch('/api/github-contributions?username=KartikLabhshetwar&limit=50')
+        const response = await fetch('/api/github-contributions?username=Shivam909058&limit=50')
         const data = await response.json()
         
         if (data.success && data.contributions.length > 0) {

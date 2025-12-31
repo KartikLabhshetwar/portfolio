@@ -4,7 +4,7 @@ import { fetchUserPullRequests } from '@/lib/github'
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const username = searchParams.get('username') || 'KartikLabhshetwar'
+    const username = searchParams.get('username') || 'Shivam909058'
     const limit = parseInt(searchParams.get('limit') || '50')
     
     const contributions = await fetchUserPullRequests(username, limit)

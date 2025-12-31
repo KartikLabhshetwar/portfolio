@@ -1,16 +1,16 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Blog | Kartik Labhshetwar',
-  description: 'Technical writings and thoughts on web development, AI, and more.',
+  title: 'Blog | Shivam Singh',
+  description: 'Technical writings and thoughts on AI, multi-agent systems, and machine learning.',
   openGraph: {
-    title: 'Blog | Kartik Labhshetwar',
-    description: 'Technical writings and thoughts on web development, AI, and more.',
+    title: 'Blog | Shivam Singh',
+    description: 'Technical writings and thoughts on AI, multi-agent systems, and machine learning.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Blog | Kartik Labhshetwar',
-    description: 'Technical writings and thoughts on web development, AI, and more.',
+    title: 'Blog | Shivam Singh',
+    description: 'Technical writings and thoughts on AI, multi-agent systems, and machine learning.',
   }
 } 

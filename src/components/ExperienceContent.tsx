@@ -21,19 +21,43 @@ export default function ExperienceContent() {
 
   const experiences: ExperienceItem[] = [
     {
-      company: "Turbo ML",
-      position: "Software Engineering Intern (AI)",
-      duration: "April 2025 – July 2025",
-      description: "Developed and deployed cutting-edge solutions, including multi-select preferences, browser-based video recording, and API integrations like WhatsApp/email reminders. Optimized workflows with autosave features and real-time scraping, leveraging Next.js, Supabase, and Cloudflare workers.",
+      company: "Valura.AI",
+      position: "AI Engineer",
+      duration: "Aug 2025 – Present",
+      description: "Architected multi-agent financial intelligence system processing 100+ data sources (news, social sentiment, market signals, web research) with 95%+ accuracy, delivering comprehensive reports in under 60 seconds.",
       achievements: [
-        "Implemented a reminder system using Redis Sorted Sets and a custom daemon to handle time-based task execution under 24-hour constraints.",
-        "Integrated multiple APIs including Swiggy for food delivery and dine-out services, and Blinkit for grocery delivery, while retaining Google for general recommendations and providing user choice flexibility.",
-        "Designed and implemented support for WhatsApp Business API commands (/help, /reset, /new), including runtime-configurable bot initialization based on environment variables.",
-        "Added Azure Blob Storage integration for file handling and message reaction management in WhatsApp bot.",
-        "Ensured WhatsApp message compliance by chunking outputs exceeding 4096 characters.",
+        "Designed parallel AI agents using tool-calling for independent analysis; synthesis agent aggregates outputs to generate actionable financial insights and dynamic visualizations",
+        "Scaled async pipelines handling concurrent queries at sub-100ms latency per agent, enabling real-time intelligence for financial professionals",
+        "Maintained 90%+ system uptime while processing complex multi-source data analysis",
       ],
-      href: "https://turboml.com/",
-      logoUrl: "/turboml.jpg",
+      href: "https://valura.ai/",
+      logoUrl: "/valura.jpg",
+    },
+    {
+      company: "Shakty.AI",
+      position: "AI Engineer (Intern)",
+      duration: "Mar 2025 – Jul 2025",
+      description: "Designed and implemented a production-grade multimodal RAG system capable of ingesting any data source including PDFs, technical documents, Word/Excel files, websites, videos, and external links.",
+      achievements: [
+        "Built automated ingestion, parsing, chunking, and embedding pipelines enabling semantic search and question answering over heterogeneous content",
+        "Optimized retrieval achieving 65% latency reduction under real workloads",
+        "Implemented production-grade monitoring and error handling for reliable operation at scale",
+      ],
+      href: "https://shakty.ai/",
+      logoUrl: "/shakty.jpg",
+    },
+    {
+      company: "Xpendable Labs",
+      position: "AI Research Engineer (Intern)",
+      duration: "Jan 2025 – Mar 2025",
+      description: "Fine-tuned a small language model for high-quality SEO-optimized blog generation, achieving 94% structural consistency and strong keyword adherence across long-form outputs.",
+      achievements: [
+        "Designed evaluation and inference pipelines improving factual grounding and coherence",
+        "Reduced content revisions by 40% through improved model quality",
+        "Enabled reliable generation at low inference cost for production deployment",
+      ],
+      href: "https://xpendablelabs.com/",
+      logoUrl: "/xpendable.jpg",
     },
   ]
 

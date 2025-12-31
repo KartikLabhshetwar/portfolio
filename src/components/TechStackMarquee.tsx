@@ -7,33 +7,37 @@ import Image from "next/image";
 // Tech Stack Data
 const techStack = [
   // Languages
+  { name: "Python", category: "language", icon: "/tech-icons/python.svg", color: "bg-gray-500" },
+  { name: "C++", category: "language", icon: "/tech-icons/cpp.svg", color: "bg-gray-500" },
+  { name: "Rust", category: "language", icon: "/tech-icons/rust.svg", color: "bg-gray-500" },
   { name: "JavaScript", category: "language", icon: "/tech-icons/javascript.svg", color: "bg-gray-500" },
   { name: "TypeScript", category: "language", icon: "/tech-icons/typescript.svg", color: "bg-gray-500" },
-  { name: "Java", category: "language", icon: "/tech-icons/java.svg", color: "bg-gray-500" },
-  { name: "Python", category: "language", icon: "/tech-icons/python.svg", color: "bg-gray-500" },
   { name: "SQL", category: "language", icon: "/tech-icons/sql.svg", color: "bg-gray-500" },
+  { name: "CUDA", category: "language", icon: "/tech-icons/cuda.svg", color: "bg-gray-500" },
   
-  // Frameworks & Libraries
-  { name: "React.js", category: "framework", icon: "/tech-icons/react.svg", color: "bg-gray-500" },
-  { name: "Next.js", category: "framework", icon: "/tech-icons/nextjs.svg", color: "bg-gray-500" },
-  { name: "Express.js", category: "framework", icon: "/tech-icons/express.svg", color: "bg-gray-500" },
-  { name: "Node.js", category: "framework", icon: "/tech-icons/nodejs.svg", color: "bg-gray-500" },
+  // AI/ML Frameworks
+  { name: "PyTorch", category: "framework", icon: "/tech-icons/pytorch.svg", color: "bg-gray-500" },
+  { name: "TensorFlow", category: "framework", icon: "/tech-icons/tensorflow.svg", color: "bg-gray-500" },
+  { name: "LangChain", category: "framework", icon: "/tech-icons/langchain.svg", color: "bg-gray-500" },
+  { name: "Hugging Face", category: "framework", icon: "/tech-icons/huggingface.svg", color: "bg-gray-500" },
+  
+  // Web Frameworks
   { name: "FastAPI", category: "framework", icon: "/tech-icons/fastapi.svg", color: "bg-gray-500" },
-  { name: "Tailwind CSS", category: "framework", icon: "/tech-icons/tailwind.svg", color: "bg-gray-500" },
+  { name: "Next.js", category: "framework", icon: "/tech-icons/nextjs.svg", color: "bg-gray-500" },
+  { name: "React", category: "framework", icon: "/tech-icons/react.svg", color: "bg-gray-500" },
+  
+  // Cloud & DevOps
+  { name: "AWS", category: "cloud", icon: "/tech-icons/AWS.svg", color: "bg-gray-500" },
+  { name: "Docker", category: "tool", icon: "/tech-icons/docker.svg", color: "bg-gray-500" },
+  { name: "Kubernetes", category: "tool", icon: "/tech-icons/kubernetes.svg", color: "bg-gray-500" },
+  { name: "Terraform", category: "tool", icon: "/tech-icons/terraform.svg", color: "bg-gray-500" },
   
   // Databases & Tools
-  { name: "MongoDB", category: "database", icon: "/tech-icons/mongodb.svg", color: "bg-gray-500" },
   { name: "PostgreSQL", category: "database", icon: "/tech-icons/postgresql.svg", color: "bg-gray-500" },
   { name: "Redis", category: "database", icon: "/tech-icons/redis.svg", color: "bg-gray-500" },
-  
-  // Developer Tools
+  { name: "Pinecone", category: "database", icon: "/tech-icons/pinecone.svg", color: "bg-gray-500" },
+  { name: "Apache Spark", category: "tool", icon: "/tech-icons/spark.svg", color: "bg-gray-500" },
   { name: "Git", category: "tool", icon: "/tech-icons/Git.svg", color: "bg-gray-500" },
-  { name: "Docker", category: "tool", icon: "/tech-icons/docker.svg", color: "bg-gray-500" },
-  { name: "Azure", category: "tool", icon: "/tech-icons/Azure.svg", color: "bg-gray-500" },
-  { name: "AWS", category: "tool", icon: "/tech-icons/AWS.svg", color: "bg-gray-500" },
-  { name: "Google Cloud", category: "tool", icon: "/tech-icons/gcp.svg", color: "bg-gray-500" },
-  { name: "Jira", category: "tool", icon: "/tech-icons/Jira.svg", color: "bg-gray-500" },
-  { name: "Nix OS", category: "tool", icon: "/tech-icons/NixOS.svg", color: "bg-gray-500" },
 ];
 
 interface TechIconProps {
@@ -89,10 +93,10 @@ export default function TechStackMarquee({ className = "" }: TechStackMarqueePro
       {/* Title - matching other component styles */}
       <div className="mb-4">
         <h2 className="text-base font-[family-name:var(--font-instrument-serif)] sm:text-xl mb-3 opacity-20 mt-4 sm:mt-6 -tracking-[0.01em]">
-          Stack I use
+          Tech Stack
         </h2>
         <p className="text-sm sm:text-base dark:text-white/70 text-black/70 leading-relaxed">
-          Technologies I work with to build products that solve real problems
+          AI/ML frameworks, cloud infrastructure, and production tools for building intelligent systems
         </p>
       </div>
 
