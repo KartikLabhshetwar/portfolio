@@ -21,11 +21,11 @@ export default function Reachout({
   title = "Let's connect",
   subtitle = "Find me on these platforms",
   socialLinks = {
-    twitter: "https://x.com/code_kartik",
-    github: "https://github.com/KartikLabhshetwar",
-    linkedin: "https://www.linkedin.com/in/kartikcode/",
+    twitter: "https://x.com/shivam909058",
+    github: "https://github.com/Shivam909058",
+    linkedin: "https://linkedin.com/in/shivam-singh-94835224a",
     resume: "https://drive.google.com/file/d/1U8450r8Qsf9Xo1IcQhMdSrdzFY2__JXP/view?usp=sharing",
-    mail: "mailto:kartik.labhshetwar@gmail.com"
+    mail: "mailto:shivamatvit@gmail.com"
   }
 }: ReachoutProps) {
   return (
@@ -129,7 +129,7 @@ export default function Reachout({
           )}
 
           {socialLinks.mail && (
-            <Tooltip content="kartik.labhshetwar@gmail.com">
+            <Tooltip content="shivamatvit@gmail.com">
               <a 
                 className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/5 dark:bg-white/10 has-hover:hover:bg-black/10 dark:has-hover:hover:bg-white/20 transition-[colors] duration-200 rounded-full touch-manipulation active:opacity-75" 
                 href={socialLinks.mail} 
@@ -182,7 +182,7 @@ export default function Reachout({
         <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-800">
           <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 text-center sm:text-left">
             <div className="text-md dark:text-white/40 text-black/40">
-              © {new Date().getFullYear()} Kartik Labhshetwar.
+              © {new Date().getFullYear()} Shivam Singh.
             </div>
             <VisitorCount className="text-md dark:text-white/40 text-black/40" />
           </div>

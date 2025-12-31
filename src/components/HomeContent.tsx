@@ -43,14 +43,14 @@ export default function NewHeroSection() {
           {/* Profile Header */}
           <Reveal delay={0.2}>
             <ProfileHeader 
-              name="Kartik Labhshetwar"
-              age="21"
-              title="engineer • developer • builder"
+              name="Shivam Singh"
+              age="22"
+              title="AI Engineer • Multi-Agent Systems • Production ML"
               profileImage="/pfp.jpg"
               socialLinks={{
-                twitter: "https://x.com/code_kartik",
-                github: "https://github.com/KartikLabhshetwar",
-                linkedin: "https://www.linkedin.com/in/kartikcode/",
+                twitter: "https://x.com/shivam909058",
+                github: "https://github.com/Shivam909058",
+                linkedin: "https://linkedin.com/in/shivam-singh-94835224a",
                 resume: "https://drive.google.com/file/d/1U8450r8Qsf9Xo1IcQhMdSrdzFY2__JXP/view?usp=sharing",
               }}
             />
@@ -62,7 +62,7 @@ export default function NewHeroSection() {
               {/* Current Role Section */}
               <Reveal delay={0.1}>
                 <ContentSection
-                  subtitle="AI Engineer | Full-stack Developer"
+                  subtitle="AI Engineer | Multi-Agent Systems | Production ML"
                   title=''
                   className="mt-6"
                 >
@@ -78,7 +78,7 @@ export default function NewHeroSection() {
               <Reveal delay={0.1}>
                 <ContentSection className="pb-6 sm:pb-8 pt-4 sm:pt-6 px-2 sm:px-0">
                   <ContentParagraph className="mb-2 text-base sm:text-lg">
-                    <span className="font-medium dark:text-white text-black">I build from zero.</span> Whether it&apos;s frontend, backend, full-stack applications, or AI-powered experiences, I work across the entire development lifecycle. From UI/UX to deployment to user feedback, I care less about technology debates and more about delivering results that people love using.
+                    <span className="font-medium dark:text-white text-black">AI Engineer specializing in multi-agent systems and production ML.</span> I architect intelligent systems that process complex data sources, optimize RAG pipelines, and scale to handle thousands of concurrent users. From parallel agent architectures to financial intelligence platforms, I build AI solutions that deliver real-world impact with 95%+ accuracy and 90%+ uptime.
                   </ContentParagraph>
                 </ContentSection>
               </Reveal>
@@ -165,7 +165,7 @@ export default function NewHeroSection() {
                   <div className="px-4 mb-4 sm:mb-6 mt-4 sm:mt-6 flex items-center justify-between">
                     <h2 className="text-base sm:text-xl opacity-20 font-[family-name:var(--font-instrument-serif)]">Sponsors</h2>
                     <SponsorButton 
-                      href="https://github.com/sponsors/KartikLabhshetwar"
+                      href="https://github.com/sponsors/Shivam909058"
                       tooltipText="Support my open source work"
                     />
                   </div>
@@ -192,11 +192,11 @@ export default function NewHeroSection() {
               <Reveal delay={0.1}>
                 <div className="sm:px-12 px-0 mt-4">
                   <h2 className="text-base font-[family-name:var(--font-instrument-serif)] sm:text-xl opacity-20 leading-relaxed -tracking-[0.01em] mb-4 px-4">
-                    GitHub Contributions <span className="opacity-20">●</span> @KartikLabhshetwar
+                    GitHub Contributions <span className="opacity-20">●</span> @Shivam909058
                   </h2>
                   <div className="mb-4 sm:mb-6">
                     <ContributionsDisplay
-                      username="KartikLabhshetwar"
+                      username="Shivam909058"
                       variant="compact"
                       className="w-full"
                     />
