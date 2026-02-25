@@ -85,14 +85,14 @@ export default function OpenSourceContributionsCard() {
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                   {contribution.state === 'merged' && (
-                    <GitMerge className="w-4 h-4 text-purple-500 dark:text-purple-400 transition-opacity duration-300 group-has-hover:opacity-40 group-has-hover:group-hover/item:opacity-100" />
+                    <GitMerge className="w-4 h-4 text-purple-500 dark:text-purple-400 shrink-0 transition-opacity duration-300 group-has-hover:opacity-40 group-has-hover:group-hover/item:opacity-100" />
                   )}
-                  <h4 className="text-[15px] leading-7 text-black/80 group-has-hover:text-black/40 group-has-hover:group-hover/item:text-black dark:text-white/80 dark:group-has-hover:text-white/40 dark:group-has-hover:group-hover/item:text-white font-medium transition-colors duration-300">
+                  <h4 className="text-sm sm:text-[15px] leading-6 sm:leading-7 text-black/80 group-has-hover:text-black/40 group-has-hover:group-hover/item:text-black dark:text-white/80 dark:group-has-hover:text-white/40 dark:group-has-hover:group-hover/item:text-white font-medium transition-colors duration-300">
                     {contribution.title}
                   </h4>
-                  <span className="text-xs text-neutral-500 dark:text-neutral-400 group-has-hover:text-neutral-400 dark:group-has-hover:text-neutral-500 group-has-hover:group-hover/item:text-neutral-500 dark:group-has-hover:group-hover/item:text-neutral-400 transition-colors duration-300">{contribution.date}</span>
+                  <span className="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 shrink-0 group-has-hover:text-neutral-400 dark:group-has-hover:text-neutral-500 group-has-hover:group-hover/item:text-neutral-500 dark:group-has-hover:group-hover/item:text-neutral-400 transition-colors duration-300">{contribution.date}</span>
                 </div>
                 
                 <p className="text-xs text-neutral-600 dark:text-neutral-400 group-has-hover:text-neutral-400 dark:group-has-hover:text-neutral-500 group-has-hover:group-hover/item:text-neutral-600 dark:group-has-hover:group-hover/item:text-neutral-400 leading-relaxed transition-colors duration-300">

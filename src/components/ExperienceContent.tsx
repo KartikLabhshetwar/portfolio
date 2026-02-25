@@ -83,15 +83,15 @@ export default function ExperienceContent() {
                       exp.company
                     )}
                   </h3>
-                  <p className="text-[10px] sm:text-sm opacity-70">
+                  <p className="text-xs sm:text-sm opacity-70">
                     {exp.position}
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="pl-13 sm:pl-0 sm:text-right shrink-0">
-                  <p className="text-[10px] sm:text-sm opacity-50">
+              <div className="flex items-center gap-3 sm:gap-4 pl-[3.25rem] sm:pl-0">
+                <div className="sm:text-right shrink-0">
+                  <p className="text-xs sm:text-sm opacity-50">
                     {exp.duration}
                   </p>
                 </div>

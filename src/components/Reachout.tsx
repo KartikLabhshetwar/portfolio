@@ -31,7 +31,7 @@ export default function Reachout({
 }: ReachoutProps) {
   return (
     <div className="sm:px-12 px-4 pb-24 sm:pb-28">
-      <div className="text-left w-full">
+      <div className="text-center sm:text-left w-full">
         <div className="mb-4 sm:mb-6">
           <h2 className="font-[family-name:var(--font-instrument-serif)] text-lg sm:text-xl mb-2 opacity-20 mt-4 sm:mt-6">
             {title}
@@ -93,8 +93,8 @@ export default function Reachout({
                   userSelect: "none",
                 }}
               >
-                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2">
-                  <FaGithub className="text-[28px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
+                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3 sm:py-2">
+                  <FaGithub className="text-[20px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
                   <span className="hidden sm:inline text-sm font-medium text-neutral-800 dark:text-white/80">
                     GitHub
                   </span>
@@ -128,8 +128,8 @@ export default function Reachout({
                   userSelect: "none",
                 }}
               >
-                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2">
-                  <FaXTwitter className="text-[28px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
+                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3 sm:py-2">
+                  <FaXTwitter className="text-[20px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
                   <span className="hidden sm:inline text-sm font-medium text-neutral-800 dark:text-white/80">
                     Twitter
                   </span>
@@ -163,8 +163,8 @@ export default function Reachout({
                   userSelect: "none",
                 }}
               >
-                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2">
-                  <FaLinkedin className="text-[28px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
+                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3 sm:py-2">
+                  <FaLinkedin className="text-[20px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
                   <span className="hidden sm:inline text-sm font-medium text-neutral-800 dark:text-white/80">
                     LinkedIn
                   </span>
@@ -187,8 +187,8 @@ export default function Reachout({
                   userSelect: "none",
                 }}
               >
-                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2">
-                  <IoMdMail className="text-[28px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
+                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3 sm:py-2">
+                  <IoMdMail className="text-[20px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
                   <span className="hidden sm:inline text-sm font-medium text-neutral-800 dark:text-white/80">
                     Mail
                   </span>
@@ -211,8 +211,8 @@ export default function Reachout({
                   userSelect: "none",
                 }}
               >
-                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2">
-                  <FaPaperclip className="text-[28px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
+                <NeumorphButton className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3 sm:py-2">
+                  <FaPaperclip className="text-[20px] sm:text-[18px] text-neutral-800 dark:text-white/80 shrink-0" />
                   <span className="hidden sm:inline text-sm font-medium text-neutral-800 dark:text-white/80">
                     Resume
                   </span>
@@ -224,11 +224,11 @@ export default function Reachout({
         
         {/* Footer Section */}
         <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-800">
-          <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 text-center sm:text-left">
-            <div className="text-md dark:text-white/40 text-black/40">
+          <div className="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 text-center sm:text-left">
+            <div className="text-sm sm:text-md dark:text-white/40 text-black/40">
               © {new Date().getFullYear()} Kartik Labhshetwar.
             </div>
-            <VisitorCount className="text-md dark:text-white/40 text-black/40" />
+            <VisitorCount className="text-sm sm:text-md dark:text-white/40 text-black/40" />
           </div>
         </div>
       </div>

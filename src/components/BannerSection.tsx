@@ -18,7 +18,7 @@ export default function BannerSection({
           alt="Banner" 
           width={1240} 
           height={900} 
-          className="rounded-none w-full h-[200px] sm:h-[270px] object-cover" 
+          className="rounded-none w-full h-[180px] sm:h-[270px] object-cover" 
           src={bannerImage}
           style={{ color: 'transparent', minHeight: '100px' }}
           priority

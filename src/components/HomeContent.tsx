@@ -237,7 +237,7 @@ export default function NewHeroSection() {
 
               {/* call to action*/}
               <Reveal delay={0.1}>
-                <div className="px-4 sm:px-0">
+                <div className="px-4 sm:px-12">
                   <CallToAction/>
                 </div>
               </Reveal>
