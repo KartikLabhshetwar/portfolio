@@ -2,6 +2,12 @@ import { BlogPost } from '@/types/blog'
 
 export const blogs: BlogPost[] = [
   {
+    id: 'tts-system',
+    title: 'Building a Text-to-Speech System for 25K Users (Without Melting a Server)',
+    readTime: '11 min read',
+    externalUrl: 'https://medium.com/@code_kartik/building-a-text-to-speech-system-for-25k-users-without-melting-a-server-78f9e21518cb'
+  },
+  {
     id: 'problem-solving',
     title: 'How I Choose Problems, Solve Them, and End Up Getting Traction',
     readTime: '4 min read',
