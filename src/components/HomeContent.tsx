@@ -45,7 +45,7 @@ export default function NewHeroSection() {
           <Reveal delay={0.2}>
             <ProfileHeader 
               name="Kartik Labhshetwar"
-              age="21"
+              age="22"
               title="engineer • developer • builder"
               profileImage="/pfp.jpg"
               socialLinks={{
@@ -79,7 +79,7 @@ export default function NewHeroSection() {
               <Reveal delay={0.1}>
                 <ContentSection className="pb-6 sm:pb-8 pt-4 sm:pt-6 px-2 sm:px-0">
                   <ContentParagraph className="mb-2 text-base sm:text-lg">
-                    <span className="font-medium dark:text-white text-black">I build from zero.</span> Whether it&apos;s frontend, backend, full-stack applications, or AI-powered experiences, I work across the entire development lifecycle. From UI/UX to deployment to user feedback, I care less about technology debates and more about delivering results that people love using.
+                    <span className="font-medium dark:text-white text-black">I build from zero.</span> Currently a Member of Technical Staff at <a href="https://mem0.ai" target="_blank" className="font-medium dark:text-white text-black hover:text-[#006FEE] transition-colors">Mem0</a>, working on the universal memory layer for AI agents. Whether it&apos;s frontend, backend, full-stack applications, or AI-powered experiences, I work across the entire development lifecycle. From UI/UX to deployment to user feedback, I care less about technology debates and more about delivering results that people love using.
                   </ContentParagraph>
                 </ContentSection>
               </Reveal>

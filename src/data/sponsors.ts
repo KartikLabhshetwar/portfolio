@@ -17,7 +17,7 @@ export const sponsors: Sponsor[] = [
     url: 'https://github.com/DavidHDev',
     github: 'DavidHDev',
     twitter: 'davidhdev',
-    amountUsd: 5
+    amountUsd: 25
   },
   
   {
