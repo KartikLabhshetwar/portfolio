@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+import { parseRepo, fetchRepoStars } from '../lib/github';
+
+const withStars = await Promise.all(projects.map(async (p) => {
+  const r = p.githubLink ? parseRepo(p.githubLink) : null;
+  const stars = r ? await fetchRepoStars(r.owner, r.repo) : 0;
+  return { ...p, stars };
+}));
+---
+<Base title="Projects — Kartik Labhshetwar">
+  <h1 class="text-2xl font-semibold">Projects</h1>
+  <div class="mt-6">
+    {withStars.map((p) => <ProjectCard {...p} />)}
+  </div>
+</Base>

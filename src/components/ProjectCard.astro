@@ -1,0 +1,18 @@
+---
+interface Props { title: string; description: string; users?: string; stars?: number; liveLink?: string; githubLink?: string; }
+const { title, description, users, stars, liveLink, githubLink } = Astro.props;
+---
+<div class="border-b border-black/10 py-5 dark:border-white/10">
+  <div class="flex items-baseline justify-between gap-3">
+    <h3 class="font-semibold">{title}</h3>
+    <div class="flex shrink-0 gap-3 text-xs text-zinc-500">
+      {users && <span>{users} users</span>}
+      {typeof stars === 'number' && stars > 0 && <span>★ {stars}</span>}
+    </div>
+  </div>
+  <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{description}</p>
+  <div class="mt-2 flex gap-4 text-xs">
+    {liveLink && <a href={liveLink} target="_blank" rel="noopener" class="hover:underline">Live ↗</a>}
+    {githubLink && <a href={githubLink} target="_blank" rel="noopener" class="hover:underline">GitHub ↗</a>}
+  </div>
+</div>
