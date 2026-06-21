@@ -1,12 +1,15 @@
 ---
-interface Props { name: string; login: string; url: string; avatarUrl: string; }
-const { name, login, url, avatarUrl } = Astro.props;
+interface Props { name: string; login: string; url: string; avatarUrl: string; isOneTime?: boolean; }
+const { name, login, url, avatarUrl, isOneTime } = Astro.props;
 ---
-<a href={url} target="_blank" rel="noopener"
-   class="flex items-center gap-3 rounded-lg border border-black/10 p-3 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
-  <img src={avatarUrl} alt={name} width="40" height="40" loading="lazy" class="h-10 w-10 rounded-full" />
-  <div class="min-w-0">
+<a href={url} target="_blank" rel="noopener noreferrer"
+   class="flex items-center gap-3 rounded-lg border border-black/10 p-3 transition-colors hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+  <img src={avatarUrl} alt={name} width="40" height="40" loading="lazy" class="h-10 w-10 shrink-0 rounded-full" />
+  <div class="min-w-0 flex-1">
     <div class="truncate text-sm font-medium">{name}</div>
     <div class="truncate text-xs text-zinc-500">@{login}</div>
   </div>
+  {isOneTime && (
+    <span class="shrink-0 rounded border border-black/10 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-zinc-500 dark:border-white/10">one-time</span>
+  )}
 </a>

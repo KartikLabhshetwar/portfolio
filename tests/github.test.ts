@@ -31,16 +31,20 @@ describe('fetchRepoStars', () => {
 });
 
 describe('fetchSponsors', () => {
-  it('maps graphql nodes to sponsors', async () => {
+  it('maps recurring and one-time sponsors from sponsorshipsAsMaintainer', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ data: { viewer: { sponsors: { nodes: [
-        { login: 'octocat', name: 'The Octocat', url: 'https://github.com/octocat', avatarUrl: 'https://x/y.png' },
+      json: async () => ({ data: { viewer: { sponsorshipsAsMaintainer: { nodes: [
+        { isOneTimePayment: false, sponsorEntity: { login: 'octocat', name: 'The Octocat', url: 'https://github.com/octocat', avatarUrl: 'https://x/y.png' } },
+        { isOneTimePayment: true, sponsorEntity: { login: 'mona', name: null, url: 'https://github.com/mona', avatarUrl: 'https://x/m.png' } },
       ] } } } }),
     }));
     process.env.GITHUB_TOKEN = 'tok';
     const s = await fetchSponsors();
-    expect(s).toEqual([{ login: 'octocat', name: 'The Octocat', url: 'https://github.com/octocat', avatarUrl: 'https://x/y.png' }]);
+    expect(s).toEqual([
+      { login: 'octocat', name: 'The Octocat', url: 'https://github.com/octocat', avatarUrl: 'https://x/y.png', isOneTime: false },
+      { login: 'mona', name: 'mona', url: 'https://github.com/mona', avatarUrl: 'https://x/m.png', isOneTime: true },
+    ]);
   });
   it('returns [] when no token', async () => {
     delete process.env.GITHUB_TOKEN;

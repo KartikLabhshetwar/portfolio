@@ -1,13 +1,12 @@
 @import "tailwindcss";
-@import "@fontsource-variable/hanken-grotesk";
-@import "@fontsource/instrument-serif";
+@import "@fontsource-variable/jetbrains-mono";
+@plugin "@tailwindcss/typography";
 
 /* class-based dark mode (Tailwind v4 defaults to prefers-color-scheme) */
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --font-hk-grotesk: "Hanken Grotesk Variable", system-ui, sans-serif;
-  --font-instrument-serif: "Instrument Serif", serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --radius: 0.625rem;
   --background: hsl(97 4% 100%);
   --foreground: oklch(0.141 0.005 285.823);
@@ -80,5 +79,15 @@
 }
 
 html {
-  font-family: var(--font-hk-grotesk);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "calt", "liga";
 }
+
+/* slightly relax tracking on big headings so mono doesn't feel cramped */
+h1, h2, h3 { letter-spacing: -0.01em; }
+
+/* long-form blog body: comfortable measure + rhythm for a mono face */
+.prose { line-height: 1.8; }
+.prose :where(pre) { line-height: 1.5; }

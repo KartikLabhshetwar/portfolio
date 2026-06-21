@@ -1,4 +1,4 @@
-export type Sponsor = { login: string; name: string; url: string; avatarUrl: string };
+export type Sponsor = { login: string; name: string; url: string; avatarUrl: string; isOneTime: boolean };
 
 export function parseRepo(url: string): { owner: string; repo: string } | null {
   const m = url.match(/github\.com\/([^/]+)\/([^/]+)/);
@@ -25,12 +25,23 @@ export async function fetchRepoStars(owner: string, repo: string): Promise<numbe
 export async function fetchSponsors(): Promise<Sponsor[]> {
   const token = process.env.GITHUB_TOKEN;
   if (!token) return [];
+  // `sponsorshipsAsMaintainer` returns BOTH recurring and one-time sponsors
+  // (the `sponsors` connection alone omits the recurring/one-time distinction).
+  // Requires a token with the `read:user` scope. `includePrivate: false` returns
+  // only sponsors who chose to be public; `activeOnly: true` = current sponsors.
   const query = `query {
-    viewer { sponsors(first: 100) { nodes {
-      __typename
-      ... on User { login name url avatarUrl }
-      ... on Organization { login name url avatarUrl }
-    } } }
+    viewer {
+      sponsorshipsAsMaintainer(first: 100, includePrivate: false, activeOnly: true) {
+        nodes {
+          isOneTimePayment
+          sponsorEntity {
+            __typename
+            ... on User { login name url avatarUrl }
+            ... on Organization { login name url avatarUrl }
+          }
+        }
+      }
+    }
   }`;
   try {
     const res = await fetch('https://api.github.com/graphql', {
@@ -40,10 +51,17 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
     });
     if (!res.ok) return [];
     const json = await res.json();
-    const nodes = json?.data?.viewer?.sponsors?.nodes ?? [];
+    const nodes = json?.data?.viewer?.sponsorshipsAsMaintainer?.nodes ?? [];
     return nodes
-      .filter((n: any) => n && n.login)
-      .map((n: any) => ({ login: n.login, name: n.name ?? n.login, url: n.url, avatarUrl: n.avatarUrl }));
+      .map((n: any) => ({ entity: n?.sponsorEntity, isOneTime: !!n?.isOneTimePayment }))
+      .filter((n: any) => n.entity && n.entity.login)
+      .map((n: any) => ({
+        login: n.entity.login,
+        name: n.entity.name ?? n.entity.login,
+        url: n.entity.url,
+        avatarUrl: n.entity.avatarUrl,
+        isOneTime: n.isOneTime,
+      }));
   } catch {
     return [];
   }
