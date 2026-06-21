@@ -1,0 +1,11 @@
+<span class="text-xs text-zinc-500">👀 <span id="visitor-count">—</span> visitors</span>
+<script>
+  (async () => {
+    const el = document.getElementById('visitor-count');
+    try {
+      const res = await fetch('/api/visitors', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      const data = await res.json();
+      if (el && typeof data.uniqueVisitors === 'number') el.textContent = data.uniqueVisitors.toLocaleString();
+    } catch {}
+  })();
+</script>

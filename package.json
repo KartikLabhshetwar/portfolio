@@ -19,6 +19,7 @@
     "@fontsource/instrument-serif": "^5.0.0",
     "@keystatic/astro": "^5.1.0",
     "@keystatic/core": "^0.5.50",
+    "@upstash/redis": "^1.38.0",
     "astro": "^6.0.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
@@ -26,11 +27,12 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@cloudflare/workers-types": "^4.20260621.1",
     "@tailwindcss/vite": "^4.1.8",
     "@types/node": "^26.0.0",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.9.3",
-    "vitest": "^2.1.9"
+    "vitest": "^3.2.6"
   },
   "overrides": {
     "vite": "^7"

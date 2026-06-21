@@ -54,3 +54,6 @@ public/_next-video
 
 # SDD scratch
 .superpowers/
+
+# Cloudflare local dev state
+.wrangler/
