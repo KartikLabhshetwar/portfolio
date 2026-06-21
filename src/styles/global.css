@@ -8,7 +8,6 @@
 :root {
   --font-hk-grotesk: "Hanken Grotesk Variable", system-ui, sans-serif;
   --font-instrument-serif: "Instrument Serif", serif;
-  /* PORT: tokens from legacy/src/app/globals.css */
   --radius: 0.625rem;
   --background: hsl(97 4% 100%);
   --foreground: oklch(0.141 0.005 285.823);
@@ -46,7 +45,6 @@
 }
 
 .dark {
-  /* PORT: .dark tokens from legacy/src/app/globals.css */
   --background: #18181b;
   --foreground: oklch(0.985 0 0);
   --loader-bg: #18181b;
