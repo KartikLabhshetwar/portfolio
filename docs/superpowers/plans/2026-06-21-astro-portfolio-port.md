@@ -937,10 +937,12 @@ git add src/pages/index.astro && git commit -m "feat: compose minimal home page"
 
 **Interfaces:**
 - Produces:
-  - `generateVisitorId(ip: string | null, userAgent: string | null, fingerprint?: string): string`
-  - `trackVisit(visitorId: string): Promise<{ uniqueVisitors: number }>`
-  - `getVisitorStats(): Promise<{ uniqueVisitors: number }>`
-  - Endpoint `GET /api/visitors` → `{ uniqueVisitors }`; `POST /api/visitors` (body `{ fingerprint? }`) → `{ uniqueVisitors }`
+  - `type RedisEnv = { UPSTASH_REDIS_REST_URL?: string; UPSTASH_REDIS_REST_TOKEN?: string }`
+  - `generateVisitorId(ip: string | null, userAgent: string | null, fingerprint?: string): string` (pure)
+  - `getRedis(env: RedisEnv): Redis | null` (null when creds missing)
+  - `trackVisit(redis: Redis, visitorId: string): Promise<{ uniqueVisitors: number }>`
+  - `getVisitorStats(redis: Redis): Promise<{ uniqueVisitors: number }>`
+  - Endpoint `GET /api/visitors` → `{ uniqueVisitors }`; `POST /api/visitors` (body `{ fingerprint? }`) → `{ uniqueVisitors }`. Reads Upstash creds from `locals.runtime.env` (Cloudflare runtime) with a `process.env` fallback (local dev/node) — `process.env` is NOT reliably populated at request time on Cloudflare.
 
 - [ ] **Step 1: Install Upstash**
 
@@ -952,12 +954,7 @@ npm install @upstash/redis
 
 ```ts
 import { describe, it, expect, vi } from 'vitest';
-
-const sadd = vi.fn().mockResolvedValue(1);
-const scard = vi.fn().mockResolvedValue(7);
-vi.mock('@upstash/redis', () => ({ Redis: vi.fn(() => ({ sadd, scard })) }));
-
-const { generateVisitorId, trackVisit, getVisitorStats } = await import('../src/lib/visitors');
+import { generateVisitorId, getRedis, trackVisit, getVisitorStats } from '../src/lib/visitors';
 
 describe('generateVisitorId', () => {
   it('is stable for the same inputs', () => {
@@ -968,13 +965,24 @@ describe('generateVisitorId', () => {
   });
 });
 
+describe('getRedis', () => {
+  it('returns null when creds are missing', () => {
+    expect(getRedis({})).toBeNull();
+  });
+  it('returns a client when creds are present', () => {
+    expect(getRedis({ UPSTASH_REDIS_REST_URL: 'https://x', UPSTASH_REDIS_REST_TOKEN: 't' })).not.toBeNull();
+  });
+});
+
 describe('visitor stats', () => {
-  it('trackVisit returns uniqueVisitors from scard', async () => {
-    expect(await trackVisit('id')).toEqual({ uniqueVisitors: 7 });
-    expect(sadd).toHaveBeenCalled();
+  // Pass a fake redis instance — no need to mock the module.
+  const redis = { sadd: vi.fn().mockResolvedValue(1), scard: vi.fn().mockResolvedValue(7) } as any;
+  it('trackVisit adds the id and returns uniqueVisitors from scard', async () => {
+    expect(await trackVisit(redis, 'id')).toEqual({ uniqueVisitors: 7 });
+    expect(redis.sadd).toHaveBeenCalledWith('unique_visitors', 'id');
   });
   it('getVisitorStats returns uniqueVisitors', async () => {
-    expect(await getVisitorStats()).toEqual({ uniqueVisitors: 7 });
+    expect(await getVisitorStats(redis)).toEqual({ uniqueVisitors: 7 });
   });
 });
 ```
@@ -992,10 +1000,11 @@ Expected: FAIL (module not found).
 import { Redis } from '@upstash/redis';
 
 const KEY = 'unique_visitors';
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
+
+export type RedisEnv = {
+  UPSTASH_REDIS_REST_URL?: string;
+  UPSTASH_REDIS_REST_TOKEN?: string;
+};
 
 export function generateVisitorId(ip: string | null, userAgent: string | null, fingerprint?: string): string {
   const raw = `${ip ?? 'noip'}|${userAgent ?? 'noua'}|${fingerprint ?? 'nofp'}`;
@@ -1004,13 +1013,22 @@ export function generateVisitorId(ip: string | null, userAgent: string | null, f
   return `v_${(h >>> 0).toString(36)}`;
 }
 
-export async function trackVisit(visitorId: string): Promise<{ uniqueVisitors: number }> {
+// Construct the Upstash client from request-time env. On Cloudflare, runtime
+// secrets live on locals.runtime.env (NOT process.env), so the caller resolves
+// the env and passes it in. Returns null when creds are absent so the endpoint
+// can degrade gracefully instead of throwing at module load.
+export function getRedis(env: RedisEnv): Redis | null {
+  if (!env.UPSTASH_REDIS_REST_URL || !env.UPSTASH_REDIS_REST_TOKEN) return null;
+  return new Redis({ url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN });
+}
+
+export async function trackVisit(redis: Redis, visitorId: string): Promise<{ uniqueVisitors: number }> {
   await redis.sadd(KEY, visitorId);
   const uniqueVisitors = await redis.scard(KEY);
   return { uniqueVisitors };
 }
 
-export async function getVisitorStats(): Promise<{ uniqueVisitors: number }> {
+export async function getVisitorStats(redis: Redis): Promise<{ uniqueVisitors: number }> {
   const uniqueVisitors = await redis.scard(KEY);
   return { uniqueVisitors };
 }
@@ -1027,24 +1045,35 @@ Expected: PASS.
 
 ```ts
 import type { APIRoute } from 'astro';
-import { generateVisitorId, trackVisit, getVisitorStats } from '../../lib/visitors';
+import { generateVisitorId, getRedis, trackVisit, getVisitorStats, type RedisEnv } from '../../lib/visitors';
 
 export const prerender = false;
 
-export const GET: APIRoute = async () => {
+// Cloudflare exposes runtime secrets on locals.runtime.env; fall back to
+// process.env for local `astro dev` / node.
+function resolveEnv(locals: App.Locals): RedisEnv {
+  const runtimeEnv = (locals as { runtime?: { env?: RedisEnv } })?.runtime?.env;
+  return runtimeEnv ?? (typeof process !== 'undefined' ? (process.env as RedisEnv) : {});
+}
+
+export const GET: APIRoute = async ({ locals }) => {
+  const redis = getRedis(resolveEnv(locals));
+  if (!redis) return Response.json({ success: false, uniqueVisitors: 0 });
   try {
-    return Response.json({ success: true, ...(await getVisitorStats()) });
+    return Response.json({ success: true, ...(await getVisitorStats(redis)) });
   } catch {
     return Response.json({ success: false, uniqueVisitors: 0 }, { status: 500 });
   }
 };
 
-export const POST: APIRoute = async ({ request, clientAddress }) => {
+export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
+  const redis = getRedis(resolveEnv(locals));
+  if (!redis) return Response.json({ success: false, uniqueVisitors: 0 });
   try {
     const body = await request.json().catch(() => ({}));
     const ua = request.headers.get('user-agent');
     const id = generateVisitorId(clientAddress ?? null, ua, body.fingerprint);
-    return Response.json({ success: true, ...(await trackVisit(id)) });
+    return Response.json({ success: true, ...(await trackVisit(redis, id)) });
   } catch {
     return Response.json({ success: false, uniqueVisitors: 0 }, { status: 500 });
   }
@@ -1086,12 +1115,15 @@ and inside `<footer>`:
       </footer>
 ```
 
-- [ ] **Step 9: Verify endpoint + UI**
+- [ ] **Step 9: Verify tests + endpoint + build**
 
+Run `npx vitest run tests/visitors.test.ts` → expect PASS (6 tests).
+
+The repo `.env` already has `UPSTASH_REDIS_REST_URL`/`_TOKEN`; the Cloudflare adapter's dev platform proxy surfaces them on `locals.runtime.env`. Start `npm run dev` IN THE BACKGROUND (never foreground), wait ~3s, then:
 ```bash
-npm run dev
+curl -s -X POST -H 'Content-Type: application/json' -d '{}' http://localhost:4321/api/visitors
 ```
-With `UPSTASH_REDIS_REST_URL`/`_TOKEN` in `.env`, load `/` → footer shows a visitor number; `curl -X POST localhost:4321/api/visitors` returns `{"success":true,"uniqueVisitors":N}`. Then `npm run build` (expect success; the endpoint is the only on-demand route).
+Expect `{"success":true,"uniqueVisitors":N}` (a real Upstash hit — adds one test id, harmless). KILL the dev server. Then `npm run build` is the final gate (if it errors with `.vite/deps_ssr/chunk... does not exist`, run `rm -rf node_modules/.vite` and rebuild; the endpoint is the only on-demand route).
 
 - [ ] **Step 10: Commit**
 
