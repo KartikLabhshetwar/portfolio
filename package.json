@@ -8,12 +8,21 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate-types": "wrangler types"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.7.0",
+    "@astrojs/markdoc": "^1.0.6",
+    "@astrojs/react": "^5.0.7",
     "@fontsource-variable/hanken-grotesk": "^5.0.0",
     "@fontsource/instrument-serif": "^5.0.0",
-    "astro": "^6.0.0"
+    "@keystatic/astro": "^5.1.0",
+    "@keystatic/core": "^0.5.50",
+    "astro": "^6.0.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "wrangler": "^4.103.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
@@ -22,5 +31,8 @@
     "tailwindcss": "^4.1.8",
     "typescript": "^5.9.3",
     "vitest": "^2.1.9"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }
