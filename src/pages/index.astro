@@ -1,7 +1,60 @@
 ---
 import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SponsorCard from '../components/SponsorCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+import { profile } from '../data/profile';
+import { experience } from '../data/experience';
+import { projects } from '../data/projects';
+import { parseRepo, fetchRepoStars, fetchSponsors } from '../lib/github';
+import { getCollection } from 'astro:content';
+
+const featured = await Promise.all(projects.slice(0, 4).map(async (p) => {
+  const r = p.githubLink ? parseRepo(p.githubLink) : null;
+  return { ...p, stars: r ? await fetchRepoStars(r.owner, r.repo) : 0 };
+}));
+const sponsors = await fetchSponsors();
+const toSlug = (id: string) => id.replace(/\/index$/, '');
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()).slice(0, 3);
 ---
 <Base>
-  <h1 class="text-3xl font-semibold">Kartik Labhshetwar</h1>
-  <p class="mt-2 text-zinc-600 dark:text-zinc-400">Rebuilding in Astro…</p>
+  <section class="py-6">
+    <h1 class="text-3xl font-semibold">{profile.name}</h1>
+    <p class="mt-1 text-zinc-600 dark:text-zinc-400">{profile.role}</p>
+    <p class="mt-3 text-sm">{profile.bio}</p>
+    <div class="mt-3 flex gap-4 text-sm">
+      {profile.socials.map((s) => <a href={s.href} target="_blank" rel="noopener" class="hover:underline">{s.label}</a>)}
+    </div>
+  </section>
+
+  <section class="mt-10">
+    <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500">Experience</h2>
+    {experience.map((e) => (
+      <div class="mt-3">
+        <div class="flex items-baseline justify-between"><span class="font-medium">{e.role} · {e.company}</span><span class="text-xs text-zinc-500">{e.period}</span></div>
+        <ul class="mt-1 list-disc pl-5 text-sm text-zinc-600 dark:text-zinc-400">{e.points.map((pt) => <li>{pt}</li>)}</ul>
+      </div>
+    ))}
+  </section>
+
+  <section class="mt-10">
+    <div class="flex items-baseline justify-between"><h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500">Projects</h2><a href="/projects" class="text-xs hover:underline">All →</a></div>
+    <div class="mt-3">{featured.map((p) => <ProjectCard {...p} />)}</div>
+  </section>
+
+  <section class="mt-10">
+    <div class="flex items-baseline justify-between"><h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500">Writing</h2><a href="/blog" class="text-xs hover:underline">All →</a></div>
+    <div class="mt-3">{posts.map((p) => <BlogCard title={p.data.title} description={p.data.description} pubDate={p.data.pubDate} slug={toSlug(p.id)} />)}</div>
+  </section>
+
+  {sponsors.length > 0 && (
+    <section class="mt-10">
+      <div class="flex items-baseline justify-between"><h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500">Sponsors</h2><a href="/sponsors" class="text-xs hover:underline">All →</a></div>
+      <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">{sponsors.slice(0, 4).map((s) => <SponsorCard {...s} />)}</div>
+    </section>
+  )}
+
+  <NewsletterForm />
 </Base>
