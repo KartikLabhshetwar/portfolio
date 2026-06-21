@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@astrojs/sitemap": "^3.7.3",
     "@cloudflare/workers-types": "^4.20260621.1",
     "@tailwindcss/vite": "^4.1.8",
     "@types/node": "^26.0.0",

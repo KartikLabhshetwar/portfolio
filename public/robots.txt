@@ -7,7 +7,7 @@ Allow: /
 Crawl-delay: 1
 
 # Sitemaps
-Sitemap: https://www.kartiklabhshetwar.me/sitemap.xml
+Sitemap: https://kartikk.tech/sitemap-index.xml
 
 # Host declaration (helps with canonicalization)
-Host: https://www.kartiklabhshetwar.me
+Host: https://kartikk.tech
