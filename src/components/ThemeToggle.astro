@@ -1,0 +1,12 @@
+<button id="theme-toggle" type="button" aria-label="Toggle theme"
+  class="rounded-md p-2 text-sm hover:bg-black/5 dark:hover:bg-white/10">
+  <span class="dark:hidden">🌙</span>
+  <span class="hidden dark:inline">☀️</span>
+</button>
+<script>
+  const btn = document.getElementById('theme-toggle');
+  btn?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+</script>

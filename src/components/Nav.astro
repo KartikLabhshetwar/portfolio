@@ -1,0 +1,16 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/sponsors', label: 'Sponsors' },
+];
+---
+<nav class="flex items-center justify-between py-6">
+  <a href="/" class="font-semibold">Kartik</a>
+  <div class="flex items-center gap-4 text-sm">
+    {links.map((l) => <a href={l.href} class="hover:underline">{l.label}</a>)}
+    <ThemeToggle />
+  </div>
+</nav>
