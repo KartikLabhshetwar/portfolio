@@ -1,0 +1,12 @@
+---
+interface Props { name: string; login: string; url: string; avatarUrl: string; }
+const { name, login, url, avatarUrl } = Astro.props;
+---
+<a href={url} target="_blank" rel="noopener"
+   class="flex items-center gap-3 rounded-lg border border-black/10 p-3 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
+  <img src={avatarUrl} alt={name} width="40" height="40" loading="lazy" class="h-10 w-10 rounded-full" />
+  <div class="min-w-0">
+    <div class="truncate text-sm font-medium">{name}</div>
+    <div class="truncate text-xs text-zinc-500">@{login}</div>
+  </div>
+</a>

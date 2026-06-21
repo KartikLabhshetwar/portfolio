@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import SponsorCard from '../components/SponsorCard.astro';
+import { fetchSponsors } from '../lib/github';
+const sponsors = await fetchSponsors();
+const sponsorUrl = 'https://github.com/sponsors/KartikLabhshetwar';
+---
+<Base title="Sponsors — Kartik Labhshetwar">
+  <h1 class="text-2xl font-semibold">Sponsors</h1>
+  <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+    Thank you to everyone who supports my work. <a href={sponsorUrl} class="underline">Become a sponsor ↗</a>
+  </p>
+  {sponsors.length === 0
+    ? <p class="mt-6 text-sm text-zinc-500">Be the first to sponsor.</p>
+    : <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">{sponsors.map((s) => <SponsorCard {...s} />)}</div>}
+</Base>
