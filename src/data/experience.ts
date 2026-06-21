@@ -12,6 +12,7 @@ export const experience = [
     role: 'Software Engineering Intern',
     period: 'Mar 2026 — Apr 2026',
     points: [
+      'Contributed across the full stack — SDKs, docs, CI, and community — for Mem0\'s open-source memory layer for AI agents.',
       'Authored 43 PRs (95% merge rate), 39 commits, 15K+ lines across 169 files — Python SDK, TypeScript SDK, docs, and CI.',
       'Triaged issue backlog from 400+ to under 100, same for open PRs. Categorized, closed stale items, linked duplicates, routed actionable work to right contributors.',
       'Fixed a critical data-loss bug where delete_all(user_id=...) destroyed the entire vector collection instead of filtered records — affecting all self-hosted users.',

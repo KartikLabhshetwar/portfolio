@@ -60,7 +60,7 @@ export const projects: Project[] = [
   {
     id: 'foliox',
     title: 'FolioX',
-    description: 'Foliox is an AI-powered portfolio generator that automatically creates beautiful developer portfolios from GitHub profiles. It fetches your GitHub data, uses AI to generate professional summaries and highlights, and presents everything in a modern, responsive portfolio website.',
+    description: 'An AI-powered portfolio generator that creates beautiful developer portfolios from your GitHub profile.',
     liveLink: 'https://foliox.site',
     githubLink: 'https://github.com/KartikLabhshetwar/foliox',
   },
