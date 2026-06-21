@@ -7,7 +7,7 @@ Personal portfolio site for Kartik Labhshetwar — built with Astro 6, Tailwind 
 | Layer | Technology |
 |---|---|
 | Framework | Astro 6 (hybrid output: static prerender + CF Workers SSR) |
-| Styling | Tailwind CSS v4 via `@astrojs/vite` (pinned 4.1.8) |
+| Styling | Tailwind CSS v4 via `@tailwindcss/vite` (pinned 4.1.8) |
 | CMS | Keystatic (local mode in dev; GitHub mode in production — see below) |
 | Deploy | Cloudflare Workers + Assets |
 | Visitor counter | Upstash Redis (REST API, accessed at runtime via CF env) |
