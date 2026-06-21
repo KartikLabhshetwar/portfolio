@@ -14,10 +14,10 @@ export function generateVisitorId(ip: string | null, userAgent: string | null, f
   return `v_${(h >>> 0).toString(36)}`;
 }
 
-// Construct the Upstash client from request-time env. On Cloudflare, runtime
-// secrets live on locals.runtime.env (NOT process.env), so the caller resolves
-// the env and passes it in. Returns null when creds are absent so the endpoint
-// can degrade gracefully instead of throwing at module load.
+// Construct the Upstash client from request-time env. On Cloudflare, secrets
+// are read from the `cloudflare:workers` env module by the caller and passed in
+// here. Returns null when creds are absent so the endpoint can degrade
+// gracefully instead of throwing at module load.
 export function getRedis(env: RedisEnv): Redis | null {
   if (!env.UPSTASH_REDIS_REST_URL || !env.UPSTASH_REDIS_REST_TOKEN) return null;
   return new Redis({ url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN });

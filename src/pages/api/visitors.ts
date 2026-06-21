@@ -8,7 +8,6 @@ export const prerender = false;
 // Fall back to process.env for plain Node.js environments (e.g. testing).
 async function resolveEnv(): Promise<RedisEnv> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cfModule = await import('cloudflare:workers' as any);
     return cfModule.env as RedisEnv;
   } catch {
