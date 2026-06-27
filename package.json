@@ -24,9 +24,10 @@
     "@keystatic/core": "^0.5.50",
     "@upstash/redis": "^1.38.0",
     "astro": "^6.0.0",
+    "cmdk": "^1.1.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "wrangler": "^4.103.0"
+    "wrangler": "^4.105.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

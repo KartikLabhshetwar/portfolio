@@ -2,7 +2,36 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import VisitorCount from '../components/VisitorCount.astro';
+import CommandMenu from '../components/CommandMenu.tsx';
+import { profile } from '../data/profile';
+import { projects } from '../data/projects';
+import { getCollection } from 'astro:content';
 const { title = 'Kartik Labhshetwar', description = 'Developer, builder.' } = Astro.props;
+// Always point canonical at the configured production domain (Astro.site),
+// so a workers.dev or any mirror host can't compete for ranking.
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const commandItems = [
+  { label: 'Home', href: '/', group: 'Pages' },
+  { label: 'Projects', href: '/projects', group: 'Pages' },
+  { label: 'Blog', href: '/blog', group: 'Pages' },
+  { label: 'Sponsors', href: '/sponsors', group: 'Pages' },
+  ...projects.map((p) => ({
+    label: p.title,
+    href: p.liveLink ?? p.githubLink ?? '/projects',
+    group: 'Projects',
+    external: true,
+    keywords: [p.description, p.impact].filter(Boolean) as string[],
+  })),
+  ...posts.map((p) => ({
+    label: p.data.title,
+    href: `/blog/${p.id.replace(/\/index$/, '')}`,
+    group: 'Writing',
+    keywords: [p.data.description],
+  })),
+  ...profile.socials.map((s) => ({ label: s.label, href: s.href, group: 'Links', external: true })),
+];
 ---
 <!doctype html>
 <html lang="en">
@@ -11,6 +40,7 @@ const { title = 'Kartik Labhshetwar', description = 'Developer, builder.' } = As
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script is:inline>
       const t = localStorage.getItem('theme');
@@ -28,5 +58,6 @@ const { title = 'Kartik Labhshetwar', description = 'Developer, builder.' } = As
         <VisitorCount />
       </footer>
     </main>
+    <CommandMenu client:idle items={commandItems} />
   </body>
 </html>

@@ -1,6 +1,7 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "portfolio",
+	"workers_dev": false,
 	"main": "@astrojs/cloudflare/entrypoints/server",
 	"compatibility_date": "2026-06-21",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],

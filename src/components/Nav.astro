@@ -10,6 +10,9 @@ const links = [
 <nav class="flex items-center justify-end py-6">
   <div class="flex items-center gap-4 text-sm">
     {links.map((l) => <a href={l.href} class="hover:underline">{l.label}</a>)}
+    <button type="button" aria-label="Open command menu" title="Search (⌘K)"
+      onclick="window.dispatchEvent(new Event('open-command-menu'))"
+      class="hidden items-center rounded border border-black/15 px-1.5 py-0.5 text-xs text-zinc-500 transition-colors hover:text-zinc-900 sm:inline-flex dark:border-white/15 dark:hover:text-zinc-50">⌘K</button>
     <ThemeToggle />
   </div>
 </nav>
