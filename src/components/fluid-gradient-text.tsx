@@ -50,7 +50,7 @@ export function FluidGradientText({
       onMouseLeave={handleMouseLeave}
     >
       <svg
-        className="size-full translate-y-[37.5%] select-none"
+        className="size-full select-none"
         viewBox={`0 0 ${svgViewBoxWidth} ${svgViewBoxHeight}`}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@ export function FluidGradientText({
             y2={svgViewBoxHeight}
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0.625" stopColor="currentColor" stopOpacity="0" />
+            <stop offset="0" stopColor="currentColor" stopOpacity="0.22" />
             <stop offset="1" stopColor="currentColor" />
           </motion.linearGradient>
         </defs>

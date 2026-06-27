@@ -1,5 +1,5 @@
 ---
-import ThemeToggle from './ThemeToggle.astro';
+import { ThemeSwitcher } from './theme-switcher';
 const links = [
   { href: '/', label: 'Home' },
   { href: '/projects', label: 'Projects' },
@@ -13,6 +13,6 @@ const links = [
     <button type="button" aria-label="Open command menu" title="Search (⌘K)"
       onclick="window.dispatchEvent(new Event('open-command-menu'))"
       class="hidden items-center rounded border border-black/15 px-1.5 py-0.5 text-xs text-zinc-500 transition-colors hover:text-zinc-900 sm:inline-flex dark:border-white/15 dark:hover:text-zinc-50">⌘K</button>
-    <ThemeToggle />
+    <ThemeSwitcher client:load />
   </div>
 </nav>

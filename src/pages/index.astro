@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import { AppleHelloEffectEnglish } from '../components/apple-hello-effect-english';
 import { HeroTagline } from '../components/HeroTagline';
 import { WorkExperience } from '../components/work-experience';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -25,37 +24,36 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 ---
 <Base>
   <section class="py-6">
-    <AppleHelloEffectEnglish client:load className="h-12 text-zinc-900 dark:text-zinc-50" />
-    <h1 class="-mt-1 text-4xl font-semibold tracking-tight">{profile.name}</h1>
-    <p class="mt-2 text-zinc-600 dark:text-zinc-400">{profile.role}</p>
+    <h1 class="text-4xl font-semibold tracking-tight">{profile.name}</h1>
+    <p class="mt-2 text-muted-foreground">{profile.role}</p>
     <p class="mt-1"><HeroTagline client:visible /></p>
-    <p class="mt-4 max-w-prose text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">{profile.bio}</p>
+    <p class="mt-4 max-w-prose text-sm leading-relaxed text-foreground/80">{profile.bio}</p>
     <div class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm">
       {profile.socials.map((s) => (
-        <a href={s.href} target="_blank" rel="noopener noreferrer" class="text-zinc-500 underline-offset-4 hover:text-zinc-900 hover:underline dark:hover:text-zinc-50">{s.label}</a>
+        <a href={s.href} target="_blank" rel="noopener noreferrer" class="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">{s.label}</a>
       ))}
     </div>
   </section>
 
   <section class="mt-12">
-    <h2 class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Experience</h2>
+    <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Experience</h2>
     <div class="mt-2">
-      <WorkExperience client:visible experiences={experience} className="px-0" />
+      <WorkExperience client:visible experiences={experience} className="px-0 bg-transparent" />
     </div>
   </section>
 
   <section class="mt-12">
     <div class="flex items-baseline justify-between">
-      <h2 class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Projects</h2>
-      <a href="/projects" class="text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50">All →</a>
+      <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Projects</h2>
+      <a href="/projects" class="text-xs text-muted-foreground hover:text-foreground">All →</a>
     </div>
     <div class="mt-1">{featured.map((p) => <ProjectCard {...p} />)}</div>
   </section>
 
   <section class="mt-12">
     <div class="flex items-baseline justify-between">
-      <h2 class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Writing</h2>
-      <a href="/blog" class="text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50">All →</a>
+      <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Writing</h2>
+      <a href="/blog" class="text-xs text-muted-foreground hover:text-foreground">All →</a>
     </div>
     <div class="mt-1">{posts.map((p) => <BlogCard title={p.data.title} description={p.data.description} pubDate={p.data.pubDate} slug={toSlug(p.id)} />)}</div>
   </section>

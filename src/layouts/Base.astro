@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
+import VisitorCount from '../components/VisitorCount.astro';
 import CommandMenu from '../components/CommandMenu.tsx';
 import { FluidGradientText } from '../components/fluid-gradient-text';
 import { profile } from '../data/profile';
@@ -49,13 +50,14 @@ const commandItems = [
     </script>
     <script defer src="https://cdn.databuddy.cc/databuddy.js"></script>
   </head>
-  <body class="min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+  <body class="min-h-screen bg-background text-foreground">
     <main class="mx-auto max-w-2xl px-4">
       <Nav />
       <slot />
-      <footer class="mt-24 border-t border-black/10 pt-2 dark:border-white/10">
-        <div class="h-28 text-zinc-900 md:h-52 dark:text-zinc-50">
-          <FluidGradientText client:visible text="Kartik Labhshetwar" svgViewBoxWidth={2600} />
+      <footer class="mt-24 border-t border-black/10 pt-3 dark:border-white/10">
+        <div class="flex justify-end pb-1"><VisitorCount /></div>
+        <div class="h-24 overflow-hidden text-foreground md:h-40">
+          <FluidGradientText client:visible text="Kartik Labhshetwar" svgViewBoxWidth={3300} />
         </div>
       </footer>
     </main>

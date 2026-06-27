@@ -1,7 +1,7 @@
 export const profile = {
   name: 'Kartik Labhshetwar',
   role: 'Member of Technical Staff @ Mem0',
-  bio: 'I build from zero. Currently a Member of Technical Staff at Mem0, working on the universal memory layer for AI agents. Whether it\'s frontend, backend, full-stack applications, or AI-powered experiences, I work across the entire development lifecycle. From UI/UX to deployment to user feedback, I care less about technology debates and more about delivering results that people love using.',
+  bio: 'I build from zero. At Mem0, working on the universal memory layer for AI agents across SDKs, infrastructure, and developer tools. I care less about tech debates and more about shipping things people love using.',
   location: 'India',
   socials: [
     { label: 'GitHub', href: 'https://github.com/KartikLabhshetwar' },

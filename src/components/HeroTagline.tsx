@@ -16,7 +16,13 @@ export function HeroTagline() {
       <TextFlip
         as={'span' as never}
         className="font-medium text-zinc-900 dark:text-zinc-50"
-        interval={2.4}
+        interval={2.6}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        variants={{
+          initial: { opacity: 0, y: 8, filter: 'blur(2px)' },
+          animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
+          exit: { opacity: 0, y: -8, filter: 'blur(2px)' },
+        }}
       >
         {phrases.map((p) => (
           <span key={p}>{p}</span>

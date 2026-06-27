@@ -48,7 +48,7 @@ export default function CommandMenu({ items }: { items: Item[] }) {
           placeholder="Search pages, projects, posts…"
           className="w-full border-b border-black/10 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-zinc-400 dark:border-white/10"
         />
-        <Command.List className="max-h-80 overflow-auto p-2">
+        <Command.List className="max-h-80 overflow-auto p-2 no-scrollbar">
           <Command.Empty className="px-2 py-6 text-center text-sm text-zinc-500">No results.</Command.Empty>
           {groups.map((g) => (
             <Command.Group key={g} heading={g}>

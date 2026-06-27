@@ -61,16 +61,16 @@ export function TOCMinimap({ items, className }: TOCMinimapProps) {
           side="left"
           sideOffset={-60}
         >
-          <div className="flex max-h-[50dvh] overflow-y-auto overscroll-contain">
-            <ul className="flex size-full flex-col px-6 py-4 text-sm">
+          <div className="flex max-h-[50dvh] overflow-y-auto overscroll-contain no-scrollbar">
+            <ul className="flex size-full flex-col gap-2.5 px-5 py-4 text-sm">
               {items.map((item) => (
-                <li key={item.url} className="flex py-1">
+                <li key={item.url} className="flex">
                   <a
                     href={item.url}
                     data-depth={item.depth}
                     data-active={item.url === `#${activeHeading}`}
                     className={cn(
-                      "line-clamp-2 w-full transition-[color] duration-200",
+                      "line-clamp-2 w-full leading-snug transition-[color] duration-200",
                       "text-muted-foreground hover:text-foreground data-active:text-foreground",
                       "data-[depth=3]:pl-4 data-[depth=4]:pl-8"
                     )}
