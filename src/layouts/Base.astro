@@ -4,10 +4,12 @@ import Nav from '../components/Nav.astro';
 import VisitorCount from '../components/VisitorCount.astro';
 import CommandMenu from '../components/CommandMenu.tsx';
 import { FooterBrand } from '../components/name-brand';
+import { AutoTOCMinimap } from '../components/auto-toc-minimap';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
 import { getCollection } from 'astro:content';
-const { title = 'Kartik Labhshetwar', description = 'Developer, builder.' } = Astro.props;
+// `toc` selects which headings become scroll-minimap ticks (section h2s by default).
+const { title = 'Kartik Labhshetwar', description = 'Developer, builder.', toc = 'main h2' } = Astro.props;
 // Always point canonical at the configured production domain (Astro.site),
 // so a workers.dev or any mirror host can't compete for ranking.
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
@@ -53,6 +55,11 @@ const commandItems = [
   <body class="min-h-screen bg-background text-foreground">
     <main class="mx-auto max-w-2xl px-4">
       <Nav />
+      <nav aria-label="On this page" class="fixed top-1/2 right-6 z-40 hidden -translate-y-1/2 xl:block">
+        <!-- client:idle, not client:visible: the island renders empty until headings load,
+             so a visibility trigger would never fire (zero-size element never intersects). -->
+        <AutoTOCMinimap client:idle selector={toc} />
+      </nav>
       <slot />
       <footer class="mt-24 border-t border-black/10 pt-3 dark:border-white/10">
         <div class="flex justify-end pb-1"><VisitorCount /></div>

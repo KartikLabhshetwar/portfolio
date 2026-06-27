@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import NewsletterForm from '../../components/NewsletterForm.astro';
-import { TOCMinimap } from '../../components/toc-minimap';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -12,18 +11,10 @@ export async function getStaticPaths() {
   }));
 }
 const { post } = Astro.props;
-const { Content, headings } = await render(post);
-const tocItems = headings
-  .filter((h) => h.depth >= 2 && h.depth <= 3)
-  .map((h) => ({ title: h.text, url: `#${h.slug}`, depth: h.depth }));
+const { Content } = await render(post);
 const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
-<Base title={`${post.data.title} — Kartik Labhshetwar`} description={post.data.description}>
-  {tocItems.length > 1 && (
-    <nav aria-label="On this page" class="fixed top-1/2 right-6 z-40 hidden -translate-y-1/2 xl:block">
-      <TOCMinimap client:visible items={tocItems} />
-    </nav>
-  )}
+<Base title={`${post.data.title} — Kartik Labhshetwar`} description={post.data.description} toc="#prose-content h2, #prose-content h3">
   <a href="/blog" class="mt-6 inline-block text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50">← Blog</a>
   <article class="mt-4">
     <header class="border-b border-black/10 pb-6 dark:border-white/10">

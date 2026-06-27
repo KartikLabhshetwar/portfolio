@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useTiks } from "@rexa-developer/tiks/react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -29,13 +30,23 @@ export function TOCMinimap({ items, className }: TOCMinimapProps) {
 
   const activeHeading = useActiveHeading(itemIds)
 
+  // ponytail: project's sound lib is tiks (soundcn was removed). `hover()` is its
+  // open blip — swap back to a soundcn sound if that ever gets re-added.
+  const { hover } = useTiks()
+
   if (!items.length) {
     return null
   }
 
   return (
     <div className={cn("ml-auto w-18", className)}>
-      <HoverCard openDelay={0} closeDelay={0}>
+      <HoverCard
+        openDelay={0}
+        closeDelay={0}
+        onOpenChange={(open) => {
+          if (open) hover()
+        }}
+      >
         <HoverCardTrigger asChild>
           <div className="flex max-h-[50dvh] flex-col gap-3 overflow-hidden py-3 pl-6 opacity-100 transition-opacity duration-200 data-popup-open:opacity-0">
             {items.map((item) => (
@@ -61,16 +72,16 @@ export function TOCMinimap({ items, className }: TOCMinimapProps) {
           side="left"
           sideOffset={-60}
         >
-          <div className="flex max-h-[50dvh] overflow-y-auto overscroll-contain no-scrollbar">
-            <ul className="flex size-full flex-col gap-2.5 px-5 py-4 text-sm">
+          <div className="flex max-h-[50dvh] overflow-y-auto overscroll-contain">
+            <ul className="flex size-full flex-col px-6 py-4 text-sm">
               {items.map((item) => (
-                <li key={item.url} className="flex">
+                <li key={item.url} className="flex py-1">
                   <a
                     href={item.url}
                     data-depth={item.depth}
                     data-active={item.url === `#${activeHeading}`}
                     className={cn(
-                      "line-clamp-2 w-full leading-snug transition-[color] duration-200",
+                      "line-clamp-2 w-full transition-[color] duration-200",
                       "text-muted-foreground hover:text-foreground data-active:text-foreground",
                       "data-[depth=3]:pl-4 data-[depth=4]:pl-8"
                     )}

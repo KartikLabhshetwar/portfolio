@@ -24,13 +24,17 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 ---
 <Base>
   <section class="py-8">
-    <img
-      src="/kartik.png"
-      alt={profile.name}
-      class="h-14 w-14 rounded-full object-cover ring-2 ring-border"
-    />
-    <h1 class="mt-4 text-4xl font-semibold tracking-tight">{profile.name}</h1>
-    <p class="mt-2"><HeroTagline client:visible /></p>
+    <div class="flex items-center gap-8">
+      <img
+        src="/kartik.png"
+        alt={profile.name}
+        class="size-33 shrink-0 rounded-full object-cover ring-2 ring-border"
+      />
+      <div>
+        <h1 class="text-4xl font-semibold tracking-tight">{profile.name}</h1>
+        <p class="mt-2"><HeroTagline client:visible /></p>
+      </div>
+    </div>
     <p class="mt-5 max-w-prose text-sm leading-relaxed text-foreground/75">{profile.bio}</p>
     <div class="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-sm">
       {profile.socials.map((s) => (
