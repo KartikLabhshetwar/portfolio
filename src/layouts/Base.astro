@@ -11,7 +11,7 @@ const { title = 'Kartik Labhshetwar', description = 'Developer, builder.' } = As
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script is:inline>
       const t = localStorage.getItem('theme');
       const dark = t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;

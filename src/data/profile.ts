@@ -7,5 +7,6 @@ export const profile = {
     { label: 'GitHub', href: 'https://github.com/KartikLabhshetwar' },
     { label: 'X', href: 'https://x.com/code_kartik' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/kartikcode/' },
+    { label: 'Book a call', href: 'https://cal.com/kartik-labhshetwar/15min' },
   ],
 };

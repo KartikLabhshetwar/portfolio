@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="K">
+  <style>
+    @media (prefers-color-scheme: dark) {
+    .bg { fill: #fafafa }
+    .fg { stroke: #18181b }
+    }
+  </style>
+  <rect class="bg" width="100" height="100" rx="24" fill="#18181b"/>
+  <g class="fg" stroke="#fafafa" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M36 28 V72"/>
+    <path d="M36 50 L66 28"/>
+    <path d="M36 50 L66 72"/>
+  </g>
+</svg>
