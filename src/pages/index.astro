@@ -24,14 +24,14 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 ---
 <Base>
   <section class="py-10">
-    <div class="flex items-center gap-8">
+    <div class="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8">
       <img
         src="/kartik.png"
         alt={profile.name}
-        class="size-33 shrink-0 rounded-full object-cover ring-2 ring-border"
+        class="size-24 shrink-0 rounded-full object-cover ring-2 ring-border sm:size-33"
       />
       <div>
-        <h1 class="text-4xl font-semibold tracking-tight">{profile.name}</h1>
+        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{profile.name}</h1>
         <p class="mt-2"><HeroTagline client:visible /></p>
       </div>
     </div>

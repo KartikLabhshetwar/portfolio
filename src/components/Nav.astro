@@ -8,7 +8,7 @@ const links = [
 ];
 ---
 <nav class="flex items-center justify-end py-6">
-  <div class="flex items-center gap-4 text-sm">
+  <div class="flex flex-wrap items-center justify-end gap-x-3 gap-y-2 text-sm sm:gap-x-4">
     {links.map((l) => <a href={l.href} class="hover:underline">{l.label}</a>)}
     <button type="button" aria-label="Open command menu" title="Search (⌘K)"
       onclick="window.dispatchEvent(new Event('open-command-menu'))"

@@ -196,7 +196,7 @@ export function ExperiencePositionItem({
             </div>
           </div>
 
-          <dl className="relative z-1 flex items-center gap-2 pl-9 text-sm text-muted-foreground">
+          <dl className="relative z-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 pl-9 text-sm text-muted-foreground">
             {position.employmentType && (
               <>
                 <div>
