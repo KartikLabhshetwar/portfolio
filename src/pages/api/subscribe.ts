@@ -65,7 +65,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     res = await fetch('https://api.buttondown.com/v1/subscribers', {
       method: 'POST',
       headers: { Authorization: `Token ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email_address: email, tags: ['newsletter'], type: 'regular' }),
+      // Pass the visitor's IP so Buttondown's firewall judges *them*, not our
+      // Cloudflare Worker's datacenter egress IP (which firewalls tend to block).
+      body: JSON.stringify({ email_address: email, tags: ['newsletter'], type: 'regular', ...(ip ? { ip_address: ip } : {}) }),
     });
   } catch {
     return Response.json({ ok: false, error: 'Could not reach the newsletter service. Try again.' }, { status: 502 });
@@ -73,11 +75,16 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   if (res.ok) return Response.json({ ok: true });
 
-  // A duplicate isn't really an error to the visitor — say so kindly. Buttondown
-  // returns 400 with a JSON { code, detail } body for this.
+  // Buttondown returns 400 with a JSON { code, detail } body on failure. A
+  // duplicate (`email_already_exists`) isn't an error to the visitor — say so
+  // kindly. Match it NARROWLY: the old /subscrib/ test also matched
+  // `subscriber_blocked` (firewall rejections), reporting blocks as fake
+  // successes so the signup silently vanished. Every other code is a real
+  // failure — surface `detail` (e.g. "This subscriber was blocked by your firewall").
   const detail = (await res.json().catch(() => ({}))) as { code?: string; detail?: string };
-  const blob = `${detail.code ?? ''} ${detail.detail ?? ''}`.toLowerCase();
-  if (res.status === 400 && /already|exists|subscrib/.test(blob)) {
+  const isDuplicate =
+    detail.code === 'email_already_exists' || (detail.detail ?? '').toLowerCase().includes('already');
+  if (isDuplicate) {
     return Response.json({ ok: true, already: true });
   }
 
