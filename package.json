@@ -18,6 +18,7 @@
     "@astrojs/react": "^5.0.7",
     "@fingerprintjs/fingerprintjs": "^5.2.0",
     "@fontsource-variable/hanken-grotesk": "^5.0.0",
+    "@fontsource-variable/inter": "^5.2.8",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@fontsource/instrument-serif": "^5.0.0",
     "@keystatic/astro": "^5.1.0",

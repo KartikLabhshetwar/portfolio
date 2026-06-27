@@ -30,9 +30,40 @@ const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', mo
       <h1 class="text-2xl font-semibold tracking-tight">{post.data.title}</h1>
       <p class="mt-2 text-xs text-zinc-500"><time datetime={post.data.pubDate.toISOString()}>{date}</time></p>
     </header>
-    <div class="prose prose-zinc dark:prose-invert font-serif mt-8 max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-pre:text-xs prose-img:rounded-lg">
+    <div
+      id="prose-content"
+      class="prose prose-zinc dark:prose-invert mt-8 max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-pre:text-xs prose-img:rounded-lg"
+      style="font-family: var(--font-sans);"
+    >
       <Content />
     </div>
   </article>
   <NewsletterForm title="Enjoyed this post?" blurb="Get new posts and what I'm learning, in your inbox." />
 </Base>
+
+<script>
+  const prose = document.getElementById('prose-content');
+  if (prose) {
+    const els = Array.from(
+      prose.querySelectorAll<HTMLElement>('p, h2, h3, h4, ul, ol, blockquote, pre, figure')
+    );
+
+    function update() {
+      const cy = window.innerHeight / 2;
+      els.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const dist = Math.abs(r.top + r.height / 2 - cy);
+        const opacity = Math.max(0.15, 1 - dist / (window.innerHeight * 0.55));
+        el.style.opacity = String(opacity);
+      });
+    }
+
+    els.forEach((el) => {
+      el.style.transition = 'opacity 0.25s ease';
+      el.style.willChange = 'opacity';
+    });
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+</script>

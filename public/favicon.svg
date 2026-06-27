@@ -1,10 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="K">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Kartik Labhshetwar">
   <style>
     @media (prefers-color-scheme: dark) {
       .bg { fill: #fafafa }
       .fg { fill: #18181b }
     }
   </style>
-  <rect class="bg" width="100" height="100" rx="26" fill="#18181b" />
-  <path class="fg" fill="#fafafa" d="M27 22 H46 V41 L66 22 H87 L57 50 L87 78 H66 L46 59 V78 H27 Z" />
+  <rect class="bg" width="100" height="100" rx="20" fill="#18181b"/>
+  <path class="fg" fill="#fafafa" transform="translate(26 14) scale(0.1875)"
+    d="M0 0h64v384h-64zM192 0h64v64h-64zM128 64h64v64h-64zM64 128h64v128h-64zM128 256h64v64h-64zM192 320h64v64h-64z"/>
 </svg>

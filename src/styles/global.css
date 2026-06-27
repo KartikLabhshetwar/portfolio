@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/inter";
 @plugin "@tailwindcss/typography";
 
 /* class-based dark mode (Tailwind v4 defaults to prefers-color-scheme) */
@@ -37,6 +38,7 @@
 
 :root {
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --radius: 0.625rem;
   --background: hsl(97 4% 100%);
   --foreground: oklch(0.141 0.005 285.823);
