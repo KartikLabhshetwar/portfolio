@@ -11,7 +11,7 @@ const withStars = await Promise.all(projects.map(async (p) => {
 }));
 ---
 <Base title="Projects — Kartik Labhshetwar" toc="main h3">
-  <h1 class="text-2xl font-semibold">Projects</h1>
+  <h1 class="pt-10 text-2xl font-semibold">Projects</h1>
   <div class="mt-6">
     {withStars.map((p) => <ProjectCard {...p} />)}
   </div>

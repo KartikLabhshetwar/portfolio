@@ -9,7 +9,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 const toSlug = (id: string) => id.replace(/\/index$/, '');
 ---
 <Base title="Blog — Kartik Labhshetwar" toc="main h3">
-  <h1 class="text-2xl font-semibold">Blog</h1>
+  <h1 class="pt-10 text-2xl font-semibold">Blog</h1>
   <div class="mt-6">
     {posts.map((p) => <BlogCard title={p.data.title} description={p.data.description} pubDate={p.data.pubDate} slug={toSlug(p.id)} />)}
   </div>

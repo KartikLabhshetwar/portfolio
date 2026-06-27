@@ -53,17 +53,21 @@ const commandItems = [
     <script defer src="https://cdn.databuddy.cc/databuddy.js"></script>
   </head>
   <body class="min-h-screen bg-background text-foreground">
-    <main class="mx-auto max-w-2xl px-4">
+    <!-- Grid system: the content lives on a centered "sheet" framed by vertical
+         hairlines; full-bleed horizontal hairlines divide it at real section
+         boundaries. Same frame on every page. -->
+    <main class="mx-auto min-h-dvh max-w-2xl border-x border-border px-6">
       <Nav />
+      <div class="-mx-6 border-b border-border" aria-hidden="true"></div>
       <nav aria-label="On this page" class="fixed top-1/2 right-6 z-40 hidden -translate-y-1/2 xl:block">
         <!-- client:idle, not client:visible: the island renders empty until headings load,
              so a visibility trigger would never fire (zero-size element never intersects). -->
         <AutoTOCMinimap client:idle selector={toc} />
       </nav>
       <slot />
-      <footer class="mt-24 border-t border-black/10 pt-3 dark:border-white/10">
+      <footer class="-mx-6 mt-24 border-t border-border px-6 pt-3">
         <div class="flex justify-end pb-1"><VisitorCount /></div>
-        <div class="-mx-4 aspect-[22/1] overflow-hidden text-foreground">
+        <div class="-mx-6 aspect-[22/1] overflow-hidden text-foreground">
           <FooterBrand client:visible />
         </div>
       </footer>

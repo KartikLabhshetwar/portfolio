@@ -15,7 +15,7 @@ const { Content } = await render(post);
 const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 <Base title={`${post.data.title} — Kartik Labhshetwar`} description={post.data.description} toc="#prose-content h2, #prose-content h3">
-  <a href="/blog" class="mt-6 inline-block text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50">← Blog</a>
+  <a href="/blog" class="mt-10 inline-block text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50">← Blog</a>
   <article class="mt-4">
     <header class="border-b border-black/10 pb-6 dark:border-white/10">
       <h1 class="text-2xl font-semibold tracking-tight">{post.data.title}</h1>
