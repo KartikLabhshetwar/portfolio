@@ -241,7 +241,7 @@ export function ExperiencePositionItem({
 
         <CollapsibleContent className="overflow-hidden">
           {position.description && (
-            <Prose className="pt-2 pl-9">
+            <Prose className="pt-2 pl-9 text-[0.800rem]! leading-relaxed!">
               <ReactMarkdown>{position.description}</ReactMarkdown>
             </Prose>
           )}
