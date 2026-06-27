@@ -57,7 +57,7 @@ const archiveUrl = 'https://buttondown.com/code_kartik/archive/';
         if (data.ok) {
           form.reset();
           setStatus(
-            data.already ? "You're already subscribed — thanks!" : 'Almost there — check your inbox to confirm.',
+            data.already ? "You're already subscribed — thanks!" : "You're subscribed — thanks for joining!",
             'ok',
           );
         } else {

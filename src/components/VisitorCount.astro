@@ -1,15 +1,21 @@
-<span class="text-xs text-zinc-500"><span id="visitor-count">—</span> visitors</span>
+<span class="text-xs text-zinc-500"><span id="visitor-count">—</span> unique visitors</span>
 <script>
   import FingerprintJS from '@fingerprintjs/fingerprintjs';
   (async () => {
     const el = document.getElementById('visitor-count');
+    // Best-effort fingerprint. If it fails (privacy modes, blockers), still
+    // record the visit below — the server falls back to an IP+UA hash so the
+    // visitor is counted instead of being silently dropped.
+    let fingerprint: string | undefined;
     try {
       const fp = await FingerprintJS.load();
-      const { visitorId } = await fp.get();
+      fingerprint = (await fp.get()).visitorId;
+    } catch {}
+    try {
       const res = await fetch('/api/visitors', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fingerprint: visitorId }),
+        body: JSON.stringify(fingerprint ? { fingerprint } : {}),
       });
       const data = await res.json();
       if (el && typeof data.uniqueVisitors === 'number') el.textContent = data.uniqueVisitors.toLocaleString();

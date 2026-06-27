@@ -4,15 +4,19 @@ import NewsletterForm from '../../components/NewsletterForm.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map((post) => ({
+  // Sorted newest-first, so for any post posts[i-1] is the newer neighbour and
+  // posts[i+1] the older one — handed in as props for the prev/next footer.
+  const posts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  return posts.map((post, i) => ({
     params: { slug: post.id.replace(/\/index$/, '') },
-    props: { post },
+    props: { post, newer: posts[i - 1] ?? null, older: posts[i + 1] ?? null },
   }));
 }
-const { post } = Astro.props;
+const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
 const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const slug = (p: { id: string }) => p.id.replace(/\/index$/, '');
 ---
 <Base title={`${post.data.title} — Kartik Labhshetwar`} description={post.data.description} toc="#prose-content h2, #prose-content h3">
   <a href="/blog" class="mt-10 inline-block text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50">← Blog</a>
@@ -29,32 +33,23 @@ const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', mo
       <Content />
     </div>
   </article>
+
+  {(newer || older) && (
+    <nav class="-mx-6 mt-12 grid grid-cols-2 border-t border-border text-sm">
+      {older ? (
+        <a href={`/blog/${slug(older)}`} class="group border-r border-border px-6 py-5">
+          <div class="text-xs uppercase tracking-wide text-muted-foreground">← Older</div>
+          <div class="mt-1 text-foreground group-hover:underline">{older.data.title}</div>
+        </a>
+      ) : <div class="border-r border-border"></div>}
+      {newer ? (
+        <a href={`/blog/${slug(newer)}`} class="group px-6 py-5 text-right">
+          <div class="text-xs uppercase tracking-wide text-muted-foreground">Newer →</div>
+          <div class="mt-1 text-foreground group-hover:underline">{newer.data.title}</div>
+        </a>
+      ) : <div></div>}
+    </nav>
+  )}
+
   <NewsletterForm title="Enjoyed this post?" blurb="Get new posts and what I'm learning, in your inbox." />
 </Base>
-
-<script>
-  const prose = document.getElementById('prose-content');
-  if (prose) {
-    const els = Array.from(
-      prose.querySelectorAll<HTMLElement>('p, h2, h3, h4, ul, ol, blockquote, pre, figure')
-    );
-
-    function update() {
-      const cy = window.innerHeight / 2;
-      els.forEach((el) => {
-        const r = el.getBoundingClientRect();
-        const dist = Math.abs(r.top + r.height / 2 - cy);
-        const opacity = Math.max(0.15, 1 - dist / (window.innerHeight * 0.55));
-        el.style.opacity = String(opacity);
-      });
-    }
-
-    els.forEach((el) => {
-      el.style.transition = 'opacity 0.25s ease';
-      el.style.willChange = 'opacity';
-    });
-
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-  }
-</script>

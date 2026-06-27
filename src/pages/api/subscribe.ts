@@ -1,16 +1,20 @@
 import type { APIRoute } from 'astro';
+import { getRedis, type RedisEnv } from '../../lib/visitors';
+import { rateLimited } from '../../lib/ratelimit';
 
 export const prerender = false;
 
-// Buttondown API key lives in the runtime env. On Cloudflare it's a Worker
-// secret read via `cloudflare:workers` (same as GITHUB_TOKEN / UPSTASH); fall
-// back to process.env for plain Node (dev / tests).
-async function resolveApiKey(): Promise<string | undefined> {
+// Runtime env. On Cloudflare these are Worker secrets read via
+// `cloudflare:workers` (same as GITHUB_TOKEN / UPSTASH); fall back to
+// process.env for plain Node (dev / tests). Carries the Buttondown key plus the
+// Upstash creds (shared with the visitor counter) used to rate-limit.
+type Env = RedisEnv & { BUTTONDOWN_API_KEY?: string };
+async function resolveEnv(): Promise<Env> {
   try {
     const m: any = await import('cloudflare:workers' as any);
-    return m.env?.BUTTONDOWN_API_KEY ?? process.env.BUTTONDOWN_API_KEY;
+    return m.env as Env;
   } catch {
-    return process.env.BUTTONDOWN_API_KEY;
+    return (typeof process !== 'undefined' ? process.env : {}) as Env;
   }
 }
 
@@ -29,23 +33,39 @@ async function readEmail(request: Request): Promise<string | undefined> {
   return f?.get('email')?.toString();
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
+  const env = await resolveEnv();
+
+  // Abuse brake: cap subscribe attempts per IP so a script can't burn Buttondown
+  // API calls or spam signups. Reuses the visitor-counter Redis; when it's
+  // absent (local/dev) we simply don't limit. CF-Connecting-IP is the fallback
+  // when Astro's clientAddress isn't populated.
+  const redis = getRedis(env);
+  const ip = clientAddress || request.headers.get('cf-connecting-ip');
+  if (redis && ip && (await rateLimited(redis, `sub:${ip}`))) {
+    return Response.json({ ok: false, error: 'Too many sign-up attempts — try again in a few minutes.' }, { status: 429 });
+  }
+
   const email = (await readEmail(request))?.trim().toLowerCase();
   if (!email || !EMAIL_RE.test(email)) {
     return Response.json({ ok: false, error: 'Enter a valid email address.' }, { status: 400 });
   }
 
-  const apiKey = await resolveApiKey();
+  const apiKey = env.BUTTONDOWN_API_KEY;
   if (!apiKey) {
     return Response.json({ ok: false, error: 'Newsletter is not configured.' }, { status: 503 });
   }
 
   let res: Response;
   try {
+    // type: 'regular' opts this subscriber out of Buttondown's double opt-in, so
+    // they're added immediately with no confirmation email (Buttondown's own docs
+    // call this the per-subscriber way to skip opt-in). The address was typed
+    // into our own form, so consent is already explicit.
     res = await fetch('https://api.buttondown.com/v1/subscribers', {
       method: 'POST',
       headers: { Authorization: `Token ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email_address: email, tags: ['newsletter'] }),
+      body: JSON.stringify({ email_address: email, tags: ['newsletter'], type: 'regular' }),
     });
   } catch {
     return Response.json({ ok: false, error: 'Could not reach the newsletter service. Try again.' }, { status: 502 });

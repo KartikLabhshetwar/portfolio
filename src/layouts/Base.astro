@@ -9,10 +9,20 @@ import { profile } from '../data/profile';
 import { projects } from '../data/projects';
 import { getCollection } from 'astro:content';
 // `toc` selects which headings become scroll-minimap ticks (section h2s by default).
-const { title = 'Kartik Labhshetwar', description = 'Developer, builder.', toc = 'main h2' } = Astro.props;
+// `image` is the social card; pages (e.g. blog posts) can pass their own.
+const {
+  title = 'Kartik Labhshetwar — Software Engineer · AI & Dev Tools',
+  description = 'I build from zero. Software engineer building memory, infrastructure, and tooling for AI agents — and shipping products people love using.',
+  image = '/og.jpeg',
+  ogType = 'website',
+  toc = 'main h2',
+} = Astro.props;
+const siteName = 'Kartik Labhshetwar';
 // Always point canonical at the configured production domain (Astro.site),
 // so a workers.dev or any mirror host can't compete for ranking.
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
+// Social scrapers need an absolute image URL.
+const ogImage = new URL(image, Astro.site ?? Astro.url).href;
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 const commandItems = [
@@ -45,6 +55,26 @@ const commandItems = [
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph (LinkedIn, Discord, Slack, Facebook) -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+
+    <!-- X / Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@code_kartik" />
+    <meta name="twitter:creator" content="@code_kartik" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={title} />
     <script is:inline>
       const t = localStorage.getItem('theme');
       const dark = t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
@@ -67,7 +97,7 @@ const commandItems = [
       <slot />
       <footer class="-mx-6 mt-24 border-t border-border px-6 pt-3">
         <div class="flex justify-end pb-1"><VisitorCount /></div>
-        <div class="-mx-6 aspect-[22/1] overflow-hidden text-foreground">
+        <div class="-mx-6 aspect-[22/1] overflow-hidden text-foreground [&>astro-island]:block [&>astro-island]:size-full">
           <FooterBrand client:visible />
         </div>
       </footer>
