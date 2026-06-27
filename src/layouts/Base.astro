@@ -1,0 +1,32 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import VisitorCount from '../components/VisitorCount.astro';
+const { title = 'Kartik Labhshetwar', description = 'Developer, builder.' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      const t = localStorage.getItem('theme');
+      const dark = t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.toggle('dark', dark);
+    </script>
+    <script defer src="https://cdn.databuddy.cc/databuddy.js"></script>
+  </head>
+  <body class="min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+    <main class="mx-auto max-w-2xl px-4">
+      <Nav />
+      <slot />
+      <footer class="mt-20 flex items-center justify-between border-t border-black/10 py-8 text-sm text-zinc-500 dark:border-white/10">
+        <span>© {new Date().getFullYear()} Kartik Labhshetwar</span>
+        <VisitorCount />
+      </footer>
+    </main>
+  </body>
+</html>

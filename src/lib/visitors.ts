@@ -1,39 +1,40 @@
-import { Redis } from '@upstash/redis'
+import { Redis } from '@upstash/redis';
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-})
+const KEY = 'unique_visitors';
 
-const UNIQUE_VISITORS_SET = 'visitors:unique'
-
-export interface VisitorData {
-  uniqueVisitors: number
-}
+export type RedisEnv = {
+  UPSTASH_REDIS_REST_URL?: string;
+  UPSTASH_REDIS_REST_TOKEN?: string;
+};
 
 export function generateVisitorId(ip: string | null, userAgent: string | null, fingerprint?: string): string {
-  if (fingerprint) {
-    return `fp:${fingerprint}`
-  }
-  
-  const ipPart = ip || 'unknown'
-  const uaPart = userAgent || 'unknown'
-  return Buffer.from(`${ipPart}-${uaPart}`).toString('base64').slice(0, 32)
+  // A real browser fingerprint is stable across networks, so key on it alone —
+  // IP+UA change when the same person switches WiFi/cellular and would
+  // otherwise count as new visitors. Fall back to an IP+UA hash only when no
+  // fingerprint is sent (e.g. JS disabled, or the client request failed).
+  if (fingerprint) return `fp_${fingerprint}`;
+  const raw = `${ip ?? 'noip'}|${userAgent ?? 'noua'}`;
+  let h = 0;
+  for (let i = 0; i < raw.length; i++) { h = (Math.imul(31, h) + raw.charCodeAt(i)) | 0; }
+  return `v_${(h >>> 0).toString(36)}`;
 }
 
-async function getStats(): Promise<VisitorData> {
-  const uniqueCount = await redis.scard(UNIQUE_VISITORS_SET)
-  return { uniqueVisitors: uniqueCount }
+// Construct the Upstash client from request-time env. On Cloudflare, secrets
+// are read from the `cloudflare:workers` env module by the caller and passed in
+// here. Returns null when creds are absent so the endpoint can degrade
+// gracefully instead of throwing at module load.
+export function getRedis(env: RedisEnv): Redis | null {
+  if (!env.UPSTASH_REDIS_REST_URL || !env.UPSTASH_REDIS_REST_TOKEN) return null;
+  return new Redis({ url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN });
 }
 
-export async function trackVisit(visitorId: string): Promise<VisitorData> {
-  await redis.sadd(UNIQUE_VISITORS_SET, visitorId)
-  const uniqueCount = await redis.scard(UNIQUE_VISITORS_SET)
-  
-  return { uniqueVisitors: uniqueCount }
+export async function trackVisit(redis: Redis, visitorId: string): Promise<{ uniqueVisitors: number }> {
+  await redis.sadd(KEY, visitorId);
+  const uniqueVisitors = await redis.scard(KEY);
+  return { uniqueVisitors };
 }
 
-export async function getVisitorStats(): Promise<{ uniqueVisitors: number }> {
-  return await getStats()
+export async function getVisitorStats(redis: Redis): Promise<{ uniqueVisitors: number }> {
+  const uniqueVisitors = await redis.scard(KEY);
+  return { uniqueVisitors };
 }
-

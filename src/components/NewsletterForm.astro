@@ -1,0 +1,22 @@
+---
+interface Props { title?: string; blurb?: string; }
+const { title = 'Newsletter', blurb = 'I share what I learn.' } = Astro.props;
+// Buttondown handle — public (it appears in the form action on the live site).
+const USERNAME = 'code_kartik';
+const action = `https://buttondown.com/api/emails/embed-subscribe/${USERNAME}`;
+const archiveUrl = `https://buttondown.com/${USERNAME}/archive/`;
+---
+<section class="mt-12 rounded-lg border border-black/10 p-5 dark:border-white/10">
+  <h2 class="font-semibold">{title}</h2>
+  <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+    {blurb} <a href={archiveUrl} target="_blank" rel="noopener" class="underline">Read past issues ↗</a>
+  </p>
+  <form action={action} method="post" target="_blank" class="mt-3 flex gap-2">
+    <input type="hidden" name="embed" value="1" />
+    <input type="email" name="email" required placeholder="you@example.com"
+      class="flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm dark:border-white/15" />
+    <button type="submit" class="rounded-md bg-zinc-900 px-4 py-2 text-sm text-white dark:bg-white dark:text-zinc-900">
+      Subscribe
+    </button>
+  </form>
+</section>

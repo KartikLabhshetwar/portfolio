@@ -1,47 +1,54 @@
 {
   "name": "portfolio",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run",
+    "generate-types": "wrangler types"
   },
   "dependencies": {
-    "@octokit/rest": "^22.0.0",
-    "@radix-ui/react-avatar": "^1.1.10",
-    "@radix-ui/react-dropdown-menu": "^2.1.6",
-    "@radix-ui/react-slot": "^1.2.4",
-    "@radix-ui/react-tooltip": "^1.2.8",
-    "@tabler/icons-react": "^3.35.0",
-    "@upstash/redis": "^1.36.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.9.2",
-    "lucide-react": "^0.483.0",
-    "mathjs": "^14.6.0",
-    "motion": "^12.23.26",
-    "next": "15.2.8",
-    "next-themes": "^0.4.6",
-    "next-video": "^2.2.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-github-calendar": "^4.5.9",
-    "react-icons": "^5.5.0",
-    "react-markdown": "^10.1.0",
-    "tailwind-merge": "^3.4.0",
-    "tw-animate-css": "^1.2.4"
+    "@astrojs/cloudflare": "^13.7.0",
+    "@astrojs/markdoc": "^1.0.6",
+    "@astrojs/react": "^5.0.7",
+    "@fingerprintjs/fingerprintjs": "^5.2.0",
+    "@fontsource-variable/hanken-grotesk": "^5.0.0",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource/instrument-serif": "^5.0.0",
+    "@keystatic/astro": "^5.1.0",
+    "@keystatic/core": "^0.5.50",
+    "@upstash/redis": "^1.38.0",
+    "astro": "^6.0.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "wrangler": "^4.103.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.4",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/sitemap": "^3.7.3",
+    "@cloudflare/workers-types": "^4.20260621.1",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.1.8",
+    "@types/node": "^26.0.0",
+    "playwright": "^1.61.1",
+    "tailwindcss": "^4.1.8",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "^7"
+    },
+    "onlyBuiltDependencies": [
+      "@tailwindcss/oxide",
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   }
 }
