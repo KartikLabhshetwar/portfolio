@@ -39,7 +39,7 @@ function monthsSince(iso: string | undefined): number {
 // Worker secret — no build-time variable required.
 export async function resolveGithubToken(): Promise<string | undefined> {
   try {
-    const m: any = await import('cloudflare:workers');
+    const m: any = await import('cloudflare:workers' as any);
     return m.env?.GITHUB_TOKEN ?? process.env.GITHUB_TOKEN;
   } catch {
     return process.env.GITHUB_TOKEN;

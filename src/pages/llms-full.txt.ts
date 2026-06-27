@@ -15,7 +15,12 @@ export const GET: APIRoute = async ({ site }) => {
   const social = (label: string) => profile.socials.find((s) => s.label === label)?.href;
 
   const experienceMd = experience
-    .map((e) => `### ${e.role} · ${e.company} (${e.period})\n\n${e.points.map((p) => `- ${p}`).join('\n')}`)
+    .flatMap((c) =>
+      c.positions.map((p) => {
+        const end = p.employmentPeriod.end ?? 'present';
+        return `### ${p.title} · ${c.companyName} (${p.employmentPeriod.start}–${end})\n\n${p.description ?? ''}`;
+      }),
+    )
     .join('\n\n');
 
   const projectsMd = projects

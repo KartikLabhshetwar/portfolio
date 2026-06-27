@@ -5,8 +5,14 @@
 </button>
 <script>
   const btn = document.getElementById('theme-toggle');
-  btn?.addEventListener('click', () => {
+  const apply = () => {
     const isDark = document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  };
+  btn?.addEventListener('click', () => {
+    // chanhdai theme-toggle-effect: animate the swap with a View Transition
+    // circle-blur reveal (CSS lives in global.css). Fall back where unsupported.
+    if (!document.startViewTransition) return apply();
+    document.startViewTransition(apply);
   });
 </script>
