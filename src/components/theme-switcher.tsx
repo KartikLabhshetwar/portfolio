@@ -19,54 +19,34 @@ function ThemeOption({
   return (
     <button
       data-active={isActive}
-      className="relative flex size-8 items-center justify-center rounded-full text-muted-foreground transition-[color] hover:text-foreground data-[active=true]:text-foreground [&_svg]:size-4"
+      className="relative flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:text-foreground data-[active=true]:text-foreground"
       role="radio"
       aria-checked={isActive}
       aria-label={`Switch to ${value} theme`}
       onClick={() => onClick(value)}
     >
+      {isActive && (
+        <motion.span
+          layoutId="theme-thumb"
+          transition={{ type: "spring", stiffness: 400, damping: 32 }}
+          className="absolute inset-0 rounded-full bg-muted shadow-sm"
+        />
+      )}
       <motion.span
-        className="relative z-10 flex"
-        animate={{ scale: isActive ? 1.12 : 1, opacity: isActive ? 1 : 0.6 }}
-        whileTap={{ scale: 0.82 }}
-        transition={{ type: "spring", stiffness: 400, damping: 22 }}
+        className="relative z-10 flex [&_svg]:size-4"
+        whileTap={{ scale: 0.85 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
       >
         {icon}
       </motion.span>
-
-      {isActive && (
-        <motion.span
-          layoutId="theme-option"
-          transition={{ type: "spring", stiffness: 350, damping: 30 }}
-          className="absolute inset-0 rounded-full border"
-        />
-      )}
     </button>
   )
 }
 
 const THEME_OPTIONS = [
-  {
-    icon: (
-      <MonitorIcon
-      />
-    ),
-    value: "system",
-  },
-  {
-    icon: (
-      <SunIcon
-      />
-    ),
-    value: "light",
-  },
-  {
-    icon: (
-      <MoonIcon
-      />
-    ),
-    value: "dark",
-  },
+  { icon: <MonitorIcon strokeWidth={1.75} />, value: "system" },
+  { icon: <SunIcon strokeWidth={1.75} />, value: "light" },
+  { icon: <MoonIcon strokeWidth={1.75} />, value: "dark" },
 ]
 
 function ThemeSwitcher() {
