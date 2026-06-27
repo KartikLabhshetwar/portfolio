@@ -8,7 +8,7 @@ export const prerender = true;
 // Generated from the same data the site renders, so /llms.txt never drifts.
 // Format follows https://llmstxt.org: H1 + blockquote summary + link sections.
 export const GET: APIRoute = async ({ site }) => {
-  const base = (site?.toString() ?? 'https://kartikk.tech/').replace(/\/$/, '');
+  const base = (site?.toString() ?? 'https://kartiklabhshetwar.com/').replace(/\/$/, '');
   const social = (label: string) => profile.socials.find((s) => s.label === label)?.href;
 
   const projectLines = projects

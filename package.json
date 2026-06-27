@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.28.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -39,7 +40,15 @@
     "typescript": "^5.9.3",
     "vitest": "^3.2.6"
   },
-  "overrides": {
-    "vite": "^7"
+  "pnpm": {
+    "overrides": {
+      "vite": "^7"
+    },
+    "onlyBuiltDependencies": [
+      "@tailwindcss/oxide",
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   }
 }

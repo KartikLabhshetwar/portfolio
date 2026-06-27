@@ -24,7 +24,7 @@ export const projects: Project[] = [
     id: 'screenshot-studio',
     title: 'Screenshot Studio',
     description: 'Turn raw screenshots into share-ready visuals in the browser — backgrounds, padding, and export, with no signup or watermarks.',
-    impact: '10k+ daily users',
+    impact: '10k+ monthly users',
     liveLink: 'https://screenshot-studio.com',
     githubLink: 'https://github.com/KartikLabhshetwar/screenshot-studio',
   },

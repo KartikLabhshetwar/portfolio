@@ -1,6 +1,6 @@
 ---
-interface Props { name: string; login: string; url: string; avatarUrl: string; isOneTime?: boolean; }
-const { name, login, url, avatarUrl, isOneTime } = Astro.props;
+interface Props { name: string; login: string; url: string; avatarUrl: string; isOneTime?: boolean; amount?: number; total?: number; }
+const { name, login, url, avatarUrl, isOneTime, amount, total } = Astro.props;
 ---
 <a href={url} target="_blank" rel="noopener noreferrer"
    class="flex items-center gap-3 rounded-lg border border-black/10 p-3 transition-colors hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
@@ -9,7 +9,12 @@ const { name, login, url, avatarUrl, isOneTime } = Astro.props;
     <div class="truncate text-sm font-medium">{name}</div>
     <div class="truncate text-xs text-zinc-500">@{login}</div>
   </div>
-  {isOneTime && (
-    <span class="shrink-0 rounded border border-black/10 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-zinc-500 dark:border-white/10">one-time</span>
+  {typeof total === 'number' && total > 0 && (
+    <div class="shrink-0 text-right">
+      <div class="text-sm font-medium" title="Total given to date">${total}</div>
+      {isOneTime
+        ? <div class="text-[10px] uppercase tracking-wide text-zinc-500">one-time</div>
+        : <div class="text-[10px] tracking-wide text-zinc-500">${amount}/mo</div>}
+    </div>
   )}
 </a>

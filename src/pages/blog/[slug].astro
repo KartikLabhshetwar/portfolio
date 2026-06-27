@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -24,4 +25,5 @@ const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', mo
       <Content />
     </div>
   </article>
+  <NewsletterForm title="Enjoyed this post?" blurb="Get new posts and what I'm learning, in your inbox." />
 </Base>

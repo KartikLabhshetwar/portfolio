@@ -7,7 +7,7 @@ import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://kartikk.tech',
+  site: 'https://kartiklabhshetwar.com',
   adapter: cloudflare({ imageService: 'compile' }),
   session: { driver: sessionDrivers.lruCache() },
   integrations: [react(), markdoc(), keystatic(), sitemap()],

@@ -31,20 +31,26 @@ describe('fetchRepoStars', () => {
 });
 
 describe('fetchSponsors', () => {
-  it('maps recurring and one-time sponsors from sponsorshipsAsMaintainer', async () => {
+  it('maps amount + all-time total, sorted by total desc', async () => {
+    // Freeze "now" so the recurring total is deterministic.
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-06-20T12:00:00Z'));
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ data: { viewer: { sponsorshipsAsMaintainer: { nodes: [
-        { isOneTimePayment: false, sponsorEntity: { login: 'octocat', name: 'The Octocat', url: 'https://github.com/octocat', avatarUrl: 'https://x/y.png' } },
-        { isOneTimePayment: true, sponsorEntity: { login: 'mona', name: null, url: 'https://github.com/mona', avatarUrl: 'https://x/m.png' } },
+        { isOneTimePayment: false, createdAt: '2025-12-15T12:00:00Z', tier: { monthlyPriceInDollars: 2 }, sponsorEntity: { login: 'octocat', name: 'The Octocat', url: 'https://github.com/octocat', avatarUrl: 'https://x/y.png' } },
+        { isOneTimePayment: true, createdAt: '2026-01-01T12:00:00Z', tier: { monthlyPriceInDollars: 20 }, sponsorEntity: { login: 'mona', name: null, url: 'https://github.com/mona', avatarUrl: 'https://x/m.png' } },
       ] } } } }),
     }));
     process.env.GITHUB_TOKEN = 'tok';
     const s = await fetchSponsors();
+    // octocat: $2/mo since 2025-12-15 → 7 monthly charges by 2026-06-20 = $14.
+    // mona: one-time $20. Sorted by total desc → mona ($20), octocat ($14).
     expect(s).toEqual([
-      { login: 'octocat', name: 'The Octocat', url: 'https://github.com/octocat', avatarUrl: 'https://x/y.png', isOneTime: false },
-      { login: 'mona', name: 'mona', url: 'https://github.com/mona', avatarUrl: 'https://x/m.png', isOneTime: true },
+      { login: 'mona', name: 'mona', url: 'https://github.com/mona', avatarUrl: 'https://x/m.png', isOneTime: true, amount: 20, total: 20 },
+      { login: 'octocat', name: 'The Octocat', url: 'https://github.com/octocat', avatarUrl: 'https://x/y.png', isOneTime: false, amount: 2, total: 14 },
     ]);
+    vi.useRealTimers();
   });
   it('returns [] when no token', async () => {
     delete process.env.GITHUB_TOKEN;

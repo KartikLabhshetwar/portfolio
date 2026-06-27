@@ -1,4 +1,4 @@
-export type Sponsor = { login: string; name: string; url: string; avatarUrl: string; isOneTime: boolean };
+export type Sponsor = { login: string; name: string; url: string; avatarUrl: string; isOneTime: boolean; amount: number; total: number };
 
 export function parseRepo(url: string): { owner: string; repo: string } | null {
   const m = url.match(/github\.com\/([^/]+)\/([^/]+)/);
@@ -22,18 +22,32 @@ export async function fetchRepoStars(owner: string, repo: string): Promise<numbe
   }
 }
 
+// Number of monthly charges from a start date to now (min 1 — the initial
+// charge). Estimates an active recurring sponsor's all-time total.
+function monthsSince(iso: string | undefined): number {
+  if (!iso) return 1;
+  const start = new Date(iso);
+  const now = new Date();
+  let m = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+  if (now.getDate() >= start.getDate()) m += 1;
+  return Math.max(1, m);
+}
+
 export async function fetchSponsors(): Promise<Sponsor[]> {
   const token = process.env.GITHUB_TOKEN;
   if (!token) return [];
-  // `sponsorshipsAsMaintainer` returns BOTH recurring and one-time sponsors
-  // (the `sponsors` connection alone omits the recurring/one-time distinction).
-  // Requires a token with the `read:user` scope. `includePrivate: false` returns
-  // only sponsors who chose to be public; `activeOnly: true` = current sponsors.
+  // `sponsorshipsAsMaintainer` returns BOTH recurring and one-time sponsors.
+  // Token needs `read:org` (alongside `read:user`) or the sponsor login/name
+  // fields fail with INSUFFICIENT_SCOPES. `includePrivate: false` = only public
+  // sponsors; `activeOnly: false` = include past/one-time sponsors too. `tier`
+  // carries the dollar amount (monthly price, or the one-time price).
   const query = `query {
     viewer {
-      sponsorshipsAsMaintainer(first: 100, includePrivate: false, activeOnly: true) {
+      sponsorshipsAsMaintainer(first: 100, includePrivate: false, activeOnly: false) {
         nodes {
           isOneTimePayment
+          createdAt
+          tier { monthlyPriceInDollars }
           sponsorEntity {
             __typename
             ... on User { login name url avatarUrl }
@@ -53,7 +67,14 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
     const json = await res.json();
     const nodes = json?.data?.viewer?.sponsorshipsAsMaintainer?.nodes ?? [];
     return nodes
-      .map((n: any) => ({ entity: n?.sponsorEntity, isOneTime: !!n?.isOneTimePayment }))
+      .map((n: any) => {
+        const amount = n?.tier?.monthlyPriceInDollars ?? 0;
+        const isOneTime = !!n?.isOneTimePayment;
+        // All-time total: one-time = the single amount; recurring = rate × the
+        // monthly charges since it started.
+        const total = isOneTime ? amount : amount * monthsSince(n?.createdAt);
+        return { entity: n?.sponsorEntity, isOneTime, amount, total };
+      })
       .filter((n: any) => n.entity && n.entity.login)
       .map((n: any) => ({
         login: n.entity.login,
@@ -61,7 +82,10 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
         url: n.entity.url,
         avatarUrl: n.entity.avatarUrl,
         isOneTime: n.isOneTime,
-      }));
+        amount: n.amount,
+        total: n.total,
+      }))
+      .sort((a: Sponsor, b: Sponsor) => b.total - a.total);
   } catch {
     return [];
   }

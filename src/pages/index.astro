@@ -30,9 +30,6 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       {profile.socials.map((s) => (
         <a href={s.href} target="_blank" rel="noopener noreferrer" class="text-zinc-500 underline-offset-4 hover:text-zinc-900 hover:underline dark:hover:text-zinc-50">{s.label}</a>
       ))}
-      {profile.resumeUrl && (
-        <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" class="text-zinc-500 underline-offset-4 hover:text-zinc-900 hover:underline dark:hover:text-zinc-50">Resume</a>
-      )}
     </div>
   </section>
 
