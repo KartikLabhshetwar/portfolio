@@ -9,9 +9,10 @@ export function parseRepo(url: string): { owner: string; repo: string } | null {
   return { owner, repo };
 }
 
-export async function fetchRepoStars(owner: string, repo: string): Promise<number> {
+export async function fetchRepoStars(owner: string, repo: string, token?: string): Promise<number> {
   const headers: Record<string, string> = { 'User-Agent': 'portfolio' };
-  if (process.env.GITHUB_TOKEN) headers.Authorization = `bearer ${process.env.GITHUB_TOKEN}`;
+  token = token ?? process.env.GITHUB_TOKEN;
+  if (token) headers.Authorization = `bearer ${token}`;
   try {
     const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
     if (!res.ok) return 0;

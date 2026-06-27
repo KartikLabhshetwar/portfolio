@@ -1,0 +1,15 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import { projects } from '../data/projects';
+import { parseRepo, fetchRepoStars, resolveGithubToken } from '../lib/github';
+// Server island (server:defer): fetches stars at request time so it can read the
+// runtime GITHUB_TOKEN Worker secret — the home page itself stays prerendered.
+const featuredIds = ['screenshot-studio', 'bettershot', 'oneurl'];
+const token = await resolveGithubToken();
+const featured = await Promise.all(featuredIds.map(async (id) => {
+  const p = projects.find((x) => x.id === id)!;
+  const r = p.githubLink ? parseRepo(p.githubLink) : null;
+  return { ...p, stars: r ? await fetchRepoStars(r.owner, r.repo, token) : 0 };
+}));
+---
+<div class="mt-1">{featured.map((p) => <ProjectCard {...p} />)}</div>

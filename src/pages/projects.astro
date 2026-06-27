@@ -1,14 +1,19 @@
 ---
+export const prerender = false;
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { projects } from '../data/projects';
-import { parseRepo, fetchRepoStars } from '../lib/github';
+import { parseRepo, fetchRepoStars, resolveGithubToken } from '../lib/github';
 
+// Fetch at request time so the runtime GITHUB_TOKEN Worker secret is used (the
+// prerendered build has no token). Cache the result at the edge for an hour.
+const token = await resolveGithubToken();
 const withStars = await Promise.all(projects.map(async (p) => {
   const r = p.githubLink ? parseRepo(p.githubLink) : null;
-  const stars = r ? await fetchRepoStars(r.owner, r.repo) : 0;
+  const stars = r ? await fetchRepoStars(r.owner, r.repo, token) : 0;
   return { ...p, stars };
 }));
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=3600');
 ---
 <Base title="Projects — Kartik Labhshetwar" toc="main h3">
   <h1 class="pt-10 text-2xl font-semibold">Projects</h1>

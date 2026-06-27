@@ -2,22 +2,14 @@
 import Base from '../layouts/Base.astro';
 import { HeroTagline } from '../components/HeroTagline';
 import { WorkExperience } from '../components/work-experience';
-import ProjectCard from '../components/ProjectCard.astro';
+import HomeProjects from '../components/HomeProjects.astro';
 import HomeSponsors from '../components/HomeSponsors.astro';
 import BlogCard from '../components/BlogCard.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
 import { profile } from '../data/profile';
 import { experience } from '../data/experience';
-import { projects } from '../data/projects';
-import { parseRepo, fetchRepoStars } from '../lib/github';
 import { getCollection } from 'astro:content';
 
-const featuredIds = ['screenshot-studio', 'bettershot', 'oneurl'];
-const featured = await Promise.all(featuredIds.map(async (id) => {
-  const p = projects.find((x) => x.id === id)!;
-  const r = p.githubLink ? parseRepo(p.githubLink) : null;
-  return { ...p, stars: r ? await fetchRepoStars(r.owner, r.repo) : 0 };
-}));
 const toSlug = (id: string) => id.replace(/\/index$/, '');
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()).slice(0, 3);
@@ -55,7 +47,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Projects</h2>
       <a href="/projects" class="text-xs text-muted-foreground hover:text-foreground">All →</a>
     </div>
-    <div class="mt-1">{featured.map((p) => <ProjectCard {...p} />)}</div>
+    <HomeProjects server:defer />
   </section>
 
   <section class="-mx-6 border-t border-border px-6 py-10">

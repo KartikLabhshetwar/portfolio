@@ -15,7 +15,7 @@ export const projects: Project[] = [
   {
     id: 'bettershot',
     title: 'BetterShot',
-    description: 'Capture, annotate, and polish screenshots natively on macOS — the open-source CleanShot X alternative.',
+    description: 'Capture, annotate, and polish screenshots natively on macOS; the open-source CleanShot X alternative.',
     impact: '12k+ downloads',
     liveLink: 'https://www.bettershot.site',
     githubLink: 'https://github.com/KartikLabhshetwar/better-shot',
@@ -23,7 +23,7 @@ export const projects: Project[] = [
   {
     id: 'screenshot-studio',
     title: 'Screenshot Studio',
-    description: 'Turn raw screenshots into share-ready visuals in the browser — backgrounds, padding, and export, with no signup or watermarks.',
+    description: 'Turn raw screenshots into share-ready visuals in the browser: backgrounds, padding, and export, with no signup or watermarks.',
     impact: '10k+ monthly users',
     liveLink: 'https://screenshot-studio.com',
     githubLink: 'https://github.com/KartikLabhshetwar/screenshot-studio',
@@ -31,21 +31,21 @@ export const projects: Project[] = [
   {
     id: 'zoomies',
     title: 'Zoomies',
-    description: 'Watch your live CPU load sprint across the macOS menu bar as a running animal — a tiny, native SwiftUI system monitor.',
+    description: 'Watch your live CPU load sprint across the macOS menu bar as a running animal: a tiny, native SwiftUI system monitor.',
     impact: 'Latest',
     githubLink: 'https://github.com/KartikLabhshetwar/zoomies',
   },
   {
     id: 'oneurl',
     title: 'OneURL',
-    description: 'Put every link on one shareable profile page — the open-source, self-hostable Linktree alternative.',
+    description: 'Put every link on one shareable profile page; the open-source, self-hostable Linktree alternative.',
     liveLink: 'https://www.oneurl.live',
     githubLink: 'https://github.com/KartikLabhshetwar/oneurl',
   },
   {
     id: 'lazycommit',
     title: 'Lazy Commit',
-    description: 'Generate your git commit messages with AI straight from the CLI — never hand-write one again.',
+    description: 'Generate your git commit messages with AI straight from the CLI, so you never hand-write one again.',
     impact: '195k+ downloads',
     liveLink: 'https://www.npmjs.com/package/lazycommitt',
     githubLink: 'https://github.com/KartikLabhshetwar/lazycommit',
@@ -74,7 +74,7 @@ export const projects: Project[] = [
   {
     id: 'mercurius',
     title: 'Mercurius',
-    description: 'Chat in self-destructing rooms that vanish after 10 minutes — anonymous and private by default.',
+    description: 'Chat in self-destructing rooms that vanish after 10 minutes, anonymous and private by default.',
     liveLink: 'https://mercurius.kartikk.tech',
     githubLink: 'https://github.com/KartikLabhshetwar/Mercurius',
   },
