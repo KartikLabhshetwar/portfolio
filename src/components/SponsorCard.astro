@@ -3,18 +3,19 @@ interface Props { name: string; login: string; url: string; avatarUrl: string; i
 const { name, login, url, avatarUrl, isOneTime, amount, total } = Astro.props;
 ---
 <a href={url} target="_blank" rel="noopener noreferrer"
-   class="flex items-center gap-3 rounded-lg border border-black/10 p-3 transition-colors hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5">
-  <img src={avatarUrl} alt={name} width="40" height="40" loading="lazy" class="h-10 w-10 shrink-0 rounded-full" />
+   class="flex items-center gap-3 rounded-lg border border-black/10 p-3 transition-colors hover:border-black/20 hover:bg-black/5 dark:border-white/10 dark:hover:border-white/20 dark:hover:bg-white/5">
+  <img src={avatarUrl} alt={name} width="40" height="40" loading="lazy"
+    class="size-10 shrink-0 rounded-full bg-muted object-cover ring-1 ring-border" />
   <div class="min-w-0 flex-1">
     <div class="truncate text-sm font-medium">{name}</div>
     <div class="truncate text-xs text-zinc-500">@{login}</div>
   </div>
   {typeof total === 'number' && total > 0 && (
     <div class="shrink-0 text-right">
-      <div class="text-sm font-medium" title="Total given to date">${total}</div>
+      <div class="text-sm font-medium tabular-nums" title="Total given to date">${total}</div>
       {isOneTime
         ? <div class="text-[10px] uppercase tracking-wide text-zinc-500">one-time</div>
-        : <div class="text-[10px] tracking-wide text-zinc-500">${amount}/mo</div>}
+        : <div class="text-[10px] tracking-wide text-zinc-500 tabular-nums">${amount}/mo</div>}
     </div>
   )}
 </a>

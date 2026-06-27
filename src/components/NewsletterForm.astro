@@ -1,22 +1,74 @@
 ---
 interface Props { title?: string; blurb?: string; }
 const { title = 'Newsletter', blurb = 'I share what I learn.' } = Astro.props;
-// Buttondown handle — public (it appears in the form action on the live site).
-const USERNAME = 'code_kartik';
-const action = `https://buttondown.com/api/emails/embed-subscribe/${USERNAME}`;
-const archiveUrl = `https://buttondown.com/${USERNAME}/archive/`;
+// Subscribing goes through our own /api/subscribe route, which calls Buttondown's
+// v1 API server-side with the exact typed email — no new tab, no autofill mixups.
+// The public archive link still uses the public handle.
+const archiveUrl = 'https://buttondown.com/code_kartik/archive/';
 ---
 <section class="mt-12 rounded-lg border border-black/10 p-5 dark:border-white/10">
   <h2 class="font-semibold">{title}</h2>
   <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
     {blurb} <a href={archiveUrl} target="_blank" rel="noopener" class="underline">Read past issues ↗</a>
   </p>
-  <form action={action} method="post" target="_blank" class="mt-3 flex gap-2">
-    <input type="hidden" name="embed" value="1" />
-    <input type="email" name="email" required placeholder="you@example.com"
+  <form data-newsletter action="/api/subscribe" method="post" class="mt-3 flex gap-2">
+    <input type="email" name="email" required autocomplete="email" placeholder="you@example.com"
       class="min-w-0 flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm dark:border-white/15" />
-    <button type="submit" class="rounded-md bg-zinc-900 px-4 py-2 text-sm text-white dark:bg-white dark:text-zinc-900">
+    <button type="submit"
+      class="shrink-0 rounded-md bg-zinc-900 px-4 py-2 text-sm text-white transition-opacity disabled:opacity-60 dark:bg-white dark:text-zinc-900">
       Subscribe
     </button>
   </form>
+  <p data-newsletter-status role="status" aria-live="polite"
+    class="mt-2 text-sm text-zinc-600 empty:hidden dark:text-zinc-400"></p>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[data-newsletter]').forEach((form) => {
+    const input = form.querySelector<HTMLInputElement>('input[name="email"]')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const status = form.parentElement!.querySelector<HTMLElement>('[data-newsletter-status]')!;
+    const setStatus = (msg: string, tone: 'ok' | 'err' | 'muted') => {
+      const color =
+        tone === 'ok' ? 'text-emerald-600 dark:text-emerald-400'
+        : tone === 'err' ? 'text-red-600 dark:text-red-400'
+        : 'text-zinc-600 dark:text-zinc-400';
+      status.className = `mt-2 text-sm empty:hidden ${color}`;
+      status.textContent = msg;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = input.value.trim();
+      if (!email) return;
+
+      const label = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Subscribing…';
+      setStatus('', 'muted');
+
+      try {
+        const res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        const data = (await res.json().catch(() => ({}))) as { ok?: boolean; already?: boolean; error?: string };
+        if (data.ok) {
+          form.reset();
+          setStatus(
+            data.already ? "You're already subscribed — thanks!" : 'Almost there — check your inbox to confirm.',
+            'ok',
+          );
+        } else {
+          setStatus(data.error || 'Something went wrong. Try again.', 'err');
+        }
+      } catch {
+        setStatus('Network error. Try again.', 'err');
+      } finally {
+        button.disabled = false;
+        button.textContent = label;
+      }
+    });
+  });
+</script>

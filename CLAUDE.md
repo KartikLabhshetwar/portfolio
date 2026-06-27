@@ -27,13 +27,14 @@ The lockfile is `pnpm-lock.yaml` and the version is pinned in `package.json` →
 
 - **Type:** JetBrains Mono for UI / headings / code; serif (`ui-serif`) for blog body (`.prose` in `global.css`). Keep this split.
 - **Projects:** action-led, verb-first descriptions + an optional `impact` metric (downloads/DAU/"Latest"). Stars render live from the build-time fetch — don't hardcode them.
-- **Newsletter:** Buttondown handle is hardcoded in `NewsletterForm.astro` (it's public — no env var).
+- **Newsletter:** subscribing posts to `/api/subscribe` (server route → Buttondown v1 API with `BUTTONDOWN_API_KEY`), so the exact typed email is used. The public archive handle stays hardcoded in `NewsletterForm.astro`.
 - **Commits:** conventional style (`feat:`, `fix:`…), no AI attribution footer. Default branch is `main`; work happens on feature branches.
 
 ## Env vars (`.env` locally, Cloudflare dashboard in prod — see `.env.example`)
 
 - `GITHUB_TOKEN` — classic PAT, build-time. Scopes: `repo` + `read:user` for stars, **plus `read:org`** for sponsors (the `sponsorshipsAsMaintainer` query returns `INSUFFICIENT_SCOPES` without it).
 - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` — visitor counter (runtime, via `cloudflare:workers` env).
+- `BUTTONDOWN_API_KEY` — newsletter subscribes (runtime, via `cloudflare:workers` env). Powers `/api/subscribe`; without it the form replies "not configured".
 - `MUX_TOKEN_ID` / `MUX_TOKEN_SECRET` — in `.env` but **unused by any code** (leftover). Safe to delete unless a Mux feature is planned.
 
 Never log secret values. There are currently no `console.*` statements in the codebase — keep it that way; if you must debug a secret, log only `Boolean(value)` and remove it before committing.
