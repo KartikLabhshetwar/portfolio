@@ -49,6 +49,7 @@ ${postLines}
 - [Projects](${base}/projects): Full list of projects
 - [Blog](${base}/blog): All posts
 - [Sponsors](${base}/sponsors): GitHub sponsors
+- [Full content](${base}/llms-full.txt): Every page plus complete blog post text, as one Markdown file
 `;
 
   return new Response(body, {
