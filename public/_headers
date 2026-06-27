@@ -1,0 +1,6 @@
+# Serve the agent-facing endpoints as Markdown (they're prerendered .txt files,
+# so without this Cloudflare would label them text/plain from the extension).
+/llms.txt
+  Content-Type: text/markdown; charset=utf-8
+/llms-full.txt
+  Content-Type: text/markdown; charset=utf-8
