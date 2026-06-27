@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { HeroTagline } from '../components/HeroTagline';
+import { HeroName } from '../components/name-brand';
 import { WorkExperience } from '../components/work-experience';
 import ProjectCard from '../components/ProjectCard.astro';
 import HomeSponsors from '../components/HomeSponsors.astro';
@@ -24,7 +25,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 ---
 <Base>
   <section class="py-6">
-    <h1 class="text-4xl font-semibold tracking-tight">{profile.name}</h1>
+    <HeroName client:load name={profile.name} />
     <p class="mt-2 text-muted-foreground">{profile.role}</p>
     <p class="mt-1"><HeroTagline client:visible /></p>
     <p class="mt-4 max-w-prose text-sm leading-relaxed text-foreground/80">{profile.bio}</p>

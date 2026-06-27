@@ -3,7 +3,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import VisitorCount from '../components/VisitorCount.astro';
 import CommandMenu from '../components/CommandMenu.tsx';
-import { FluidGradientText } from '../components/fluid-gradient-text';
+import { FooterBrand } from '../components/name-brand';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
 import { getCollection } from 'astro:content';
@@ -56,8 +56,8 @@ const commandItems = [
       <slot />
       <footer class="mt-24 border-t border-black/10 pt-3 dark:border-white/10">
         <div class="flex justify-end pb-1"><VisitorCount /></div>
-        <div class="h-24 overflow-hidden text-foreground md:h-40">
-          <FluidGradientText client:visible text="Kartik Labhshetwar" svgViewBoxWidth={3300} />
+        <div class="-mx-4 aspect-[22/1] overflow-hidden text-foreground">
+          <FooterBrand client:visible />
         </div>
       </footer>
     </main>

@@ -45,12 +45,12 @@ export function FluidGradientText({
 
   return (
     <div
-      className="relative size-full overflow-hidden after:absolute after:bottom-0 after:h-px after:w-full after:bg-current/15"
+      className="relative w-full"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       <svg
-        className="size-full select-none"
+        className="w-full select-none"
         viewBox={`0 0 ${svgViewBoxWidth} ${svgViewBoxHeight}`}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

@@ -3,6 +3,7 @@ import { useSyncExternalStore } from "react"
 import { motion, MotionConfig } from "motion/react"
 import { ThemeProvider, useTheme } from "next-themes"
 import { MonitorIcon, SunIcon, MoonIcon } from "lucide-react"
+import { Toaster } from "@/components/ui/sonner"
 
 function ThemeOption({
   icon,
@@ -109,6 +110,7 @@ function ThemeSwitcherRoot() {
       <MotionConfig reducedMotion="user">
         <ThemeSwitcher />
       </MotionConfig>
+      <Toaster />
     </ThemeProvider>
   )
 }
