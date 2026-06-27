@@ -8,7 +8,12 @@ export type RedisEnv = {
 };
 
 export function generateVisitorId(ip: string | null, userAgent: string | null, fingerprint?: string): string {
-  const raw = `${ip ?? 'noip'}|${userAgent ?? 'noua'}|${fingerprint ?? 'nofp'}`;
+  // A real browser fingerprint is stable across networks, so key on it alone —
+  // IP+UA change when the same person switches WiFi/cellular and would
+  // otherwise count as new visitors. Fall back to an IP+UA hash only when no
+  // fingerprint is sent (e.g. JS disabled, or the client request failed).
+  if (fingerprint) return `fp_${fingerprint}`;
+  const raw = `${ip ?? 'noip'}|${userAgent ?? 'noua'}`;
   let h = 0;
   for (let i = 0; i < raw.length; i++) { h = (Math.imul(31, h) + raw.charCodeAt(i)) | 0; }
   return `v_${(h >>> 0).toString(36)}`;

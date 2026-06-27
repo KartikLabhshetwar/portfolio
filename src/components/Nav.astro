@@ -7,8 +7,7 @@ const links = [
   { href: '/sponsors', label: 'Sponsors' },
 ];
 ---
-<nav class="flex items-center justify-between py-6">
-  <a href="/" class="font-semibold">Kartik</a>
+<nav class="flex items-center justify-end py-6">
   <div class="flex items-center gap-4 text-sm">
     {links.map((l) => <a href={l.href} class="hover:underline">{l.label}</a>)}
     <ThemeToggle />

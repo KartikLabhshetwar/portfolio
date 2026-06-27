@@ -88,6 +88,14 @@ html {
 /* slightly relax tracking on big headings so mono doesn't feel cramped */
 h1, h2, h3 { letter-spacing: -0.01em; }
 
-/* long-form blog body: comfortable measure + rhythm for a mono face */
-.prose { line-height: 1.8; }
+/* Long-form blog body reads in a serif for comfort (New York on Apple via
+   ui-serif, Georgia elsewhere); headings, code, and the rest of the site keep
+   the mono identity. */
+.prose {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.prose :where(h1, h2, h3, h4, h5, h6, th) { font-family: var(--font-mono); }
+.prose :where(code, pre, kbd, samp) { font-family: var(--font-mono); }
 .prose :where(pre) { line-height: 1.5; }

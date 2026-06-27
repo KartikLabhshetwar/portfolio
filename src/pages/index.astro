@@ -10,7 +10,9 @@ import { projects } from '../data/projects';
 import { parseRepo, fetchRepoStars, fetchSponsors } from '../lib/github';
 import { getCollection } from 'astro:content';
 
-const featured = await Promise.all(projects.slice(0, 4).map(async (p) => {
+const featuredIds = ['screenshot-studio', 'bettershot', 'oneurl'];
+const featured = await Promise.all(featuredIds.map(async (id) => {
+  const p = projects.find((x) => x.id === id)!;
   const r = p.githubLink ? parseRepo(p.githubLink) : null;
   return { ...p, stars: r ? await fetchRepoStars(r.owner, r.repo) : 0 };
 }));

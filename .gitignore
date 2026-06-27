@@ -19,6 +19,7 @@ yarn-error.log*
 
 # env files
 .env*
+!.env.example
 .dev.vars
 
 # typescript
@@ -29,3 +30,8 @@ yarn-error.log*
 
 # SDD scratch
 .superpowers/
+
+# agent tooling (skills CLI + local Claude settings)
+.agents/
+.claude/
+skills-lock.json

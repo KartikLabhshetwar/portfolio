@@ -1,8 +1,12 @@
 ---
-const USERNAME = 'BUTTONDOWN_USERNAME'; // TODO: set real username
+// Enable the newsletter by setting BUTTONDOWN_USERNAME (your buttondown.com
+// handle) in .env locally and in your Cloudflare Pages build env. While unset,
+// the section simply doesn't render — no broken form.
+const USERNAME = import.meta.env.BUTTONDOWN_USERNAME;
 const action = `https://buttondown.com/api/emails/embed-subscribe/${USERNAME}`;
 const archiveUrl = `https://buttondown.com/${USERNAME}/archive/`;
 ---
+{USERNAME && (
 <section class="mt-12 rounded-lg border border-black/10 p-5 dark:border-white/10">
   <h2 class="font-semibold">Newsletter</h2>
   <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
@@ -17,3 +21,4 @@ const archiveUrl = `https://buttondown.com/${USERNAME}/archive/`;
     </button>
   </form>
 </section>
+)}

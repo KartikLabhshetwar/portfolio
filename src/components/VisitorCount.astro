@@ -1,9 +1,16 @@
 <span class="text-xs text-zinc-500">👀 <span id="visitor-count">—</span> visitors</span>
 <script>
+  import FingerprintJS from '@fingerprintjs/fingerprintjs';
   (async () => {
     const el = document.getElementById('visitor-count');
     try {
-      const res = await fetch('/api/visitors', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      const fp = await FingerprintJS.load();
+      const { visitorId } = await fp.get();
+      const res = await fetch('/api/visitors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fingerprint: visitorId }),
+      });
       const data = await res.json();
       if (el && typeof data.uniqueVisitors === 'number') el.textContent = data.uniqueVisitors.toLocaleString();
     } catch {}
