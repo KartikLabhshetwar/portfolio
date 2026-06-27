@@ -33,8 +33,21 @@ function monthsSince(iso: string | undefined): number {
   return Math.max(1, m);
 }
 
-export async function fetchSponsors(): Promise<Sponsor[]> {
-  const token = process.env.GITHUB_TOKEN;
+// On Cloudflare, secrets live in the `cloudflare:workers` env module at RUNTIME
+// (the same place the visitor counter reads UPSTASH). Falls back to process.env
+// for build-time / Node. This lets an SSR page read GITHUB_TOKEN that's set as a
+// Worker secret — no build-time variable required.
+export async function resolveGithubToken(): Promise<string | undefined> {
+  try {
+    const m: any = await import('cloudflare:workers');
+    return m.env?.GITHUB_TOKEN ?? process.env.GITHUB_TOKEN;
+  } catch {
+    return process.env.GITHUB_TOKEN;
+  }
+}
+
+export async function fetchSponsors(token?: string): Promise<Sponsor[]> {
+  token = token ?? process.env.GITHUB_TOKEN;
   if (!token) return [];
   // `sponsorshipsAsMaintainer` returns BOTH recurring and one-time sponsors.
   // Token needs `read:org` (alongside `read:user`) or the sponsor login/name

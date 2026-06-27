@@ -1,8 +1,12 @@
 ---
+export const prerender = false;
 import Base from '../layouts/Base.astro';
 import SponsorCard from '../components/SponsorCard.astro';
-import { fetchSponsors } from '../lib/github';
-const sponsors = await fetchSponsors();
+import { fetchSponsors, resolveGithubToken } from '../lib/github';
+// Fetch at request time so the runtime GITHUB_TOKEN Worker secret is used (the
+// prerendered build has no token). Cache the result at the edge for an hour.
+const sponsors = await fetchSponsors(await resolveGithubToken());
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=3600');
 const recurring = sponsors.filter((s) => !s.isOneTime);
 const oneTime = sponsors.filter((s) => s.isOneTime);
 const sponsorUrl = 'https://github.com/sponsors/KartikLabhshetwar';
