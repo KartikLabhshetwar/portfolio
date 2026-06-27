@@ -1,9 +1,10 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { useTiks } from "@rexa-developer/tiks/react"
 
+import { uMiniMapOpenSound } from "@/lib/u-mini-map-open"
 import { cn } from "@/lib/utils"
+import { useSound } from "@/hooks/soundcn/use-sound"
 import {
   HoverCard,
   HoverCardContent,
@@ -30,9 +31,7 @@ export function TOCMinimap({ items, className }: TOCMinimapProps) {
 
   const activeHeading = useActiveHeading(itemIds)
 
-  // ponytail: project's sound lib is tiks (soundcn was removed). `hover()` is its
-  // open blip — swap back to a soundcn sound if that ever gets re-added.
-  const { hover } = useTiks()
+  const [play] = useSound(uMiniMapOpenSound, { volume: 0.3 })
 
   if (!items.length) {
     return null
@@ -44,7 +43,7 @@ export function TOCMinimap({ items, className }: TOCMinimapProps) {
         openDelay={0}
         closeDelay={0}
         onOpenChange={(open) => {
-          if (open) hover()
+          if (open) play()
         }}
       >
         <HoverCardTrigger asChild>

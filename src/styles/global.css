@@ -172,6 +172,14 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 }
 
 @layer base {
+  /* Hide scrollbars across the whole site — scrolling still works. */
+  * {
+    scrollbar-width: none; /* Firefox */
+  }
+  *::-webkit-scrollbar {
+    display: none; /* WebKit (Chrome/Safari/Edge) */
+  }
+
   ::view-transition-group(root) {
     animation-timing-function: var(--expo-out);
   }
