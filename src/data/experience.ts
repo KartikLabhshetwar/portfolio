@@ -4,7 +4,16 @@ export const experience = [
     role: 'Member of Technical Staff',
     period: 'Apr 2026 — present',
     points: [
-      'Full-time role continuing from internship, working across Python SDK, TypeScript SDK, documentation, and CI infrastructure for the universal memory layer for AI agents.',
+      'Merged 83 PRs in ~3 months (+55K/−21K lines across 656 files) — spanning the Python & TypeScript SDKs, vector stores, self-hosted server, editor plugins, CLI, and docs.',
+      'Patched a critical Remote Code Execution vulnerability (unsafe pickle deserialization) in the FAISS vector store, closing a long-open security issue.',
+      'Hardened the self-hosted server — enforced admin-role auth on /configure and /reset (403 for non-admins), upgraded to PostgreSQL 17 + pgvector 0.8.2, and shipped a migration guide.',
+      'Fixed inverted search ranking across 11 vector-store backends — normalized raw distances to a consistent similarity contract so Memory.search() returns the most relevant memories, not the least.',
+      'Cut multi-second search latency by re-architecting entity-boost search from 16 serial embedding round-trips to a single batched, parallel call — across both the Python and TypeScript SDKs.',
+      'Resolved an enterprise-reported /search 502 and implemented the full pgvector filter operator set (gt/lt/in/contains/AND/OR/NOT/wildcard) in both SDKs, where they were previously silent no-ops.',
+      'Built and shipped the Mem0 editor-memory plugin (v0.2.1 → v0.2.6+): onboarding wizard, per-project/session memory scoping, and intelligent auto-triggering (pre-fetch on errors/resume, dedup, file-context injection).',
+      'Launched 4 new editor integrations — Pi Agent (~8.4K LOC: agent tool, 8 commands, 8 skills, auto-capture), OpenCode and Antigravity (full hook parity with Claude Code), and a rebuilt OpenClaw plugin with OAuth login.',
+      'Instrumented end-to-end PostHog telemetry with per-editor attribution, giving the team its first real usage data.',
+      'Built CLI import/event commands, restructured the monorepo (plugins consolidated under integrations/), and led the v3 API docs migration — authoring SECURITY.md, integration guides (Google ADK, ChatDev, Hermes), and coordinated SDK releases (Python 2.0.x, TS 3.0.x).',
     ],
   },
   {
