@@ -46,4 +46,5 @@ if (!result.ok) die(`Kit rejected the broadcast: ${result.error}`);
 console.log(`Draft created for "${email.subject}".`);
 console.log('Review it in Kit, then press send:');
 console.log('  https://app.kit.com/broadcasts');
-if (result.url) console.log(`  public url: ${result.url}`);
+const hasPublicSlug = result.url && !result.url.endsWith('/');
+if (hasPublicSlug) console.log(`  public url: ${result.url}`);
