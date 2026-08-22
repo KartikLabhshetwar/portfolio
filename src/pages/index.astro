@@ -15,7 +15,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()).slice(0, 3);
 ---
 <Base>
-  <section class="py-10">
+  <section class="pb-10">
     <div class="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8">
       <img
         src="/kartik.png"
