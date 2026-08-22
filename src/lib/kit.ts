@@ -21,7 +21,7 @@ async function errorFrom(res: Response): Promise<{ ok: false; error: string; sta
 
 export async function subscribe(
   env: KitEnv,
-  input: { email: string; referrer?: string; ip?: string },
+  input: { email: string; referrer?: string },
   doFetch: Fetch = fetch,
 ): Promise<KitResult> {
   if (!env.KIT_API_KEY || !env.KIT_FORM_ID) return NOT_CONFIGURED;

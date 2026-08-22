@@ -22,7 +22,7 @@ describe('subscribe', () => {
       { status: 200, body: { subscriber: { id: 1 } } },
       { status: 200, body: { subscriber: { id: 1 } } },
     );
-    const res = await subscribe(env, { email: 'a@b.com', referrer: 'https://site/x', ip: '1.2.3.4' }, fn as any);
+    const res = await subscribe(env, { email: 'a@b.com', referrer: 'https://site/x' }, fn as any);
 
     expect(res).toEqual({ ok: true });
     expect(calls).toHaveLength(2);

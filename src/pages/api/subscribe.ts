@@ -43,7 +43,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }
 
   const referrer = request.headers.get('referer') ?? undefined;
-  const result = await subscribe(env, { email, referrer, ip }).catch(() => null);
+  const result = await subscribe(env, { email, referrer }).catch(() => null);
 
   if (!result) {
     return Response.json(
