@@ -1,0 +1,11 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import { projects } from '../data/projects';
+import { parseRepo, fetchRepoStars, resolveGithubToken } from '../lib/github';
+const token = await resolveGithubToken();
+const withStars = await Promise.all(projects.map(async (p) => {
+  const r = p.githubLink ? parseRepo(p.githubLink) : null;
+  return { ...p, stars: r ? await fetchRepoStars(r.owner, r.repo, token) : 0 };
+}));
+---
+<div class="mt-6">{withStars.map((p) => <ProjectCard {...p} />)}</div>

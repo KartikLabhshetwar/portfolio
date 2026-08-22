@@ -14,7 +14,8 @@ export async function fetchRepoStars(owner: string, repo: string, token?: string
   token = token ?? process.env.GITHUB_TOKEN;
   if (token) headers.Authorization = `bearer ${token}`;
   try {
-    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
+    const init = { headers, cf: { cacheTtl: 3600, cacheEverything: true } } as RequestInit;
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, init);
     if (!res.ok) return 0;
     const data = await res.json();
     return data.stargazers_count ?? 0;
