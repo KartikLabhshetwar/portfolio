@@ -27,13 +27,13 @@ export async function subscribe(
   if (!env.KIT_API_KEY || !env.KIT_FORM_ID) return NOT_CONFIGURED;
 
   // Two calls because Kit requires it: the form endpoint only accepts subscribers
-  // that already exist. Whether the second call sends a confirmation email is a
-  // property of the form in Kit's dashboard, not of this request, so single vs
-  // double opt-in is a toggle there rather than a deploy here.
+  // that already exist. state: 'inactive' is what makes double opt-in real: the v4
+  // API activates on create and ignores the form's confirmation-email setting, so
+  // without it every signup is live before anyone clicks anything.
   const created = await doFetch(`${API}/subscribers`, {
     method: 'POST',
     headers: headers(env.KIT_API_KEY),
-    body: JSON.stringify({ email_address: input.email }),
+    body: JSON.stringify({ email_address: input.email, state: 'inactive' }),
   });
   if (!created.ok) return errorFrom(created);
 

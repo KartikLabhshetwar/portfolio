@@ -33,6 +33,16 @@ describe('subscribe', () => {
     expect(bodyOf(calls[1].init).referrer).toBe('https://site/x');
   });
 
+  it('creates the subscriber inactive so the confirmation email gates activation', async () => {
+    const { fn, calls } = fakeFetch(
+      { status: 200, body: { subscriber: { id: 1 } } },
+      { status: 200, body: { subscriber: { id: 1 } } },
+    );
+    await subscribe(env, { email: 'a@b.com' }, fn as any);
+
+    expect(bodyOf(calls[0].init).state).toBe('inactive');
+  });
+
   it('treats a resubscribe as success because Kit upserts', async () => {
     const { fn } = fakeFetch(
       { status: 200, body: { subscriber: { id: 1 } } },
