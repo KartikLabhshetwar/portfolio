@@ -41,6 +41,9 @@ importers:
       '@keystatic/core':
         specifier: ^0.5.50
         version: 0.5.50(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@markdoc/markdoc':
+        specifier: ^0.5.9
+        version: 0.5.9(@types/react@19.2.17)(react@19.2.7)
       '@rexa-developer/tiks':
         specifier: ^0.3.0
         version: 0.3.0(react@19.2.7)
@@ -89,6 +92,9 @@ importers:
       wrangler:
         specifier: ^4.105.0
         version: 4.105.0(@cloudflare/workers-types@4.20260627.1)
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.9
@@ -1008,8 +1014,8 @@ packages:
       react:
         optional: true
 
-  '@markdoc/markdoc@0.5.7':
-    resolution: {integrity: sha512-NxreNThm7foFgMMQD6zgk7rKkcFMmdC8J5r+Zn4FKoN75F5YjvwdihwF11VhrBfL3CXnD4+YG1VYwvBL+igzvw==}
+  '@markdoc/markdoc@0.5.9':
+    resolution: {integrity: sha512-req3Wpi1xXIs7C+n2nsKv7oGeC0xREkpd+D+JRGZ/pIMXEuQSlT+s/I760fqdmiysvkx10EC3MGlScokRRcaSQ==}
     engines: {node: '>=14.7.0'}
     peerDependencies:
       '@types/react': '*'
@@ -4974,7 +4980,7 @@ snapshots:
     dependencies:
       '@astrojs/internal-helpers': 0.10.0
       '@astrojs/prism': 4.0.2
-      '@markdoc/markdoc': 0.5.7(@types/react@19.2.17)(react@19.2.7)
+      '@markdoc/markdoc': 0.5.9(@types/react@19.2.17)(react@19.2.7)
       astro: 6.4.8(@types/node@26.0.1)(@upstash/redis@1.38.0)(idb-keyval@6.2.5)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(yaml@2.9.0)
       esbuild: 0.27.7
       github-slugger: 2.0.0
@@ -5863,7 +5869,7 @@ snapshots:
       '@types/react': 19.2.17
       react: 19.2.7
 
-  '@markdoc/markdoc@0.5.7(@types/react@19.2.17)(react@19.2.7)':
+  '@markdoc/markdoc@0.5.9(@types/react@19.2.17)(react@19.2.7)':
     optionalDependencies:
       '@types/linkify-it': 3.0.5
       '@types/markdown-it': 12.2.3
