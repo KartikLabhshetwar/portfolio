@@ -20,7 +20,8 @@ export const experience: ExperienceItemType[] = [
 - Cut multi-second search latency by re-architecting entity-boost search from 16 serial embedding round-trips to a single batched, parallel call across both the Python and TypeScript SDKs.
 - Resolved an enterprise-reported /search 502 and implemented the full pgvector filter operator set (gt/lt/in/contains/AND/OR/NOT/wildcard) in both SDKs, where they were previously silent no-ops.
 - Built and shipped the Mem0 editor-memory plugin (v0.2.1 → v0.2.6+): onboarding wizard, per-project/session memory scoping, and intelligent auto-triggering (pre-fetch on errors/resume, dedup, file-context injection).
-- Built and shipped four editor integrations end-to-end: Pi Agent (agent tool, 8 commands, 8 skills, and auto-capture), OpenCode and Antigravity (full hook parity with Claude Code), and a rebuilt OpenClaw plugin with OAuth login.
+- Shipped memory integrations for Claude Code, Cursor, Codex, OpenCode, and Pi Agent, each serving 500 to 10,000 weekly users: Pi Agent with an agent tool, 8 commands, 8 skills, and auto-capture, OpenCode and Antigravity at full hook parity with Claude Code, plus a rebuilt OpenClaw plugin with OAuth login.
+- Built an orchestration agent that triages incoming issues, reviews contributor PRs, and validates changes in sandboxes, taking the backlog from 400+ to under 100.
 - Instrumented end-to-end PostHog telemetry with per-editor attribution, giving the team its first real usage data.
 - Built CLI import/event commands, restructured the monorepo (plugins consolidated under integrations/), and led the v3 API docs migration, authoring SECURITY.md, integration guides (Google ADK, ChatDev, Hermes), and coordinated SDK releases (Python 2.0.x, TS 3.0.x).`,
       },
