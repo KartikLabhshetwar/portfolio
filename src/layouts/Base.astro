@@ -3,7 +3,6 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import VisitorCount from '../components/VisitorCount.astro';
 import CommandMenu from '../components/CommandMenu.tsx';
-import { FooterBrand } from '../components/name-brand';
 import { AutoTOCMinimap } from '../components/auto-toc-minimap';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
@@ -95,11 +94,9 @@ const commandItems = [
         <AutoTOCMinimap client:idle selector={toc} />
       </nav>
       <slot />
-      <footer class="-mx-6 mt-24 border-t border-border px-6 pt-3">
-        <div class="flex justify-end pb-1"><VisitorCount /></div>
-        <div class="-mx-6 aspect-[22/1] overflow-hidden text-foreground [&>astro-island]:block [&>astro-island]:size-full">
-          <FooterBrand client:visible />
-        </div>
+      <footer class="-mx-6 mt-24 flex items-center justify-between border-t border-border px-6 py-3">
+        <span class="text-xs text-zinc-500">&copy; {new Date().getFullYear()} Kartik Labhshetwar</span>
+        <VisitorCount />
       </footer>
     </main>
     <CommandMenu client:idle items={commandItems} />
