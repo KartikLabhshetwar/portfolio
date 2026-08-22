@@ -21,23 +21,25 @@ The lockfile is `pnpm-lock.yaml` and the version is pinned in `package.json` →
 - `src/content/blog/<slug>/index.mdoc` — blog posts (Markdoc collection), editable via Keystatic at `/keystatic`.
 - `src/lib/github.ts` — build-time GitHub fetches (stars + sponsors).
 - `src/lib/visitors.ts` + `src/pages/api/visitors.ts` — Upstash Redis visitor counter (footer count only).
+- `src/lib/kit.ts` + `src/lib/post-email.ts` + `scripts/send-newsletter.ts` — newsletter. Pure core (Kit transport, markdoc→email HTML) with thin shells over it: `src/pages/api/subscribe.ts` and the CLI.
+- `src/lib/env.ts` — `resolveEnv<T>()`, the one place that reads runtime secrets from `cloudflare:workers` with a `process.env` fallback.
 - `src/pages/llms.txt.ts` — **generated** `/llms.txt`; edit the data, not the output.
 
 ## Conventions
 
 - **Type:** JetBrains Mono for UI / headings / code; serif (`ui-serif`) for blog body (`.prose` in `global.css`). Keep this split.
 - **Projects:** action-led, verb-first descriptions + an optional `impact` metric (downloads/DAU/"Latest"). Stars render live from the build-time fetch — don't hardcode them.
-- **Newsletter:** subscribing posts to `/api/subscribe` (server route → Buttondown v1 API with `BUTTONDOWN_API_KEY`), so the exact typed email is used. The public archive handle stays hardcoded in `NewsletterForm.astro`.
+- **Newsletter:** subscribing posts to `/api/subscribe` (server route → Kit v4 API with `KIT_API_KEY` + `KIT_FORM_ID`). Sending a post as email is `pnpm newsletter <slug>`, which creates a **draft** broadcast in Kit that you review and send by hand — so a double-run leaves two drafts, never two sends. Single vs double opt-in is a setting on the Kit form, not in this code.
 - **Commits:** conventional style (`feat:`, `fix:`…), no AI attribution footer. Default branch is `main`; work happens on feature branches.
 
 ## Env vars (`.env` locally, Cloudflare dashboard in prod — see `.env.example`)
 
 - `GITHUB_TOKEN` — classic PAT, build-time. Scopes: `repo` + `read:user` for stars, **plus `read:org`** for sponsors (the `sponsorshipsAsMaintainer` query returns `INSUFFICIENT_SCOPES` without it).
 - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` — visitor counter (runtime, via `cloudflare:workers` env).
-- `BUTTONDOWN_API_KEY` — newsletter subscribes (runtime, via `cloudflare:workers` env). Powers `/api/subscribe`; without it the form replies "not configured".
+- `KIT_API_KEY` / `KIT_FORM_ID` — newsletter (runtime for `/api/subscribe` via `cloudflare:workers` env; `KIT_API_KEY` is also read from `.env` by `pnpm newsletter`). Without them the form replies "not configured".
 - `MUX_TOKEN_ID` / `MUX_TOKEN_SECRET` — in `.env` but **unused by any code** (leftover). Safe to delete unless a Mux feature is planned.
 
-Never log secret values. There are currently no `console.*` statements in the codebase — keep it that way; if you must debug a secret, log only `Boolean(value)` and remove it before committing.
+Never log secret values. There are no `console.*` statements anywhere in `src/` — keep it that way; if you must debug a secret, log only `Boolean(value)` and remove it before committing. `scripts/` is exempt: those are CLIs and are expected to print.
 
 ## Don't commit
 

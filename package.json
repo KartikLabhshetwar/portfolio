@@ -10,6 +10,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
+    "newsletter": "node --env-file-if-exists=.env scripts/send-newsletter.ts",
     "generate-types": "wrangler types"
   },
   "dependencies": {
