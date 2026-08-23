@@ -151,3 +151,6 @@ export const projects: Project[] = [
     githubLink: 'https://github.com/KartikLabhshetwar/LearnX',
   },
 ];
+
+// The three the home page leads with, in order.
+export const featuredIds = ['screenshot-studio', 'bettershot', 'oneurl'] as const;

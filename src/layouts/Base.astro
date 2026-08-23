@@ -7,14 +7,18 @@ import { AutoTOCMinimap } from '../components/auto-toc-minimap';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
 import { getCollection } from 'astro:content';
+import { serializeJsonLd, structuredData } from '../lib/structured-data';
 // `toc` selects which headings become scroll-minimap ticks (section h2s by default).
 // `image` is the social card; pages (e.g. blog posts) can pass their own.
+// `schemaType`/`datePublished` shape the page's JSON-LD node.
 const {
   title = 'Kartik Labhshetwar · Software Engineer',
   description = 'I build from zero. Software engineer building memory, infrastructure, and tooling for AI agents and shipping products people love using.',
   image = '/og.png',
   ogType = 'website',
   toc = 'main h2',
+  schemaType,
+  datePublished,
 } = Astro.props;
 const siteName = 'Kartik Labhshetwar';
 // Always point canonical at the configured production domain (Astro.site),
@@ -22,6 +26,16 @@ const siteName = 'Kartik Labhshetwar';
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
 // Social scrapers need an absolute image URL.
 const ogImage = new URL(image, Astro.site ?? Astro.url).href;
+const jsonLd = serializeJsonLd(
+  structuredData((Astro.site ?? Astro.url).toString(), profile, {
+    url: canonical,
+    title,
+    description,
+    image: ogImage,
+    type: schemaType,
+    datePublished,
+  }),
+);
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 const commandItems = [
@@ -54,6 +68,8 @@ const commandItems = [
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="text/markdown" href={canonical} title="Markdown (send Accept: text/markdown)" />
+    <script type="application/ld+json" is:inline set:html={jsonLd}></script>
 
     <!-- Open Graph (LinkedIn, Discord, Slack, Facebook) -->
     <meta property="og:type" content={ogType} />

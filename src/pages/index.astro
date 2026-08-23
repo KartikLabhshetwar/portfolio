@@ -5,12 +5,18 @@ import { WorkExperience } from '../components/work-experience';
 import HomeProjects from '../components/HomeProjects.astro';
 import HomeSponsors from '../components/HomeSponsors.astro';
 import BlogCard from '../components/BlogCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
 import { profile } from '../data/profile';
 import { experience } from '../data/experience';
+import { featuredIds, projects } from '../data/projects';
 import { getCollection } from 'astro:content';
 
+// On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
+export const prerender = false;
+
 const toSlug = (id: string) => id.replace(/\/index$/, '');
+const featured = featuredIds.map((id) => projects.find((p) => p.id === id)!);
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()).slice(0, 3);
 ---
@@ -47,7 +53,9 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Projects</h2>
       <a href="/projects" class="text-xs text-muted-foreground hover:text-foreground">All →</a>
     </div>
-    <HomeProjects server:defer />
+    <HomeProjects server:defer>
+      <div slot="fallback" class="mt-1">{featured.map((p) => <ProjectCard {...p} />)}</div>
+    </HomeProjects>
   </section>
 
   <section class="-mx-6 border-t border-border px-6 py-10">

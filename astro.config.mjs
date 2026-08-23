@@ -5,6 +5,17 @@ import markdoc from '@astrojs/markdoc';
 import keystatic from '@keystatic/astro';
 import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
+import { readdirSync, readFileSync } from 'node:fs';
+
+const SITE = 'https://kartiklabhshetwar.com';
+
+// Blog posts render on demand (Accept negotiation, see src/middleware.ts), so the
+// sitemap integration — which only sees prerendered pages and static route
+// patterns — can't discover them. Feed them in from the content directory.
+const blogPages = readdirSync('src/content/blog', { withFileTypes: true })
+  .filter((d) => d.isDirectory())
+  .filter((d) => !/^\s*draft:\s*true\s*$/m.test(readFileSync(`src/content/blog/${d.name}/index.mdoc`, 'utf8')))
+  .map((d) => `${SITE}/blog/${d.name}/`);
 const reactEntrypoints = [
   'react',
   'react-dom',
@@ -37,11 +48,11 @@ function dedupeReactInWorkerd() {
 }
 
 export default defineConfig({
-  site: 'https://kartiklabhshetwar.com',
+  site: SITE,
   prefetch: { prefetchAll: true },
   adapter: cloudflare({ imageService: 'compile' }),
   session: { driver: sessionDrivers.lruCache() },
-  integrations: [react(), markdoc(), keystatic(), sitemap()],
+  integrations: [react(), markdoc(), keystatic(), sitemap({ customPages: blogPages })],
   vite: {
     plugins: [tailwindcss(), dedupeReactInWorkerd()],
     resolve: {

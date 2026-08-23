@@ -3,8 +3,11 @@ import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ProjectList from '../components/ProjectList.astro';
 import { projects } from '../data/projects';
+
+// On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
+export const prerender = false;
 ---
-<Base title="Projects — Kartik Labhshetwar" toc="main h3">
+<Base title="Projects — Kartik Labhshetwar" description="Everything Kartik Labhshetwar has built and shipped, from macOS apps to CLIs and AI tooling." toc="main h3" schemaType="CollectionPage">
   <h1 class="text-2xl font-semibold">Projects</h1>
   <ProjectList server:defer>
     <div slot="fallback" class="mt-6">{projects.map((p) => <ProjectCard {...p} />)}</div>

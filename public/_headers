@@ -1,6 +1,10 @@
 # Serve the agent-facing endpoints as Markdown (they're prerendered .txt files,
 # so without this Cloudflare would label them text/plain from the extension).
+# `Vary: Accept` matches what the Accept-negotiation middleware sets on the HTML
+# pages, so a cache can never hand an agent the wrong representation.
 /llms.txt
   Content-Type: text/markdown; charset=utf-8
+  Vary: Accept
 /llms-full.txt
   Content-Type: text/markdown; charset=utf-8
+  Vary: Accept

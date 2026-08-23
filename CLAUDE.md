@@ -1,6 +1,6 @@
 # Portfolio — guide for Claude
 
-Personal portfolio. Astro 6 (static prerender + Cloudflare Workers SSR), Tailwind v4, React 19 islands, Keystatic CMS. Canonical domain: **kartiklabhshetwar.com** (set once in `astro.config.mjs` → `site`; `robots.txt`, the sitemap, and `/llms.txt` all derive from it).
+Personal portfolio. Astro 6 (Cloudflare Workers SSR for the HTML pages, prerender for `/llms*.txt` and assets), Tailwind v4, React 19 islands, Keystatic CMS. Canonical domain: **kartiklabhshetwar.com** (set once in `astro.config.mjs` → `site`; `robots.txt`, the sitemap, and `/llms.txt` all derive from it).
 
 ## Package manager: pnpm — NOT npm or bun
 
@@ -23,6 +23,9 @@ The lockfile is `pnpm-lock.yaml` and the version is pinned in `package.json` →
 - `src/lib/visitors.ts` + `src/pages/api/visitors.ts` — Upstash Redis visitor counter (footer count only).
 - `src/lib/kit.ts` + `src/lib/post-email.ts` + `scripts/send-newsletter.ts` — newsletter. Pure core (Kit transport, markdoc→email HTML) with thin shells over it: `src/pages/api/subscribe.ts` and the CLI.
 - `src/lib/env.ts` — `resolveEnv<T>()`, the one place that reads runtime secrets from `cloudflare:workers` with a `process.env` fallback.
+- `src/lib/accept.ts` + `src/middleware.ts` — Accept negotiation. Pure RFC 9110 parser with a thin middleware shell over it.
+- `src/lib/page-markdown.ts` — the Markdown representation of every HTML page (and the 404 body), built from the same data the pages render.
+- `src/lib/structured-data.ts` — the schema.org JSON-LD `@graph` injected by `Base.astro`.
 - `src/pages/llms.txt.ts` — **generated** `/llms.txt`; edit the data, not the output.
 
 ## Conventions
@@ -30,6 +33,8 @@ The lockfile is `pnpm-lock.yaml` and the version is pinned in `package.json` →
 - **Type:** JetBrains Mono for UI / headings / code; serif (`ui-serif`) for blog body (`.prose` in `global.css`). Keep this split.
 - **Projects:** action-led, verb-first descriptions + an optional `impact` metric (downloads/DAU/"Latest"). Stars render live from the build-time fetch — don't hardcode them.
 - **Newsletter:** subscribing posts to `/api/subscribe` (server route → Kit v4 API with `KIT_API_KEY` + `KIT_FORM_ID`). Sending a post as email is `pnpm newsletter <slug>`, which creates a **draft** broadcast in Kit that you review and send by hand — so a double-run leaves two drafts, never two sends. Single vs double opt-in is a setting on the Kit form, not in this code.
+- **Agent-readiness (don't regress these):** every HTML page serves Markdown from the same URL when the request sends `Accept: text/markdown` (<https://acceptmarkdown.com>), with `Vary: Accept` on every response and `406` when nothing acceptable can be produced. That negotiation happens in `src/middleware.ts`, and **Astro middleware only runs for on-demand routes** — so the five page routes plus `src/pages/404.astro` carry `export const prerender = false`. Removing that line silently drops the page out of negotiation. Add a page → add its route to `pageMarkdown()` too.
+- **Sitemap:** `@astrojs/sitemap` can't see on-demand *dynamic* routes, so blog URLs come from `customPages` in `astro.config.mjs`, read straight from `src/content/blog/`. Static on-demand routes (`/`, `/projects`, `/blog`, `/sponsors`) it still finds on its own.
 - **Commits:** conventional style (`feat:`, `fix:`…), no AI attribution footer. Default branch is `main`; work happens on feature branches.
 
 ## Env vars (`.env` locally, Cloudflare dashboard in prod — see `.env.example`)

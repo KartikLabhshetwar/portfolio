@@ -1,9 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
 import SponsorList from '../components/SponsorList.astro';
+
+// On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
+export const prerender = false;
 const sponsorUrl = 'https://github.com/sponsors/KartikLabhshetwar';
 ---
-<Base title="Sponsors — Kartik Labhshetwar">
+<Base title="Sponsors — Kartik Labhshetwar" description="The people and organizations sponsoring Kartik Labhshetwar's open-source work." schemaType="CollectionPage">
   <h1 class="text-2xl font-semibold tracking-tight">Sponsors</h1>
   <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
     Thank you to everyone who supports my work.
