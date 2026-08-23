@@ -1,6 +1,6 @@
 import { defineMiddleware } from 'astro:middleware';
 import { getCollection } from 'astro:content';
-import { negotiate } from './lib/accept';
+import { namesExplicitly, negotiate } from './lib/accept';
 import {
   MARKDOWN_CONTENT_TYPE,
   notFoundMarkdown,
@@ -47,12 +47,13 @@ async function loadSite(base: string): Promise<MarkdownSite> {
 export const onRequest = defineMiddleware(async (ctx, next) => {
   if (SKIP.test(ctx.url.pathname)) return next();
 
-  const chosen = negotiate(ctx.request.headers.get('accept'), PRODUCES);
+  const accept = ctx.request.headers.get('accept');
+  const chosen = negotiate(accept, PRODUCES);
   const base = (ctx.site?.toString() ?? ctx.url.origin).replace(/\/$/, '');
 
   if (!chosen) {
     return new Response(
-      `This resource is available in:\n- text/html\n- text/markdown\n\nYou requested: ${ctx.request.headers.get('accept')}\n`,
+      `This resource is available in:\n- text/html\n- text/markdown\n\nYou requested: ${accept}\n`,
       {
         status: 406,
         headers: { 'Content-Type': 'text/plain; charset=utf-8', Vary: 'Accept', 'Cache-Control': 'no-store' },
@@ -66,7 +67,12 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
   }
 
   const response = await next();
-  if (response.status === 404 && chosen === 'text/markdown') return markdown(notFoundMarkdown(base), 404);
+  // A 404 is where an agent most needs a machine-readable way back in, and a
+  // client that never named text/html (curl, crawlers, fetch defaults) has no
+  // use for the styled page. Browsers always name it, so they keep it.
+  if (response.status === 404 && !namesExplicitly(accept, 'text/html')) {
+    return markdown(notFoundMarkdown(base), 404);
+  }
   withVaryAccept(response.headers);
   return response;
 });

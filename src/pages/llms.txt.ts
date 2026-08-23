@@ -66,9 +66,12 @@ ${postLines}
 ## Pages
 
 - [Home](${base}/): About, experience, featured projects, and writing
+- [About](${base}/about): Who ${profile.name} is, what he works on, and what he has shipped
 - [Projects](${base}/projects): Full list of projects
 - [Blog](${base}/blog): All posts
+- [Contact](${base}/contact): How to get in touch, and how agents can subscribe
 - [Sponsors](${base}/sponsors): GitHub sponsors
+- [Privacy](${base}/privacy): What this site collects and who processes it
 - [Full content](${base}/llms-full.txt): Every page plus complete blog post text, as one Markdown file
 `;
 

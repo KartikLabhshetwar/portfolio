@@ -69,6 +69,33 @@ describe('structuredData', () => {
     expect(nodeOf(data['@graph'], 'CollectionPage')).toBeTruthy();
   });
 
+  it('names the employer and topics when the profile carries them', () => {
+    const withEmployer = { ...profile, employer: { name: 'Mem0', url: 'https://mem0.ai' }, knowsAbout: ['AI agents'] };
+    const person = nodeOf(structuredData(base, withEmployer, page)['@graph'], 'Person') as any;
+    expect(person.worksFor).toEqual({ '@type': 'Organization', name: 'Mem0', url: 'https://mem0.ai' });
+    expect(person.knowsAbout).toEqual(['AI agents']);
+  });
+
+  it('omits worksFor and knowsAbout when the profile has neither', () => {
+    const person = nodeOf(structuredData(base, profile, page)['@graph'], 'Person') as any;
+    expect(person.worksFor).toBeUndefined();
+    expect(person.knowsAbout).toBeUndefined();
+  });
+
+  it('ties a profile page to the person through mainEntity', () => {
+    const data = structuredData(base, profile, { ...page, url: `${base}/about`, type: 'ProfilePage' });
+    const node = nodeOf(data['@graph'], 'ProfilePage') as any;
+    expect(node.mainEntity['@id']).toBe(`${base}/#person`);
+    expect(node.about['@id']).toBe(`${base}/#person`);
+  });
+
+  it('leaves mainEntity off pages that are not about the person', () => {
+    const data = structuredData(base, profile, { ...page, url: `${base}/contact`, type: 'ContactPage' });
+    const node = nodeOf(data['@graph'], 'ContactPage') as any;
+    expect(node.mainEntity).toBeUndefined();
+    expect(node.isPartOf['@id']).toBe(`${base}/#website`);
+  });
+
   it('tolerates a trailing slash on the site url', () => {
     const person = nodeOf(structuredData(`${base}/`, profile, page)['@graph'], 'Person') as any;
     expect(person['@id']).toBe(`${base}/#person`);

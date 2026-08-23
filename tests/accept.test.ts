@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { negotiate } from '../src/lib/accept';
+import { namesExplicitly, negotiate } from '../src/lib/accept';
 
 const produces = ['text/html', 'text/markdown'];
 
@@ -68,5 +68,22 @@ describe('negotiate', () => {
     expect(negotiate('text/markdown;q=abc, text/html;q=0.1', produces)).toBe('text/markdown');
     expect(negotiate('text/markdown;q=5, text/html', produces)).toBe('text/markdown');
     expect(negotiate('text/markdown;q=-1, text/html', produces)).toBe('text/html');
+  });
+});
+
+describe('namesExplicitly', () => {
+  it('is true only when the client lists the exact type', () => {
+    expect(namesExplicitly('text/html,application/xhtml+xml,*/*;q=0.8', 'text/html')).toBe(true);
+    expect(namesExplicitly('text/markdown', 'text/markdown')).toBe(true);
+    expect(namesExplicitly('TEXT/HTML;q=0.9', 'text/html')).toBe(true);
+  });
+
+  it('is false for wildcards, absent headers, and rejections', () => {
+    expect(namesExplicitly('*/*', 'text/html')).toBe(false);
+    expect(namesExplicitly('text/*', 'text/html')).toBe(false);
+    expect(namesExplicitly(null, 'text/html')).toBe(false);
+    expect(namesExplicitly('   ', 'text/html')).toBe(false);
+    expect(namesExplicitly('text/html;q=0', 'text/html')).toBe(false);
+    expect(namesExplicitly('text/markdown', 'text/html')).toBe(false);
   });
 });

@@ -7,6 +7,8 @@ export type SchemaProfile = {
   bio: string;
   location: string;
   socials: { label: string; href: string }[];
+  employer?: { name: string; url?: string };
+  knowsAbout?: readonly string[];
 };
 
 type GraphNode = Record<string, unknown>;
@@ -16,7 +18,7 @@ export type PageSchema = {
   title: string;
   description: string;
   image: string;
-  type?: 'WebPage' | 'CollectionPage' | 'BlogPosting';
+  type?: 'WebPage' | 'CollectionPage' | 'BlogPosting' | 'ProfilePage' | 'ContactPage' | 'AboutPage';
   datePublished?: string;
 };
 
@@ -36,6 +38,10 @@ export function structuredData(site: string, profile: SchemaProfile, page: PageS
     address: { '@type': 'PostalAddress', addressCountry: profile.location },
     sameAs: profile.socials.map((s) => s.href),
   };
+  if (profile.employer) {
+    person.worksFor = { '@type': 'Organization', name: profile.employer.name, url: profile.employer.url };
+  }
+  if (profile.knowsAbout?.length) person.knowsAbout = [...profile.knowsAbout];
 
   const website: GraphNode = {
     '@type': 'WebSite',
@@ -67,6 +73,9 @@ export function structuredData(site: string, profile: SchemaProfile, page: PageS
   } else {
     node.about = { '@id': personId };
   }
+  // ProfilePage is the page *of* the person, not merely about them: naming the
+  // Person as mainEntity is what ties the domain to the human in a knowledge graph.
+  if (type === 'ProfilePage') node.mainEntity = { '@id': personId };
   if (page.datePublished) {
     node.datePublished = page.datePublished;
     node.dateModified = page.datePublished;

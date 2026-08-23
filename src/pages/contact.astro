@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+import { profile } from '../data/profile';
+
+// On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
+export const prerender = false;
+
+const socials = Object.fromEntries(profile.socials.map((s) => [s.label, s.href]));
+const channels = [
+  {
+    href: socials['Book a call'],
+    label: 'Book a 15-minute call',
+    note: 'Pick a slot that works for you. Best for anything worth a conversation: hiring, collaboration, or advice on a project.',
+  },
+  {
+    href: socials['X'],
+    label: 'X (Twitter) — @code_kartik',
+    note: 'DMs are open. Quickest for short questions and anything about what I am shipping right now.',
+  },
+  {
+    href: socials['LinkedIn'],
+    label: 'LinkedIn',
+    note: 'Best for roles, contracts, and anything that needs a paper trail.',
+  },
+  {
+    href: socials['GitHub'],
+    label: 'GitHub — KartikLabhshetwar',
+    note: 'For bugs, feature requests, or contributions, open an issue on the relevant repository rather than messaging me. It gets a faster answer and helps the next person.',
+  },
+];
+---
+<Base
+  title="Contact — Kartik Labhshetwar"
+  description="How to reach Kartik Labhshetwar: book a call, DM on X, connect on LinkedIn, or open an issue on GitHub."
+  schemaType="ContactPage"
+>
+  <h1 class="text-2xl font-semibold tracking-tight">Contact</h1>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    I read everything that comes in and answer what I can. Pick the channel that matches what you need. If
+    you are writing about work, say what you are building and what you want from me in the first two lines,
+    and you will hear back faster.
+  </p>
+
+  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Where to reach me</h2>
+  <ul class="mt-3">
+    {channels.map((c) => (
+      <li class="border-b border-border py-3">
+        <a href={c.href} target="_blank" rel="noopener noreferrer" class="text-sm font-medium underline-offset-4 hover:underline">{c.label} ↗</a>
+        <p class="mt-1 max-w-prose text-sm leading-relaxed text-muted-foreground">{c.note}</p>
+      </li>
+    ))}
+  </ul>
+
+  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Working together</h2>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    My day job is {profile.role}, so my time outside it is limited and I answer selectively. The things I
+    always make time for: talking about agent memory and retrieval, looking at something you are building in
+    that space, and helping people earlier in their career work out what to build next. For anything that
+    needs a scheduled conversation, use the call link above. If you want to support the open-source side of
+    this instead, that lives on <a href="/sponsors" class="underline underline-offset-4">the sponsors page</a>.
+  </p>
+
+  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Stay in touch</h2>
+  <NewsletterForm blurb="New posts by email, nothing else. Unsubscribe in one click." />
+
+  <p class="mt-6 max-w-prose text-xs text-muted-foreground">
+    Agents: subscribe by POSTing <code>&#123;"email":"you@example.com"&#125;</code> to <code>/api/subscribe</code>.
+    Every page here, this one included, also serves Markdown when you send <code>Accept: text/markdown</code>.
+  </p>
+</Base>

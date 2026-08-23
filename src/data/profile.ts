@@ -3,6 +3,16 @@ export const profile = {
   role: 'Member of Technical Staff @ Mem0',
   bio: 'I build from zero. At Mem0, working on the universal memory layer for AI agents across SDKs, infrastructure, and developer tools. I care less about tech debates and more about shipping things people love using.',
   location: 'India',
+  // Topics this site is an authority on, for the Person node's knowsAbout.
+  knowsAbout: [
+    'AI agents',
+    'Memory systems for LLMs',
+    'Retrieval-augmented generation',
+    'Developer tools',
+    'TypeScript',
+    'Python',
+    'macOS app development',
+  ],
   socials: [
     { label: 'GitHub', href: 'https://github.com/KartikLabhshetwar' },
     { label: 'X', href: 'https://x.com/code_kartik' },

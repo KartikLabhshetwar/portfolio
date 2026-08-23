@@ -12,5 +12,23 @@ const sponsorUrl = 'https://github.com/sponsors/KartikLabhshetwar';
     Thank you to everyone who supports my work.
     <a href={sponsorUrl} target="_blank" rel="noopener noreferrer" class="underline underline-offset-4">Become a sponsor ↗</a>
   </p>
-  <SponsorList server:defer />
+  <SponsorList server:defer>
+    <p slot="fallback" class="mt-8 text-sm text-zinc-500">Loading the sponsor list from GitHub.</p>
+  </SponsorList>
+
+  <h2 class="mt-12 text-xs font-semibold uppercase tracking-wide text-muted-foreground">What sponsorship funds</h2>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    Most of what I build is open source and free to use: BetterShot, a CleanShot X alternative for macOS, Lazy
+    Commit, a CLI that writes your git commit messages, OneURL, a self-hostable link page, and the smaller
+    tools around them. None of that is funded by anything. Sponsorship pays for the parts nobody sees: the time
+    to answer issues, review pull requests, cut releases, keep Apple developer and domain renewals paid, and
+    keep the hosting running for the things that need a server.
+  </p>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    Sponsoring is monthly or one-off, from a few dollars up, and it runs through GitHub Sponsors, so there is
+    nothing to set up here and you can cancel any time. Both tiers show on this page, pulled live from GitHub.
+    Companies using these tools in production are the ones I would most like to hear from: if you want an
+    invoice or a different arrangement, say so on <a href="/contact" class="underline underline-offset-4">the
+    contact page</a> and we will sort it out.
+  </p>
 </Base>

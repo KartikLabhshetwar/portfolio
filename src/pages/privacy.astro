@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+
+// On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
+export const prerender = false;
+
+// Bump when the practices below change, not on every deploy.
+const updated = '23 August 2026';
+---
+<Base
+  title="Privacy — Kartik Labhshetwar"
+  description="What this site collects, who processes it, and how to opt out. No ads, no tracking profiles, no data sold."
+>
+  <h1 class="text-2xl font-semibold tracking-tight">Privacy</h1>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    This is a personal site. It has no accounts, no ads, and nothing to sell you. Below is everything it
+    collects and every third party that sees any of it. Last updated {updated}.
+  </p>
+
+  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Newsletter</h2>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    If you subscribe, your email address is sent to Kit (formerly ConvertKit), which stores it and delivers
+    the emails. Kit sends a confirmation email first, so nothing arrives unless you click the link in it.
+    That address is used for one thing: telling you when there is a new post. It is never sold, rented, or
+    shared, and every email carries a one-click unsubscribe link that removes you immediately.
+  </p>
+
+  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Visitor count</h2>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    The number in the footer is a count of unique visitors. Your browser computes an opaque identifier
+    (via FingerprintJS) and the site stores that identifier in a set in Upstash Redis, purely so the same
+    person is not counted twice across networks. If that fails, for example with JavaScript off or a blocker
+    on, the server falls back to a non-reversible hash of your IP address and user agent instead. Either way
+    what is stored is one opaque string in a set. No raw IP address is kept, nothing is tied to a name, and
+    the only thing ever read back out is the total.
+  </p>
+
+  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Analytics</h2>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    Page analytics run through Databuddy, loaded from cdn.databuddy.cc. It records page views, outbound link
+    clicks, interactions, and web vitals so I can see which posts get read and what is slow. Blocking that
+    script, or using a browser that blocks it for you, does not break anything on this site.
+  </p>
+
+  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Hosting and storage on your device</h2>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    The site runs on Cloudflare Workers, so Cloudflare handles every request and keeps its own standard
+    request logs. Your light or dark theme choice is stored in your browser's local storage and never leaves
+    your device. GitHub's API is called from the server for star counts and the sponsor list; those requests
+    carry nothing about you.
+  </p>
+
+  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Your choices</h2>
+  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
+    Unsubscribe from any email to have your address removed. Block the analytics script or browse privately
+    to stay out of the counts. If you want to know what is held about you or want it deleted, ask via
+    <a href="/contact" class="underline underline-offset-4">the contact page</a> and I will handle it
+    myself. This policy changes only when the practices above do, and the date at the top moves with it.
+  </p>
+</Base>

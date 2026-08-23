@@ -6,6 +6,7 @@ import CommandMenu from '../components/CommandMenu.tsx';
 import { AutoTOCMinimap } from '../components/auto-toc-minimap';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
+import { experience } from '../data/experience';
 import { getCollection } from 'astro:content';
 import { serializeJsonLd, structuredData } from '../lib/structured-data';
 // `toc` selects which headings become scroll-minimap ticks (section h2s by default).
@@ -26,23 +27,38 @@ const siteName = 'Kartik Labhshetwar';
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
 // Social scrapers need an absolute image URL.
 const ogImage = new URL(image, Astro.site ?? Astro.url).href;
+// worksFor comes from the experience data rather than a second copy of it, so
+// a job change updates the schema too.
+const current = experience.find((e) => e.isCurrentEmployer);
 const jsonLd = serializeJsonLd(
-  structuredData((Astro.site ?? Astro.url).toString(), profile, {
-    url: canonical,
-    title,
-    description,
-    image: ogImage,
-    type: schemaType,
-    datePublished,
-  }),
+  structuredData(
+    (Astro.site ?? Astro.url).toString(),
+    { ...profile, employer: current && { name: current.companyName, url: current.companyWebsite } },
+    {
+      url: canonical,
+      title,
+      description,
+      image: ogImage,
+      type: schemaType,
+      datePublished,
+    },
+  ),
 );
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+// Trust-anchor pages: linked from every footer and reachable from ⌘K, but kept
+// out of the top nav so the four primary destinations stay four.
+const footerLinks = [
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/privacy', label: 'Privacy' },
+];
 const commandItems = [
   { label: 'Home', href: '/', group: 'Pages' },
   { label: 'Projects', href: '/projects', group: 'Pages' },
   { label: 'Blog', href: '/blog', group: 'Pages' },
   { label: 'Sponsors', href: '/sponsors', group: 'Pages' },
+  ...footerLinks.map((l) => ({ label: l.label, href: l.href, group: 'Pages' })),
   ...projects.map((p) => ({
     label: p.title,
     href: p.liveLink ?? p.githubLink ?? '/projects',
@@ -121,8 +137,11 @@ const commandItems = [
         <AutoTOCMinimap client:idle selector={toc} />
       </nav>
       <div class="flex-1 pt-10"><slot /></div>
-      <footer class="-mx-6 mt-24 flex items-center justify-between border-t border-border px-6 py-3">
+      <footer class="-mx-6 mt-24 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-border px-6 py-3">
         <span class="text-xs text-zinc-500">&copy; {new Date().getFullYear()} Kartik Labhshetwar</span>
+        <nav aria-label="Site information" class="flex items-center gap-x-3 text-xs text-zinc-500">
+          {footerLinks.map((l) => <a href={l.href} class="hover:underline">{l.label}</a>)}
+        </nav>
         <VisitorCount />
       </footer>
     </main>

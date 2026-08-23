@@ -13,6 +13,8 @@ const site: MarkdownSite = {
     socials: [
       { label: 'GitHub', href: 'https://github.com/KartikLabhshetwar' },
       { label: 'X', href: 'https://x.com/code_kartik' },
+      { label: 'LinkedIn', href: 'https://linkedin.com/in/kartikcode' },
+      { label: 'Book a call', href: 'https://cal.com/kartik' },
     ],
   },
   projects: [
@@ -84,6 +86,44 @@ describe('pageMarkdown', () => {
     const md = pageMarkdown('/sponsors', site)!;
     expect(md).toContain('# Sponsors');
     expect(md).toContain('https://github.com/sponsors/KartikLabhshetwar');
+    expect(md).toContain('## What sponsorship funds');
+    expect(md.length).toBeGreaterThan(500);
+  });
+
+  it('renders the about page as a trust anchor', () => {
+    const md = pageMarkdown('/about', site)!;
+    expect(md).toContain('# About');
+    expect(md).toContain('Kartik Labhshetwar');
+    expect(md).toContain('India');
+    expect(md).toContain('Software Engineer at Mem0');
+    expect(md).toContain(`${base}/projects`);
+    expect(md).toContain(`${base}/contact`);
+    expect(md).toContain('- GitHub: https://github.com/KartikLabhshetwar');
+  });
+
+  it('renders the contact page with every channel', () => {
+    const md = pageMarkdown('/contact', site)!;
+    expect(md).toContain('# Contact');
+    expect(md).toContain('https://cal.com/kartik');
+    expect(md).toContain('https://x.com/code_kartik');
+    expect(md).toContain('https://linkedin.com/in/kartikcode');
+    expect(md).toContain('https://github.com/KartikLabhshetwar');
+    expect(md).toContain(`${base}/api/subscribe`);
+  });
+
+  it('renders the privacy page covering every processor the site uses', () => {
+    const md = pageMarkdown('/privacy', site)!;
+    expect(md).toContain('# Privacy');
+    for (const processor of ['Kit', 'Upstash Redis', 'Databuddy', 'Cloudflare']) {
+      expect(md).toContain(processor);
+    }
+    expect(md).toContain(`${base}/contact`);
+  });
+
+  it('gives each trust anchor page the 500+ characters agents look for', () => {
+    for (const path of ['/about', '/contact', '/privacy']) {
+      expect(pageMarkdown(path, site)!.length).toBeGreaterThan(500);
+    }
   });
 
   it('ignores trailing slashes', () => {
@@ -103,7 +143,8 @@ describe('notFoundMarkdown', () => {
     const md = notFoundMarkdown(base);
     expect(md).toContain('# 404');
     expect(md).toContain('## Where to look next');
-    for (const path of ['/', '/projects', '/blog', '/sponsors', '/llms.txt', '/llms-full.txt', '/sitemap-index.xml']) {
+    const paths = ['/', '/about', '/projects', '/blog', '/contact', '/sponsors', '/privacy', '/llms.txt', '/llms-full.txt', '/sitemap-index.xml'];
+    for (const path of paths) {
       expect(md).toContain(`${base}${path}`);
     }
     expect(md).toContain('Accept: text/markdown');

@@ -61,3 +61,12 @@ export function negotiate(header: string | null | undefined, produces: readonly 
 
   return best;
 }
+
+// True when the client named this exact type, rather than landing on it via a
+// wildcard. Lets an error response prefer Markdown for the wildcard-and-no-header
+// clients (agents, curl) while browsers, which always name `text/html`, keep the
+// styled page.
+export function namesExplicitly(header: string | null | undefined, type: string): boolean {
+  if (!header?.trim()) return false;
+  return parseAccept(header).some((entry) => entry.type === type.toLowerCase() && entry.q > 0);
+}
