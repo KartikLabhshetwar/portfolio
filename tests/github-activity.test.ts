@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { toWeeks, weeksFor, type Contribution } from '../src/components/github-activity';
+import { toWeeks, weeksFor, type Contribution } from '../src/components/ui/github-activity';
 
 describe('GitHub activity layout', () => {
   it('keeps responsive history in seven-day columns', () => {

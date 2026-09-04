@@ -137,10 +137,7 @@ const commandItems = [
         <AutoTOCMinimap client:idle selector={toc} />
       </div>
       {backHref && (
-        <>
-          <a href={backHref} class="mb-8 text-sm text-muted-foreground hover:text-foreground lg:hidden">{backLabel}</a>
-          <a href={backHref} class="fixed bottom-4 left-4 z-40 hidden text-sm text-muted-foreground hover:text-foreground lg:block">{backLabel}</a>
-        </>
+        <a href={backHref} class="mb-8 text-sm text-muted-foreground hover:text-foreground">{backLabel}</a>
       )}
       <slot />
       <footer class="mt-auto flex flex-row flex-wrap gap-4 pt-12 text-base text-muted-foreground">

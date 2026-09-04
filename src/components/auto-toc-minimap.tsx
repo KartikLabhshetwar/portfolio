@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { HookSidebar, type HookSidebarItem } from "@/components/hook-sidebar"
+import { HookSidebar, type HookSidebarItem } from "@/components/ui/hook-sidebar"
 
 const slugify = (s: string) =>
   s.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-")
