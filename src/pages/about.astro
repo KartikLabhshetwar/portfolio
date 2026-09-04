@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
 import { experience } from '../data/experience';
@@ -13,56 +14,51 @@ const shipped = projects.length;
 const withImpact = projects.filter((p) => p.impact && p.impact !== 'Latest').length;
 ---
 <Base
-  title="About — Kartik Labhshetwar"
+  title="About | Kartik Labhshetwar"
   description="Kartik Labhshetwar is a software engineer at Mem0 in India, building the memory layer for AI agents and shipping open-source developer tools."
   schemaType="ProfilePage"
+  backHref="/"
 >
-  <h1 class="text-2xl font-semibold tracking-tight">About</h1>
-  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
-    I'm {profile.name}, a software engineer based in {profile.location}. I'm a {currentTitle} at {current?.companyName},
-    where I build the universal memory layer for AI agents: SDKs in Python and TypeScript, the self-hosted
-    server, vector-store integrations, editor plugins, and the CLI. Outside of that I ship my own products,
-    mostly small tools that solve a problem I hit myself, and write about what I learn doing it.
+  <PageHeader
+    title="About"
+    description={`I'm ${profile.name}, a software engineer in ${profile.location}. I build memory infrastructure for AI agents as a ${currentTitle} at ${current?.companyName}, then turn the problems I notice into products of my own.`}
+  />
+
+  <h2 class="mt-11 text-2xl font-semibold">What I work on</h2>
+  <p class="mt-3 text-base">
+    At Mem0, I work across retrieval, SDKs, plugins, and the self-hosted server. I care about the unglamorous
+    details that make infrastructure trustworthy: relevant search results, lower latency, safer defaults, clean
+    migrations, and releases teams can depend on. Before Mem0, I built scheduling and messaging workflows for
+    an AI assistant at Turbo ML.
   </p>
 
-  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">What I work on</h2>
-  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
-    Day to day that means memory infrastructure for agents: making retrieval return the right memories instead
-    of the closest ones, cutting search latency, hardening a self-hosted server other teams run in production,
-    and closing security holes in the vector stores underneath. A lot of the work is open source, so it happens
-    in public: reviewing community pull requests, triaging a backlog, and keeping SDK releases moving. Before
-    Mem0 I was a software engineering intern at Turbo ML, working on scheduling, messaging integrations, and
-    real-time scraping on Next.js, Supabase, and Cloudflare Workers.
+  <h2 class="mt-11 text-2xl font-semibold">What I've built</h2>
+  <p class="mt-3 text-base">
+    I have shipped {shipped} projects, with measurable adoption across {withImpact} of them. Screenshot Studio
+    serves 20k+ monthly users, BetterShot has 15k+ downloads, and Lazy Commit has passed 195k+ downloads on npm.
+    Most began as a recurring annoyance in my own workflow. I built the smallest useful fix, shipped it, and
+    kept improving the ones people returned to.
+    <a href="/work#projects" class="underline underline-offset-4">See all projects</a>.
   </p>
 
-  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">What I've built</h2>
-  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
-    {shipped} projects shipped so far, {withImpact} of them with real users behind them: Screenshot Studio
-    (20k+ monthly users), BetterShot, an open-source CleanShot X alternative for macOS (12k+ downloads), Lazy
-    Commit, a CLI that writes your git commit messages (195k+ downloads on npm), and OneURL, a self-hostable
-    Linktree alternative. Most are open source. I care less about which framework wins an argument and more
-    about whether the thing ships and people keep using it.
-    <a href="/projects" class="underline underline-offset-4">See all projects</a>.
-  </p>
-
-  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">What I write</h2>
-  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
-    Experience reports, not tutorials: what retrieval-augmented generation actually is and where it breaks,
-    running a text-to-speech system for 25,000 users without melting a server, a working guide to SSH, and how
-    I pick problems worth solving. If a post exists it's because I had to figure the thing out first.
+  <h2 class="mt-11 text-2xl font-semibold">What I write</h2>
+  <p class="mt-3 text-base">
+    I write from work I have done: scaling text to speech for 25,000 daily users, grounding LLMs with retrieval,
+    securing remote servers, and choosing product ideas worth building. Each post includes the tradeoffs, bugs,
+    and fixes that made the final system work.
     <a href="/blog" class="underline underline-offset-4">Read the blog</a>.
   </p>
 
-  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Elsewhere</h2>
-  <ul class="mt-3">
+  <h2 class="mt-11 text-2xl font-semibold">Elsewhere</h2>
+  <ul class="mt-3 flex flex-col gap-2">
     {profile.socials.map((s) => (
-      <li class="border-b border-border py-3">
-        <a href={s.href} target="_blank" rel="noopener noreferrer" class="text-sm font-medium underline-offset-4 hover:underline">{s.label} ↗</a>
+      <li>
+        <a href={s.href} target="_blank" rel="noopener noreferrer" class="text-base underline-offset-4 hover:underline">{s.label} ↗</a>
       </li>
     ))}
   </ul>
 
-  <p class="mt-6 max-w-prose text-sm leading-relaxed text-foreground/75">
+  <p class="mt-6 text-base text-muted-foreground">
     The fastest way to reach me is on <a href="/contact" class="underline underline-offset-4">the contact page</a>.
   </p>
 </Base>

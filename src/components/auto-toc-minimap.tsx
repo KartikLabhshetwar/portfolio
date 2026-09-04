@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-
-import { TOCMinimap, type TOCItemType } from "@/components/toc-minimap"
+import { HookSidebar, type HookSidebarItem } from "@/components/hook-sidebar"
 
 const slugify = (s: string) =>
   s.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-")
@@ -13,22 +12,32 @@ const slugify = (s: string) =>
  * headings become ticks (section h2s by default; prose/cards per page).
  */
 export function AutoTOCMinimap({ selector = "main h2" }: { selector?: string }) {
-  const [items, setItems] = useState<TOCItemType[]>([])
+  const [items, setItems] = useState<HookSidebarItem[]>([])
+  const [active, setActive] = useState(0)
 
   useEffect(() => {
-    const next: TOCItemType[] = Array.from(
-      document.querySelectorAll<HTMLElement>(selector)
-    )
+    const headings = Array.from(document.querySelectorAll<HTMLElement>(selector))
       .filter((el) => (el.textContent ?? "").trim())
-      .map((el) => {
-        if (!el.id) el.id = slugify(el.textContent!) || el.tagName.toLowerCase()
-        const depth = el.tagName === "H3" ? 3 : el.tagName === "H4" ? 4 : 2
-        return { title: el.textContent!.trim(), url: `#${el.id}`, depth }
-      })
-    setItems(next)
+    setItems(headings.map((el) => {
+      if (!el.id) el.id = slugify(el.textContent!) || el.tagName.toLowerCase()
+      return { label: el.textContent!.trim(), href: `#${el.id}` }
+    }))
+
+    const update = () => {
+      const threshold = window.innerHeight * 0.28
+      const next = headings.findLastIndex((heading) => heading.getBoundingClientRect().top <= threshold)
+      setActive(Math.max(0, next))
+    }
+    update()
+    addEventListener("scroll", update, { passive: true })
+    addEventListener("resize", update)
+    return () => {
+      removeEventListener("scroll", update)
+      removeEventListener("resize", update)
+    }
   }, [selector])
 
-  // ponytail: need 2+ ticks to be worth showing; one-heading pages just hide it.
+  // ponytail: need 2+ sections to make a sidebar useful.
   if (items.length < 2) return null
-  return <TOCMinimap items={items} />
+  return <HookSidebar items={items} value={active} label="On this page" color="var(--signal)" className="w-56" />
 }

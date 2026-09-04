@@ -11,6 +11,7 @@ export const experience: ExperienceItemType[] = [
       {
         id: 'mem0-mts',
         title: 'Member of Technical Staff',
+        summary: 'Building memory infrastructure for AI agents across SDKs, retrieval, plugins, and the self-hosted server.',
         employmentType: 'Full-time',
         employmentPeriod: { start: '04.2026' },
         description: `- Merged 83 PRs (+55K/−21K lines across 656 files), spanning the Python & TypeScript SDKs, vector stores, self-hosted server, editor plugins, CLI, and docs.
@@ -28,6 +29,7 @@ export const experience: ExperienceItemType[] = [
       {
         id: 'mem0-intern',
         title: 'Software Engineering Intern',
+        summary: 'Shipped across Mem0’s SDKs, docs, CI, security, and open-source community.',
         employmentType: 'Internship',
         employmentPeriod: { start: '03.2026', end: '04.2026' },
         description: `- Contributed across the full stack (SDKs, docs, CI, and community) for Mem0's open-source memory layer for AI agents.
@@ -46,10 +48,12 @@ export const experience: ExperienceItemType[] = [
     id: 'turboml',
     companyName: 'Turbo ML',
     companyLogo: '/logos/turboml.png',
+    companyWebsite: 'https://turboml.com',
     positions: [
       {
         id: 'turboml-ai',
         title: 'Software Engineering Intern (AI)',
+        summary: 'Built product workflows, messaging integrations, and scheduling infrastructure for an AI assistant.',
         employmentType: 'Internship',
         employmentPeriod: { start: '04.2025', end: '07.2025' },
         description: `- Shipped multi-select preferences, browser-based video recording, and API integrations (WhatsApp/email reminders), with autosave and real-time scraping on Next.js, Supabase, and Cloudflare Workers.

@@ -1,0 +1,18 @@
+---
+import { experience } from '../data/experience';
+
+const current = experience.find((company) => company.isCurrentEmployer)!;
+const previous = experience.find((company) => company.id === 'turboml')!;
+---
+<p class="mt-5 max-w-[34rem] text-sm leading-6 text-muted-foreground">
+  <a href="/work" class="text-foreground underline decoration-[var(--signal)]/35 underline-offset-4 hover:decoration-[var(--signal)]">Currently</a> a <span class="text-foreground">{current.positions[0].title}</span> at
+  <a href={current.companyWebsite} target="_blank" rel="noopener noreferrer" class="ml-0.5 inline-flex items-center gap-1.5 rounded-full bg-muted px-1.5 py-0.5 text-foreground hover:bg-accent">
+    <img src={current.companyLogo} alt="" class="size-4 rounded-full" />
+    {current.companyName}
+  </a>, building memory infrastructure for AI agents. Previously a
+  <span class="text-foreground">{previous.positions[0].title}</span> at
+  <a href={previous.companyWebsite} target="_blank" rel="noopener noreferrer" class="ml-0.5 inline-flex items-center gap-1.5 rounded-full bg-muted px-1.5 py-0.5 text-foreground hover:bg-accent">
+    <img src={previous.companyLogo} alt="" class="size-4 rounded-full" />
+    {previous.companyName}
+  </a>.
+</p>

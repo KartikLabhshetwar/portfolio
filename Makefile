@@ -1,4 +1,4 @@
-# Portfolio — common tasks. Run `make` (or `make help`) to list them.
+# Portfolio: common tasks. Run `make` (or `make help`) to list them.
 .DEFAULT_GOAL := help
 .PHONY: help install dev cms build preview check test clean deploy newsletter
 
@@ -11,7 +11,7 @@ install: ## Install dependencies
 dev: ## Start dev server (site + /keystatic CMS) at http://localhost:4321
 	pnpm dev
 
-cms: ## Edit blog posts in the CMS — run `make dev`, then open /keystatic
+cms: ## Edit blog posts in the CMS: run `make dev`, then open /keystatic
 	pnpm dev
 
 build: ## Production build (clears the Vite cache first to dodge stale-cache errors)
@@ -34,5 +34,5 @@ clean: ## Remove build output and caches
 deploy: build ## Build and deploy to Cloudflare (needs `wrangler login`)
 	pnpm exec wrangler deploy
 
-newsletter: ## Draft a blog post as a Kit broadcast — `make newsletter SLUG=my-post`
+newsletter: ## Draft a blog post as a Kit broadcast: `make newsletter SLUG=my-post`
 	pnpm newsletter $(SLUG)

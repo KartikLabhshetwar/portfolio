@@ -1,3 +1,3 @@
 # Portfolio
 
-Personal portfolio for Kartik Labhshetwar — kartiklabhshetwar.com
+Personal portfolio for Kartik Labhshetwar: kartiklabhshetwar.com

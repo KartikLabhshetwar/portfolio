@@ -1,0 +1,43 @@
+---
+import { experience } from '../data/experience';
+
+const month = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const formatDate = (value: string) => {
+  const [part, year] = value.split('.');
+  return year ? month.format(new Date(Date.UTC(Number(year), Number(part) - 1))) : value;
+};
+const companyPeriod = (positions: (typeof experience)[number]['positions']) => {
+  const first = positions.at(-1)!;
+  const current = positions.find((position) => !position.employmentPeriod.end);
+  return `${formatDate(first.employmentPeriod.start)} to ${current ? 'Present' : formatDate(positions[0].employmentPeriod.end!)}`;
+};
+---
+<section class="flex flex-col gap-4">
+  <p class="text-muted-foreground">Companies</p>
+  <ul class="flex flex-col gap-6">
+    {experience.map((company) => (
+      <li class="flex items-start gap-3">
+        <a href={company.companyWebsite} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${company.companyName}`} class="shrink-0 rounded-full ring-offset-2">
+          <img src={company.companyLogo} alt="" class="size-7 rounded-full" />
+        </a>
+        <div class="min-w-0 flex-1">
+          <div class="grid grid-cols-[auto_1fr_auto] items-center gap-4">
+            <a href={company.companyWebsite} target="_blank" rel="noopener noreferrer" class="text-foreground hover:underline">{company.companyName}</a>
+            <span class="border-t border-border" aria-hidden="true"></span>
+            <span class="text-sm tabular-nums text-muted-foreground">{companyPeriod(company.positions)}</span>
+          </div>
+          <ul class="mt-2 flex flex-col gap-1.5">
+            {company.positions.map((position) => (
+              <li class="flex flex-col justify-between gap-x-4 text-sm sm:flex-row">
+                <span class="text-foreground/80">{position.title}</span>
+                <span class="shrink-0 tabular-nums text-muted-foreground">
+                  {formatDate(position.employmentPeriod.start)} to {position.employmentPeriod.end ? formatDate(position.employmentPeriod.end) : 'Present'}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>

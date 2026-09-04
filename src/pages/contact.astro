@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
 import { profile } from '../data/profile';
 
@@ -9,62 +10,62 @@ export const prerender = false;
 const socials = Object.fromEntries(profile.socials.map((s) => [s.label, s.href]));
 const channels = [
   {
+    href: socials['Email'],
+    label: 'kartik.labhshetwar@gmail.com',
+    note: 'The best place for roles, collaborations, and anything that benefits from context.',
+  },
+  {
     href: socials['Book a call'],
     label: 'Book a 15-minute call',
-    note: 'Pick a slot that works for you. Best for anything worth a conversation: hiring, collaboration, or advice on a project.',
+    note: 'Pick a time for hiring, collaboration, or a focused conversation about something you are building.',
   },
   {
     href: socials['X'],
-    label: 'X (Twitter) — @code_kartik',
-    note: 'DMs are open. Quickest for short questions and anything about what I am shipping right now.',
+    label: 'X (Twitter): @code_kartik',
+    note: 'Best for short questions and conversations about what I am shipping now.',
   },
   {
     href: socials['LinkedIn'],
     label: 'LinkedIn',
-    note: 'Best for roles, contracts, and anything that needs a paper trail.',
+    note: 'A good place for roles, professional context, and staying connected.',
   },
   {
     href: socials['GitHub'],
-    label: 'GitHub — KartikLabhshetwar',
+    label: 'GitHub: KartikLabhshetwar',
     note: 'For bugs, feature requests, or contributions, open an issue on the relevant repository rather than messaging me. It gets a faster answer and helps the next person.',
   },
 ];
 ---
 <Base
-  title="Contact — Kartik Labhshetwar"
-  description="How to reach Kartik Labhshetwar: book a call, DM on X, connect on LinkedIn, or open an issue on GitHub."
+  title="Contact | Kartik Labhshetwar"
+  description="Email Kartik Labhshetwar, book a short call, or get in touch through LinkedIn, X, and GitHub."
   schemaType="ContactPage"
+  backHref="/"
 >
-  <h1 class="text-2xl font-semibold tracking-tight">Contact</h1>
-  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
-    I read everything that comes in and answer what I can. Pick the channel that matches what you need. If
-    you are writing about work, say what you are building and what you want from me in the first two lines,
-    and you will hear back faster.
-  </p>
+  <PageHeader title="Contact" description="Have a role, collaboration, or difficult engineering problem worth discussing? Email me or book a short call." />
 
-  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Where to reach me</h2>
-  <ul class="mt-3">
+  <h2 class="mt-11 text-2xl font-semibold">Where to reach me</h2>
+  <ul class="mt-3 flex flex-col gap-5">
     {channels.map((c) => (
-      <li class="border-b border-border py-3">
-        <a href={c.href} target="_blank" rel="noopener noreferrer" class="text-sm font-medium underline-offset-4 hover:underline">{c.label} ↗</a>
-        <p class="mt-1 max-w-prose text-sm leading-relaxed text-muted-foreground">{c.note}</p>
+      <li>
+        <a href={c.href} target="_blank" rel="noopener noreferrer" class="text-base underline-offset-4 hover:underline">{c.label} ↗</a>
+        <p class="text-base text-muted-foreground">{c.note}</p>
       </li>
     ))}
   </ul>
 
-  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Working together</h2>
-  <p class="mt-3 max-w-prose text-sm leading-relaxed text-foreground/75">
-    My day job is {profile.role}, so my time outside it is limited and I answer selectively. The things I
-    always make time for: talking about agent memory and retrieval, looking at something you are building in
-    that space, and helping people earlier in their career work out what to build next. For anything that
-    needs a scheduled conversation, use the call link above. If you want to support the open-source side of
-    this instead, that lives on <a href="/sponsors" class="underline underline-offset-4">the sponsors page</a>.
+  <h2 class="mt-11 text-2xl font-semibold">Working together</h2>
+  <p class="mt-3 text-base">
+    I spend most of my time building memory infrastructure at Mem0. I make room for thoughtful conversations
+    about agent memory, retrieval, developer tools, and products already in motion. Send enough context for me
+    to understand the problem, or use the meeting link when a live conversation will be faster.
   </p>
 
-  <h2 class="mt-10 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Stay in touch</h2>
-  <NewsletterForm blurb="New posts by email, nothing else. Unsubscribe in one click." />
+  <div class="mt-11">
+    <NewsletterForm title="Stay in touch" blurb="Useful engineering notes, sent when I have something worth sharing. No schedule and no noise." />
+  </div>
 
-  <p class="mt-6 max-w-prose text-xs text-muted-foreground">
+  <p class="mt-6 text-sm text-muted-foreground">
     Agents: subscribe by POSTing <code>&#123;"email":"you@example.com"&#125;</code> to <code>/api/subscribe</code>.
     Every page here, this one included, also serves Markdown when you send <code>Accept: text/markdown</code>.
   </p>

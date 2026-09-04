@@ -673,7 +673,7 @@ In `package.json` `scripts`, add:
 In `Makefile`, add `newsletter` to the `.PHONY` line and append this target:
 
 ```make
-newsletter: ## Draft a blog post as a Kit broadcast — `make newsletter SLUG=my-post`
+newsletter: ## Draft a blog post as a Kit broadcast: `make newsletter SLUG=my-post`
 	pnpm newsletter $(SLUG)
 ```
 
@@ -702,7 +702,7 @@ In `CLAUDE.md`, replace the `**Newsletter:**` bullet under Conventions with:
 In the Env vars section, delete the `BUTTONDOWN_API_KEY` bullet and add:
 
 ```markdown
-- `KIT_API_KEY` / `KIT_FORM_ID` — newsletter (runtime for `/api/subscribe` via `cloudflare:workers` env; `KIT_API_KEY` also read from `.env` by `pnpm newsletter`). Without them the form replies "not configured".
+- `KIT_API_KEY` / `KIT_FORM_ID`: newsletter (runtime for `/api/subscribe` via `cloudflare:workers` env; `KIT_API_KEY` also read from `.env` by `pnpm newsletter`). Without them the form replies "not configured".
 ```
 
 - [ ] **Step 6: Verify end to end**

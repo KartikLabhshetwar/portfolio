@@ -9,7 +9,7 @@ import {
   type MarkdownSite,
 } from './lib/page-markdown';
 import { profile } from './data/profile';
-import { featuredIds, projects } from './data/projects';
+import { projects } from './data/projects';
 import { experience } from './data/experience';
 
 // HTML first: a missing or `*/*` Accept header gets the browser representation.
@@ -41,7 +41,7 @@ async function loadSite(base: string): Promise<MarkdownSite> {
       pubDate: p.data.pubDate,
       body: p.body ?? '',
     }));
-  return { base, profile, projects, featuredIds, experience, posts };
+  return { base, profile, projects, experience, posts };
 }
 
 export const onRequest = defineMiddleware(async (ctx, next) => {

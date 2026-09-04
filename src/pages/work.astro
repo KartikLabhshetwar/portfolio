@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import ProjectList from '../components/ProjectList.astro';
+
+export const prerender = false;
+---
+<Base
+  title="Work | Kartik Labhshetwar"
+  description="Kartik Labhshetwar's work history and shipped software, from AI memory infrastructure to macOS apps and open-source developer tools."
+  schemaType="ProfilePage"
+  backHref="/"
+>
+  <PageHeader title="Work" description="Where I've worked and what I've shipped." />
+  <div class="mt-10">
+    <ExperienceList />
+  </div>
+  <section id="projects" class="mt-16 scroll-mt-16">
+    <h2 class="text-base font-normal">Projects</h2>
+    <ProjectList />
+  </section>
+</Base>

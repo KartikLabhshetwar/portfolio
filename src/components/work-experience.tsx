@@ -32,6 +32,8 @@ export type ExperiencePositionItemType = {
   employmentType?: string
   /** A brief description of the position or responsibilities */
   description?: string
+  /** A concise public summary for compact lists. */
+  summary?: string
   /** An icon representing the position */
   icon?: React.ReactElement
   /** A list of skills associated with the position */
@@ -215,7 +217,7 @@ export function ExperiencePositionItem({
               <dt className="sr-only">Employment Period</dt>
               <dd className="flex items-center gap-0.5 tabular-nums">
                 <span>{start}</span>
-                <span className="font-mono">—</span>
+                <span>:</span>
                 {isOngoing ? (
                   <InfinityIcon className="size-4.5 translate-y-[0.5px]" aria-label="Present" />
                 ) : (
@@ -277,7 +279,7 @@ function Skill({ className, ...props }: ComponentProps<"span">) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md border bg-muted/50 px-1.5 py-0.5 font-mono text-xs text-muted-foreground",
+        "inline-flex items-center rounded-md border bg-muted/50 px-1.5 py-0.5 text-xs text-muted-foreground",
         className
       )}
       {...props}

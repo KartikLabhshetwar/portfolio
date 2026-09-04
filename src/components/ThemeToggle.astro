@@ -1,17 +1,38 @@
-<button id="theme-toggle" type="button" aria-label="Toggle theme"
-  class="rounded-md p-2 text-sm hover:bg-black/5 dark:hover:bg-white/10">
-  <span class="dark:hidden">🌙</span>
-  <span class="hidden dark:inline">☀️</span>
+<button
+  data-theme-toggle
+  type="button"
+  aria-label="Use dark theme"
+  aria-pressed="false"
+  title="Use dark theme"
+  class="absolute top-0 right-0 cursor-pointer rounded-full bg-popover p-1 text-foreground/80 transition-colors hover:text-foreground"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5" aria-hidden="true">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+    <path d="M12 3l0 18"></path>
+    <path d="M12 9l4.65 -4.65"></path>
+    <path d="M12 14.3l7.37 -7.37"></path>
+    <path d="M12 19.6l8.85 -8.85"></path>
+  </svg>
 </button>
+
 <script>
-  const btn = document.getElementById('theme-toggle');
+  const btn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const syncLabel = () => {
+    const dark = document.documentElement.classList.contains('dark');
+    const label = dark ? 'Use light theme' : 'Use dark theme';
+    btn?.setAttribute('aria-label', label);
+    btn?.setAttribute('title', label);
+    btn?.setAttribute('aria-pressed', String(dark));
+  };
   const apply = () => {
     const isDark = document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+    syncLabel();
   };
+  syncLabel();
   btn?.addEventListener('click', () => {
-    // chanhdai theme-toggle-effect: animate the swap with a View Transition
-    // circle-blur reveal (CSS lives in global.css). Fall back where unsupported.
     if (!document.startViewTransition) return apply();
     document.startViewTransition(apply);
   });

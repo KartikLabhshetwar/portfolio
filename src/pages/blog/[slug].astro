@@ -1,63 +1,40 @@
 ---
 import Base from '../../layouts/Base.astro';
-import NewsletterForm from '../../components/NewsletterForm.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PostViews from '../../components/PostViews.astro';
 import { getCollection, render } from 'astro:content';
 
 // On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
 export const prerender = false;
 
 const slug = (p: { id: string }) => p.id.replace(/\/index$/, '');
-// Sorted newest-first, so for any post posts[i-1] is the newer neighbour and
-// posts[i+1] the older one — the prev/next footer.
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 const index = posts.findIndex((p) => slug(p) === Astro.params.slug);
 if (index === -1) return Astro.rewrite('/404');
 const post = posts[index]!;
-const newer = posts[index - 1] ?? null;
-const older = posts[index + 1] ?? null;
 const { Content } = await render(post);
 const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 <Base
-  title={`${post.data.title} — Kartik Labhshetwar`}
+  title={`${post.data.title} | Kartik Labhshetwar`}
   description={post.data.description}
   toc="#prose-content h2, #prose-content h3"
   ogType="article"
   schemaType="BlogPosting"
   datePublished={post.data.pubDate.toISOString()}
+  wide
+  backHref="/blog"
 >
-  <a href="/blog" class="inline-block text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50">← Blog</a>
-  <article class="mt-4">
-    <header class="border-b border-black/10 pb-6 dark:border-white/10">
-      <h1 class="text-2xl font-semibold tracking-tight">{post.data.title}</h1>
-      <p class="mt-2 text-xs text-zinc-500"><time datetime={post.data.pubDate.toISOString()}>{date}</time></p>
-    </header>
-    <div
-      id="prose-content"
-      class="prose prose-zinc dark:prose-invert mt-8 max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-pre:text-xs prose-img:rounded-lg"
-      style="font-family: var(--font-sans);"
-    >
+  <PageHeader title={post.data.title} description={post.data.description} href="/blog" compact />
+
+  <article>
+    <div id="prose-content" class="article-prose">
       <Content />
     </div>
+    <div class="mt-8 flex items-center justify-between gap-4">
+      <time datetime={post.data.pubDate.toISOString()} class="text-sm text-muted-foreground">Published {date}</time>
+      <PostViews slug={slug(post)} />
+    </div>
   </article>
-
-  {(newer || older) && (
-    <nav class="-mx-6 mt-12 grid grid-cols-2 border-t border-border text-sm">
-      {older ? (
-        <a href={`/blog/${slug(older)}`} class="group border-r border-border px-6 py-5">
-          <div class="text-xs uppercase tracking-wide text-muted-foreground">← Older</div>
-          <div class="mt-1 text-foreground group-hover:underline">{older.data.title}</div>
-        </a>
-      ) : <div class="border-r border-border"></div>}
-      {newer ? (
-        <a href={`/blog/${slug(newer)}`} class="group px-6 py-5 text-right">
-          <div class="text-xs uppercase tracking-wide text-muted-foreground">Newer →</div>
-          <div class="mt-1 text-foreground group-hover:underline">{newer.data.title}</div>
-        </a>
-      ) : <div></div>}
-    </nav>
-  )}
-
-  <NewsletterForm title="Enjoyed this post?" blurb="Get new posts and what I'm learning, in your inbox." />
 </Base>

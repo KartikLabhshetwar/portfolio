@@ -1,7 +1,6 @@
 import type { APIRoute } from 'astro';
 import { resolveEnv } from '../../lib/env';
-import { getRedis, type RedisEnv } from '../../lib/visitors';
-import { rateLimited } from '../../lib/ratelimit';
+import { getRedis, rateLimited, type RedisEnv } from '../../lib/ratelimit';
 import { subscribe, type KitEnv } from '../../lib/kit';
 
 export const prerender = false;
@@ -27,7 +26,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const env = await resolveEnv<Env>();
 
   // Abuse brake so a script cannot burn our Kit quota or spam signups. Reuses
-  // the visitor-counter Redis; with no creds we simply do not limit.
+  // With no Redis credentials we simply do not rate limit.
   const redis = getRedis(env);
   const ip = clientAddress || request.headers.get('cf-connecting-ip') || undefined;
   if (redis && ip && (await rateLimited(redis, `sub:${ip}`))) {

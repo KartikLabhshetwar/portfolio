@@ -14,7 +14,7 @@ const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
 /**
  * Minimal soundcn-compatible hook: plays a SoundAsset's base64 dataUri via an
  * HTMLAudioElement. Conforms to the `[play, controls]` contract in sound-types.
- * ponytail: plain <audio>, no Web Audio pooling — swap in soundcn's canonical
+ * ponytail: plain <audio>, no Web Audio pooling: swap in soundcn's canonical
  * hook if you need sprites/low-latency overlap.
  */
 export function useSound(
@@ -70,7 +70,7 @@ export function useSound(
           onPlay?.()
         })
         .catch(() => {
-          // Autoplay can be blocked until the first gesture — ignore.
+          // Autoplay can be blocked until the first gesture: ignore.
         })
     },
     [soundEnabled, interrupt, volume, playbackRate, onPlay]

@@ -1,7 +1,8 @@
 export const profile = {
   name: 'Kartik Labhshetwar',
-  role: 'Member of Technical Staff @ Mem0',
-  bio: 'I build from zero. At Mem0, working on the universal memory layer for AI agents across SDKs, infrastructure, and developer tools. I care less about tech debates and more about shipping things people love using.',
+  role: 'Member of Technical Staff at Mem0',
+  tagline: 'I ship things people love using.',
+  bio: 'I build memory infrastructure for AI agents at Mem0 and turn recurring problems into developer tools people keep using.',
   location: 'India',
   // Topics this site is an authority on, for the Person node's knowsAbout.
   knowsAbout: [
@@ -14,6 +15,7 @@ export const profile = {
     'macOS app development',
   ],
   socials: [
+    { label: 'Email', href: 'mailto:kartik.labhshetwar@gmail.com' },
     { label: 'GitHub', href: 'https://github.com/KartikLabhshetwar' },
     { label: 'X', href: 'https://x.com/code_kartik' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/kartikcode/' },

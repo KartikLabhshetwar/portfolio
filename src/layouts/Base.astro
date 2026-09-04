@@ -1,7 +1,5 @@
 ---
 import '../styles/global.css';
-import Nav from '../components/Nav.astro';
-import VisitorCount from '../components/VisitorCount.astro';
 import CommandMenu from '../components/CommandMenu.tsx';
 import { AutoTOCMinimap } from '../components/auto-toc-minimap';
 import { profile } from '../data/profile';
@@ -14,12 +12,15 @@ import { serializeJsonLd, structuredData } from '../lib/structured-data';
 // `schemaType`/`datePublished` shape the page's JSON-LD node.
 const {
   title = 'Kartik Labhshetwar · Software Engineer',
-  description = 'I build from zero. Software engineer building memory, infrastructure, and tooling for AI agents and shipping products people love using.',
-  image = '/og.png',
+  description = 'Kartik Labhshetwar builds memory infrastructure for AI agents at Mem0 and ships developer tools people keep using.',
+  image = '/og-card.png',
   ogType = 'website',
   toc = 'main h2',
   schemaType,
   datePublished,
+  wide = false,
+  backHref,
+  backLabel = 'Back',
 } = Astro.props;
 const siteName = 'Kartik Labhshetwar';
 // Always point canonical at the configured production domain (Astro.site),
@@ -46,22 +47,23 @@ const jsonLd = serializeJsonLd(
 );
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-// Trust-anchor pages: linked from every footer and reachable from ⌘K, but kept
-// out of the top nav so the four primary destinations stay four.
+// Trust-anchor pages stay reachable from every footer and the command menu.
 const footerLinks = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
   { href: '/privacy', label: 'Privacy' },
 ];
+const footerSocials = ['LinkedIn', 'X', 'GitHub'].map((label) => profile.socials.find((social) => social.label === label)!);
+const meeting = profile.socials.find((social) => social.label === 'Book a call')!;
+const email = profile.socials.find((social) => social.label === 'Email')!;
 const commandItems = [
   { label: 'Home', href: '/', group: 'Pages' },
-  { label: 'Projects', href: '/projects', group: 'Pages' },
+  { label: 'Work', href: '/work', group: 'Pages' },
   { label: 'Blog', href: '/blog', group: 'Pages' },
-  { label: 'Sponsors', href: '/sponsors', group: 'Pages' },
   ...footerLinks.map((l) => ({ label: l.label, href: l.href, group: 'Pages' })),
   ...projects.map((p) => ({
     label: p.title,
-    href: p.liveLink ?? p.githubLink ?? '/projects',
+    href: p.liveLink ?? p.githubLink ?? '/work#projects',
     group: 'Projects',
     external: true,
     keywords: [p.description, p.impact].filter(Boolean) as string[],
@@ -80,6 +82,7 @@ const commandItems = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -94,6 +97,7 @@ const commandItems = [
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={title} />
@@ -110,6 +114,7 @@ const commandItems = [
       const t = localStorage.getItem('theme');
       const dark = t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.classList.toggle('dark', dark);
+      document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
     </script>
     <script
       is:inline
@@ -125,24 +130,27 @@ const commandItems = [
     ></script>
   </head>
   <body class="min-h-screen bg-background text-foreground">
-    <!-- Grid system: the content lives on a centered "sheet" framed by vertical
-         hairlines; full-bleed horizontal hairlines divide it at real section
-         boundaries. Same frame on every page. -->
-    <main class="mx-auto flex min-h-dvh max-w-2xl flex-col border-x border-border px-6">
-      <Nav />
-      <div class="-mx-6 border-b border-border" aria-hidden="true"></div>
-      <nav aria-label="On this page" class="fixed top-1/2 right-6 z-40 hidden -translate-y-1/2 xl:block">
+    <main class:list={["mx-auto flex min-h-screen grow flex-col px-4 py-20", wide ? "max-w-4xl gap-8" : "max-w-xl"]}>
+      <div class="fixed top-1/2 right-2 z-40 hidden -translate-y-1/2 xl:block">
         <!-- client:idle, not client:visible: the island renders empty until headings load,
              so a visibility trigger would never fire (zero-size element never intersects). -->
         <AutoTOCMinimap client:idle selector={toc} />
-      </nav>
-      <div class="flex-1 pt-10"><slot /></div>
-      <footer class="-mx-6 mt-24 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-border px-6 py-3">
-        <span class="text-xs text-zinc-500">&copy; {new Date().getFullYear()} Kartik Labhshetwar</span>
-        <nav aria-label="Site information" class="flex items-center gap-x-3 text-xs text-zinc-500">
-          {footerLinks.map((l) => <a href={l.href} class="hover:underline">{l.label}</a>)}
+      </div>
+      {backHref && (
+        <>
+          <a href={backHref} class="mb-8 text-sm text-muted-foreground hover:text-foreground lg:hidden">{backLabel}</a>
+          <a href={backHref} class="fixed bottom-4 left-4 z-40 hidden text-sm text-muted-foreground hover:text-foreground lg:block">{backLabel}</a>
+        </>
+      )}
+      <slot />
+      <footer class="mt-auto flex flex-row flex-wrap gap-4 pt-12 text-base text-muted-foreground">
+        <nav aria-label="Elsewhere" class="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <a href={email.href} class="hover:text-foreground hover:underline">Email</a>
+          <a href={meeting.href} target="_blank" rel="noopener noreferrer" class="hover:text-foreground hover:underline">Book a meet</a>
+          {footerSocials.map((s) => (
+            <a href={s.href} target="_blank" rel="noopener noreferrer" class="hover:text-foreground hover:underline">{s.label}</a>
+          ))}
         </nav>
-        <VisitorCount />
       </footer>
     </main>
     <CommandMenu client:idle items={commandItems} />

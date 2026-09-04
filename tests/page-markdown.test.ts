@@ -21,7 +21,6 @@ const site: MarkdownSite = {
     { id: 'alpha', title: 'Alpha', description: 'Does alpha things.', impact: '10k downloads', liveLink: `${base}/a`, githubLink: 'https://github.com/x/alpha' },
     { id: 'beta', title: 'Beta', description: 'Does beta things.' },
   ],
-  featuredIds: ['alpha'],
   experience: [
     {
       companyName: 'Mem0',
@@ -38,30 +37,26 @@ const site: MarkdownSite = {
 };
 
 describe('pageMarkdown', () => {
-  it('renders the home page with identity, experience, projects, and writing', () => {
+  it('renders the home page with identity and writing', () => {
     const md = pageMarkdown('/', site)!;
     expect(md).toContain('# Kartik Labhshetwar');
     expect(md).toContain('> Software Engineer. I build from zero.');
     expect(md).toContain('- GitHub: https://github.com/KartikLabhshetwar');
-    expect(md).toContain('## Experience');
-    expect(md).toContain('### Software Engineer · [Mem0](https://mem0.ai) (Jan 2025–present)');
-    expect(md).toContain('Built memory infrastructure.');
-    expect(md).toContain('## Projects');
-    expect(md).toContain('### Alpha — 10k downloads');
+    expect(md).toContain(`[Work history](${base}/work)`);
+    expect(md).not.toContain('## Experience');
+    expect(md).not.toContain('## Projects');
+    expect(md).not.toContain('### Alpha');
     expect(md).toContain('## Writing');
-    expect(md).toContain(`- [First](${base}/blog/first) — 2026-01-02: About first.`);
-    expect(md).toContain('/api/subscribe');
+    expect(md).toContain(`- [First](${base}/blog/first): 2026-01-02: About first.`);
+    expect(md).not.toContain('/api/subscribe');
   });
 
-  it('only lists featured projects on the home page', () => {
-    const md = pageMarkdown('/', site)!;
-    expect(md).toContain('### Alpha');
-    expect(md).not.toContain('### Beta');
-  });
-
-  it('lists every project on the projects page', () => {
-    const md = pageMarkdown('/projects', site)!;
-    expect(md).toContain('# Projects');
+  it('renders work history and every project on the work page', () => {
+    const md = pageMarkdown('/work', site)!;
+    expect(md).toContain('# Work');
+    expect(md).toContain('## [Mem0](https://mem0.ai)');
+    expect(md).toContain('**Software Engineer** (Jan 2025 to Present)');
+    expect(md).toContain('## Projects');
     expect(md).toContain('### Alpha');
     expect(md).toContain('### Beta');
     expect(md).toContain('[Live](https://kartiklabhshetwar.com/a) · [GitHub](https://github.com/x/alpha)');
@@ -69,7 +64,7 @@ describe('pageMarkdown', () => {
 
   it('lists every post on the blog index', () => {
     const md = pageMarkdown('/blog', site)!;
-    expect(md).toContain('# Blog');
+    expect(md).toContain('# Writing');
     expect(md).toContain(`${base}/blog/first`);
     expect(md).toContain(`${base}/blog/second`);
   });
@@ -82,21 +77,13 @@ describe('pageMarkdown', () => {
     expect(md).toContain('## Body');
   });
 
-  it('renders the sponsors page', () => {
-    const md = pageMarkdown('/sponsors', site)!;
-    expect(md).toContain('# Sponsors');
-    expect(md).toContain('https://github.com/sponsors/KartikLabhshetwar');
-    expect(md).toContain('## What sponsorship funds');
-    expect(md.length).toBeGreaterThan(500);
-  });
-
   it('renders the about page as a trust anchor', () => {
     const md = pageMarkdown('/about', site)!;
     expect(md).toContain('# About');
     expect(md).toContain('Kartik Labhshetwar');
     expect(md).toContain('India');
     expect(md).toContain('Software Engineer at Mem0');
-    expect(md).toContain(`${base}/projects`);
+    expect(md).toContain(`${base}/work#projects`);
     expect(md).toContain(`${base}/contact`);
     expect(md).toContain('- GitHub: https://github.com/KartikLabhshetwar');
   });
@@ -114,7 +101,7 @@ describe('pageMarkdown', () => {
   it('renders the privacy page covering every processor the site uses', () => {
     const md = pageMarkdown('/privacy', site)!;
     expect(md).toContain('# Privacy');
-    for (const processor of ['Kit', 'Upstash Redis', 'Databuddy', 'Cloudflare']) {
+    for (const processor of ['Kit', 'Databuddy', 'Upstash', 'GitHub', 'Cloudflare']) {
       expect(md).toContain(processor);
     }
     expect(md).toContain(`${base}/contact`);
@@ -127,7 +114,7 @@ describe('pageMarkdown', () => {
   });
 
   it('ignores trailing slashes', () => {
-    expect(pageMarkdown('/projects/', site)).toBe(pageMarkdown('/projects', site));
+    expect(pageMarkdown('/work/', site)).toBe(pageMarkdown('/work', site));
     expect(pageMarkdown('', site)).toBe(pageMarkdown('/', site));
   });
 
@@ -143,10 +130,11 @@ describe('notFoundMarkdown', () => {
     const md = notFoundMarkdown(base);
     expect(md).toContain('# 404');
     expect(md).toContain('## Where to look next');
-    const paths = ['/', '/about', '/projects', '/blog', '/contact', '/sponsors', '/privacy', '/llms.txt', '/llms-full.txt', '/sitemap-index.xml'];
+    const paths = ['/', '/work', '/about', '/blog', '/contact', '/privacy', '/llms.txt', '/llms-full.txt', '/sitemap-index.xml'];
     for (const path of paths) {
       expect(md).toContain(`${base}${path}`);
     }
+    expect(md).not.toContain(`${base}/projects`);
     expect(md).toContain('Accept: text/markdown');
   });
 });

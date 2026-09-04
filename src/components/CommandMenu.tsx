@@ -41,7 +41,7 @@ export default function CommandMenu({ items }: { items: Item[] }) {
       <Command
         loop
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md overflow-hidden rounded-lg border border-black/10 bg-white font-mono shadow-2xl dark:border-white/10 dark:bg-zinc-900"
+        className="w-full max-w-md overflow-hidden rounded-lg border border-black/10 bg-white shadow-2xl dark:border-white/10 dark:bg-zinc-900"
       >
         <Command.Input
           autoFocus

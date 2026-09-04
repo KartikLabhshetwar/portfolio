@@ -1,0 +1,27 @@
+---
+interface Props { slug: string; }
+const { slug } = Astro.props;
+---
+<span data-post-views data-slug={slug} class="hidden text-sm text-muted-foreground" aria-live="polite">
+  <span data-post-views-count></span>&nbsp;<span data-post-views-label>views</span>
+</span>
+
+<script>
+  const format = (views: number) => new Intl.NumberFormat('en-US', {
+    notation: views >= 1000 ? 'compact' : 'standard',
+    maximumFractionDigits: 2,
+  }).format(views).toLowerCase();
+
+  document.querySelectorAll<HTMLElement>('[data-post-views]').forEach(async (element) => {
+    const slug = element.dataset.slug;
+    if (!slug) return;
+    try {
+      const response = await fetch(`/api/views/${encodeURIComponent(slug)}`, { method: 'POST' });
+      const data = await response.json() as { configured?: boolean; views?: number };
+      if (!data.configured || typeof data.views !== 'number') return;
+      element.querySelector<HTMLElement>('[data-post-views-count]')!.textContent = format(data.views);
+      element.querySelector<HTMLElement>('[data-post-views-label]')!.textContent = data.views === 1 ? 'view' : 'views';
+      element.classList.remove('hidden');
+    } catch {}
+  });
+</script>

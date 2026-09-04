@@ -1,0 +1,13 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props { title: string; description: string; compact?: boolean; href?: string; }
+const { title, description, compact = false, href } = Astro.props;
+---
+<header class:list={["relative flex flex-col", compact ? "gap-0" : "gap-4"]}>
+  <ThemeToggle />
+  <h1 class="pr-10 text-base font-normal">
+    {href ? <a href={href} class="hover:underline">{title}</a> : title}
+  </h1>
+  <p class="max-w-[34rem] text-base text-muted-foreground">{description}</p>
+</header>

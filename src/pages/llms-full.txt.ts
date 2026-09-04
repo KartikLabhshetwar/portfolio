@@ -28,7 +28,7 @@ export const GET: APIRoute = async ({ site }) => {
       const links = [p.liveLink && `[Live](${p.liveLink})`, p.githubLink && `[GitHub](${p.githubLink})`]
         .filter(Boolean)
         .join(' · ');
-      const impact = p.impact ? ` — ${p.impact}` : '';
+      const impact = p.impact ? `: ${p.impact}` : '';
       return `### ${p.title}${impact}\n\n${p.description}${links ? `\n\n${links}` : ''}`;
     })
     .join('\n\n');
@@ -50,6 +50,7 @@ export const GET: APIRoute = async ({ site }) => {
 > ${profile.role}. ${profile.bio}
 
 - Location: ${profile.location}
+- Email: ${social('Email')}
 - GitHub: ${social('GitHub')}
 - X: ${social('X')}
 - LinkedIn: ${social('LinkedIn')}

@@ -1,4 +1,4 @@
-# Newsletter — design
+# Newsletter: design
 
 Date: 2026-08-22
 Status: approved for planning
@@ -11,19 +11,19 @@ already in this repo.
 
 ## What already exists (do not rebuild)
 
-- **Keystatic CMS** — `keystatic.config.ts`, served at `/keystatic`. Blog
+- **Keystatic CMS**: `keystatic.config.ts`, served at `/keystatic`. Blog
   collection writes `src/content/blog/<slug>/index.mdoc`.
-- **Blog rendering** — `src/pages/blog/index.astro`, `blog/[slug].astro`.
-- **Rate limiter** — `src/lib/ratelimit.ts` (fixed window, Upstash).
-- **Redis client factory** — `getRedis()` in `src/lib/visitors.ts`.
-- **A prior subscribe route** — deleted in `ddb027b`, recoverable from git.
+- **Blog rendering**: `src/pages/blog/index.astro`, `blog/[slug].astro`.
+- **Rate limiter**: `src/lib/ratelimit.ts` (fixed window, Upstash).
+- **Redis client factory**: `getRedis()` in `src/lib/visitors.ts`.
+- **A prior subscribe route**: deleted in `ddb027b`, recoverable from git.
   Its shape (validation, rate limiting, JSON+form parsing, graceful degrade) is
   sound and gets reused; only the provider call changes.
 
 ## Decisions
 
 **Provider: Kit (ConvertKit) v4.** Free to 10,000 subscribers, which covers the
-whole stated goal. Auth is a `X-Kit-Api-Key` header. Limit 120 req/60s — our
+whole stated goal. Auth is a `X-Kit-Api-Key` header. Limit 120 req/60s: our
 per-IP brake (5 per 10 min) keeps us orders of magnitude under.
 
 **Broadcasts are created as drafts** (`send_at: null`). You review in Kit and
@@ -77,7 +77,7 @@ migrated to use it so there is exactly one definition.
 ### `src/lib/kit.ts` (new)
 
 Pure transport over `fetch`. No Astro, no Cloudflare imports, no env reads of
-its own — the caller passes credentials in.
+its own: the caller passes credentials in.
 
 ```ts
 type KitEnv = { KIT_API_KEY?: string; KIT_FORM_ID?: string }
@@ -98,8 +98,8 @@ with the form and triggers confirmation when the form is double opt-in.
 
 ### `src/lib/post-email.ts` (new)
 
-Pure function, zero I/O. The riskiest logic in the system — a bug here is
-invisible until it is in 10,000 inboxes — so it is isolated and tested.
+Pure function, zero I/O. The riskiest logic in the system: a bug here is
+invisible until it is in 10,000 inboxes: so it is isolated and tested.
 
 ```ts
 postToEmail({ title, description, body, slug }, baseUrl)
@@ -119,9 +119,9 @@ postToEmail({ title, description, body, slug }, baseUrl)
 ### `src/pages/api/subscribe.ts` (restored, retargeted)
 
 Recovered from `ddb027b^` and edited: Buttondown call swapped for
-`kit.subscribe`, env resolution swapped for `lib/env`. Everything else — the
+`kit.subscribe`, env resolution swapped for `lib/env`. Everything else: the
 linear email regex, JSON-or-form-encoded body reading, per-IP rate limiting via
-the existing Upstash client, graceful 503 when unconfigured — is kept as-is.
+the existing Upstash client, graceful 503 when unconfigured: is kept as-is.
 
 ### `scripts/send-newsletter.ts` (new)
 
@@ -138,7 +138,7 @@ Refuses to run when `draft: true`.
 
 ### `src/components/NewsletterForm.astro` (rewritten)
 
-Form restored from `ddb027b^` — email input, progressive-enhancement script,
+Form restored from `ddb027b^`: email input, progressive-enhancement script,
 `aria-live` status line, works without JS via a plain form POST. Substack link
 deleted. Both call sites (`index.astro:64`, `blog/[slug].astro:54`) keep their
 existing props.
@@ -156,13 +156,13 @@ degrades.
 
 ## Testing
 
-Following the existing style in `tests/` — fake objects passed in, no module
+Following the existing style in `tests/`: fake objects passed in, no module
 mocking.
 
-- `tests/post-email.test.ts` — markdoc renders expected HTML; relative links
+- `tests/post-email.test.ts`: markdoc renders expected HTML; relative links
   and images become absolute; absolute URLs are left alone; subject/preview
   come from frontmatter; the read-on-web link is present.
-- `tests/kit.test.ts` — fake `fetch`. Subscribe sends the right header and
+- `tests/kit.test.ts`: fake `fetch`. Subscribe sends the right header and
   body; a duplicate is reported as success-already, not as an error; a real
   failure surfaces its message. Broadcast payload carries `send_at: null` and
   `public: true`.
@@ -175,7 +175,7 @@ mocking.
   of muscle memory.
 - **Notion sync.** A Notion→markdoc converter (callouts, toggles, nested lists,
   image re-hosting) is more code than everything above combined, and it buys one
-  copy-paste per post. Purely additive later — it drops in front of this
+  copy-paste per post. Purely additive later: it drops in front of this
   pipeline without changing it.
 - **A sent-posts ledger.** Draft-first makes it unnecessary.
 - **A custom email template.** Kit's template does it.

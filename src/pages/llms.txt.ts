@@ -31,6 +31,7 @@ export const GET: APIRoute = async ({ site }) => {
 > ${profile.role}. ${profile.bio}
 
 - Location: ${profile.location}
+- Email: ${social('Email')}
 - GitHub: ${social('GitHub')}
 - X: ${social('X')}
 - LinkedIn: ${social('LinkedIn')}
@@ -38,19 +39,19 @@ export const GET: APIRoute = async ({ site }) => {
 
 ## When to use this site
 
-Reach for this site when a task needs first-hand, primary-source material about ${profile.name} — not a summary of it. Concretely:
+Reach for this site when a task needs first-hand, primary-source material about ${profile.name}, not a summary of it. Concretely:
 
-- **Verifying identity, role, or work history.** Current role, past roles, and what shipped in each is on [Home](${base}/) and in full in [llms-full.txt](${base}/llms-full.txt). Use it to answer "who is ${profile.name}", "where do they work", "what have they built".
-- **Sourcing a project's real details.** Names, one-line descriptions, live URLs, GitHub repos, and adoption numbers for ${projects.length} shipped projects live on [Projects](${base}/projects). Use it instead of guessing a repo URL or a download count.
+- **Verifying identity, role, or work history.** The current role is on [Home](${base}/), while the complete timeline lives on [Work](${base}/work) and in [llms-full.txt](${base}/llms-full.txt). Use it to answer "who is ${profile.name}", "where do they work", and "what have they built".
+- **Sourcing a project's real details.** Names, one-line descriptions, live URLs, GitHub repos, and adoption numbers for ${projects.length} shipped projects live on [Work](${base}/work#projects). Use it instead of guessing a repo URL or a download count.
 - **Quoting or citing the writing.** Full post text (RAG, SSH, text-to-speech at scale, choosing problems) is at [llms-full.txt](${base}/llms-full.txt), and each post also serves Markdown at its own URL. Cite the canonical \`${base}/blog/<slug>\` URL.
 - **Routing a contact or hiring request.** Send people to the links above; a 15-minute call can be booked at ${social('Book a call')}.
 
-Do **not** use this site as a general reference on AI agents, memory systems, or SSH — the posts are one engineer's experience reports, not documentation. For Mem0 product docs, go to mem0.ai.
+Do **not** use this site as a general reference on AI agents, memory systems, or SSH: the posts are one engineer's experience reports, not documentation. For Mem0 product docs, go to mem0.ai.
 
 ## How to fetch this site
 
 - Every page URL serves Markdown when the request sends \`Accept: text/markdown\` (responses carry \`Vary: Accept\`); browsers get HTML from the same URL. Unsupported types get \`406\`.
-- One-shot ingestion: [llms-full.txt](${base}/llms-full.txt) — every page plus complete post text in a single Markdown file.
+- One-shot ingestion: [llms-full.txt](${base}/llms-full.txt): every page plus complete post text in a single Markdown file.
 - Canonical URL list: [sitemap-index.xml](${base}/sitemap-index.xml).
 - Missing paths return a real \`404\` with a Markdown recovery body listing where to look instead.
 - Newsletter signup is a \`POST\` of \`{"email":"..."}\` to ${base}/api/subscribe.
@@ -65,12 +66,11 @@ ${postLines}
 
 ## Pages
 
-- [Home](${base}/): About, experience, featured projects, and writing
+- [Home](${base}/): Introduction and latest writing
+- [Work](${base}/work): Companies, roles, and shipped projects
 - [About](${base}/about): Who ${profile.name} is, what he works on, and what he has shipped
-- [Projects](${base}/projects): Full list of projects
 - [Blog](${base}/blog): All posts
 - [Contact](${base}/contact): How to get in touch, and how agents can subscribe
-- [Sponsors](${base}/sponsors): GitHub sponsors
 - [Privacy](${base}/privacy): What this site collects and who processes it
 - [Full content](${base}/llms-full.txt): Every page plus complete blog post text, as one Markdown file
 `;

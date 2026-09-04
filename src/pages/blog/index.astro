@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
 
@@ -11,9 +12,9 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 // Strip the trailing /index to get clean slugs for URLs
 const toSlug = (id: string) => id.replace(/\/index$/, '');
 ---
-<Base title="Blog — Kartik Labhshetwar" description="Posts on shipping software: AI agents, memory, infrastructure, and developer tooling." toc="main h3" schemaType="CollectionPage">
-  <h1 class="text-2xl font-semibold">Blog</h1>
-  <div class="mt-6">
+<Base title="Writing | Kartik Labhshetwar" description="Technical field notes from Kartik Labhshetwar on AI systems, infrastructure, and developer tools." toc="main h3" schemaType="CollectionPage" backHref="/">
+  <PageHeader title="Writing" description="Field notes from shipped work, with the architecture, tradeoffs, bugs, and fixes behind it." />
+  <div class="mt-10 flex flex-col gap-4">
     {posts.map((p) => <BlogCard title={p.data.title} description={p.data.description} pubDate={p.data.pubDate} slug={toSlug(p.id)} />)}
   </div>
 </Base>

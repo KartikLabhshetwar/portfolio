@@ -1,9 +1,18 @@
-import type { Redis } from '@upstash/redis';
+import { Redis } from '@upstash/redis';
+
+export type RedisEnv = {
+  UPSTASH_REDIS_REST_URL?: string;
+  UPSTASH_REDIS_REST_TOKEN?: string;
+};
+
+export function getRedis(env: RedisEnv): Redis | null {
+  if (!env.UPSTASH_REDIS_REST_URL || !env.UPSTASH_REDIS_REST_TOKEN) return null;
+  return new Redis({ url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN });
+}
 
 // Fixed-window counter: allow `limit` hits per `windowS` seconds, keyed by `id`
 // (e.g. an IP). The first hit sets the TTL and the key self-expires, so there's
-// nothing to sweep. Reuses the Upstash Redis already wired for the visitor
-// counter — callers pass a client (or skip the call when creds are absent).
+// nothing to sweep. Callers skip the check when Redis credentials are absent.
 //
 // ponytail: fixed-window can allow up to 2× `limit` across a window boundary,
 // and a crash between incr/expire could leave one key without a TTL. Fine for a

@@ -1,86 +1,40 @@
 ---
 import Base from '../layouts/Base.astro';
-import { HeroTagline } from '../components/HeroTagline';
-import { WorkExperience } from '../components/work-experience';
-import HomeProjects from '../components/HomeProjects.astro';
-import HomeSponsors from '../components/HomeSponsors.astro';
+import PageHeader from '../components/PageHeader.astro';
 import BlogCard from '../components/BlogCard.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import NewsletterForm from '../components/NewsletterForm.astro';
+import GitHubActivity from '../components/github-activity';
+import CareerLine from '../components/CareerLine.astro';
 import { profile } from '../data/profile';
-import { experience } from '../data/experience';
-import { featuredIds, projects } from '../data/projects';
 import { getCollection } from 'astro:content';
 
-// On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
 export const prerender = false;
 
 const toSlug = (id: string) => id.replace(/\/index$/, '');
-const featured = featuredIds.map((id) => projects.find((p) => p.id === id)!);
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()).slice(0, 3);
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()).slice(0, 4);
 ---
 <Base>
-  <section class="pb-10">
-    <div class="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8">
-      <img
-        src="/kartik.png"
-        alt={profile.name}
-        class="size-24 shrink-0 rounded-full object-cover ring-2 ring-border sm:size-33"
-      />
-      <div>
-        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{profile.name}</h1>
-        <p class="mt-2"><HeroTagline client:visible /></p>
-      </div>
+  <PageHeader title={profile.name} description={profile.tagline} />
+  <CareerLine />
+
+  <div class="py-10 lg:py-12">
+    <GitHubActivity client:visible username="kartik-mem0" />
+  </div>
+
+  <section class="flex flex-col gap-4">
+    <div class="flex items-baseline justify-between gap-4">
+      <p>Writing</p>
+      <a href="/blog" class="text-sm text-muted-foreground hover:text-foreground hover:underline">All writing</a>
     </div>
-    <p class="mt-5 max-w-prose text-sm leading-relaxed text-foreground/75">{profile.bio}</p>
-    <div class="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-sm">
-      {profile.socials.map((s) => (
-        <a href={s.href} target="_blank" rel="noopener noreferrer" class="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">{s.label}</a>
+    <div class="flex flex-col gap-4">
+      {posts.map((post) => (
+        <BlogCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          slug={toSlug(post.id)}
+        />
       ))}
     </div>
-  </section>
-
-  <section class="-mx-6 border-t border-border px-6 py-10">
-    <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Experience</h2>
-    <div class="mt-2">
-      <WorkExperience client:visible experiences={experience} className="px-0 bg-transparent" />
-    </div>
-  </section>
-
-  <section class="-mx-6 border-t border-border px-6 py-10">
-    <div class="flex items-baseline justify-between">
-      <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Projects</h2>
-      <a href="/projects" class="text-xs text-muted-foreground hover:text-foreground">All →</a>
-    </div>
-    <HomeProjects server:defer>
-      <div slot="fallback" class="mt-1">{featured.map((p) => <ProjectCard {...p} />)}</div>
-    </HomeProjects>
-  </section>
-
-  <section class="-mx-6 border-t border-border px-6 py-10">
-    <div class="flex items-baseline justify-between">
-      <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Writing</h2>
-      <a href="/blog" class="text-xs text-muted-foreground hover:text-foreground">All →</a>
-    </div>
-    <div class="mt-1">{posts.map((p) => <BlogCard title={p.data.title} description={p.data.description} pubDate={p.data.pubDate} slug={toSlug(p.id)} />)}</div>
-  </section>
-  <section class="-mx-6 border-t border-border px-6 py-10">
-    <HomeSponsors server:defer>
-      <!-- Same heading the island renders, so the section isn't a hole in the
-           outline for a reader without JS; the cards need a request-time token. -->
-      <section slot="fallback" class="mt-12">
-        <div class="flex items-baseline justify-between">
-          <h2 class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Sponsors</h2>
-          <a href="/sponsors" class="text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50">All →</a>
-        </div>
-        <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
-          People and companies funding the open-source work, loaded live from GitHub Sponsors.
-        </p>
-      </section>
-    </HomeSponsors>
-  </section>
-  <section class="-mx-6 border-t border-border px-6 py-10">
-    <NewsletterForm />
   </section>
 </Base>

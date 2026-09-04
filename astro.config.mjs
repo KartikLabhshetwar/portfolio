@@ -10,8 +10,8 @@ import { readdirSync, readFileSync } from 'node:fs';
 const SITE = 'https://kartiklabhshetwar.com';
 
 // Blog posts render on demand (Accept negotiation, see src/middleware.ts), so the
-// sitemap integration — which only sees prerendered pages and static route
-// patterns — can't discover them. Feed them in from the content directory.
+// sitemap integration: which only sees prerendered pages and static route
+// patterns: can't discover them. Feed them in from the content directory.
 const blogPages = readdirSync('src/content/blog', { withFileTypes: true })
   .filter((d) => d.isDirectory())
   .filter((d) => !/^\s*draft:\s*true\s*$/m.test(readFileSync(`src/content/blog/${d.name}/index.mdoc`, 'utf8')))
@@ -23,7 +23,7 @@ const reactEntrypoints = [
   'react/jsx-runtime',
   'react/jsx-dev-runtime',
 ];
-// Deps Vite finds only at request time (content/markdoc render, visitor counter)
+// Deps Vite finds only at request time (content/markdoc render, rate limiting)
 // rather than in its initial scan. Left alone, it re-optimizes mid-session and
 // each SSR reload briefly nulls React → "Invalid hook call" floods on dev start.
 // Pre-bundling them up front means one optimize pass, no reloads. Dev-only;
@@ -33,7 +33,6 @@ const ssrPrebundle = [
   '@astrojs/markdoc/components',
   '@astrojs/markdoc/runtime',
   '@astrojs/markdoc/runtime-assets-config',
-  '@fingerprintjs/fingerprintjs',
   '@upstash/redis',
 ];
 function dedupeReactInWorkerd() {
@@ -49,6 +48,7 @@ function dedupeReactInWorkerd() {
 
 export default defineConfig({
   site: SITE,
+  redirects: { '/projects': '/work#projects' },
   prefetch: { prefetchAll: true },
   adapter: cloudflare({ imageService: 'compile' }),
   session: { driver: sessionDrivers.lruCache() },
@@ -59,7 +59,6 @@ export default defineConfig({
       dedupe: reactEntrypoints,
     },
     optimizeDeps: {
-      include: ['@fingerprintjs/fingerprintjs'],
       exclude: ['virtual:keystatic-config'],
     },
   },
