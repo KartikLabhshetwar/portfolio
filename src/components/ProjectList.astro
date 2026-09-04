@@ -1,7 +1,7 @@
 ---
 import { projects } from '../data/projects';
 ---
-<ul class="mt-10 flex flex-col gap-3" aria-label="Projects">
+<ul class="-mx-3 mt-8 flex flex-col gap-1" aria-label="Projects">
   {projects.map((project) => (
     <li>
       <a
@@ -9,11 +9,14 @@ import { projects } from '../data/projects';
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`${project.title}: ${project.description}`}
-        class="group grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-sm py-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        class="group flex cursor-pointer items-center gap-3 rounded-full px-3 py-2 transition-colors duration-200 hover:bg-muted active:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <span class="text-foreground group-hover:underline">{project.title}</span>
-        <span class="border-t border-border transition-colors group-hover:border-foreground/20" aria-hidden="true"></span>
-        <span class="text-sm text-muted-foreground">{project.kind}</span>
+        <span class="min-w-0 shrink truncate text-foreground">{project.title}</span>
+        <span class="min-w-4 flex-1 border-t border-border transition-colors group-hover:border-foreground/20" aria-hidden="true"></span>
+        <span class="flex shrink-0 items-center gap-1.5 text-sm text-muted-foreground">
+          {project.kind}
+          <span aria-hidden="true" class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">↗</span>
+        </span>
       </a>
     </li>
   ))}

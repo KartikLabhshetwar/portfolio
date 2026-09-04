@@ -14,29 +14,38 @@ const companyPeriod = (positions: (typeof experience)[number]['positions']) => {
 ---
 <section class="flex flex-col gap-4">
   <p class="text-muted-foreground">Companies</p>
-  <ul class="flex flex-col gap-6">
+  <ul class="-mx-3 flex flex-col gap-2">
     {experience.map((company) => (
-      <li class="flex items-start gap-3">
-        <a href={company.companyWebsite} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${company.companyName}`} class="shrink-0 rounded-full ring-offset-2">
+      <li>
+        <a
+          href={company.companyWebsite}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Visit ${company.companyName}`}
+          class="group flex cursor-pointer items-start gap-3 rounded-xl px-3 py-2 transition-colors duration-200 hover:bg-muted active:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
           <img src={company.companyLogo} alt="" class="size-7 rounded-full" />
-        </a>
-        <div class="min-w-0 flex-1">
-          <div class="grid grid-cols-[auto_1fr_auto] items-center gap-4">
-            <a href={company.companyWebsite} target="_blank" rel="noopener noreferrer" class="text-foreground hover:underline">{company.companyName}</a>
-            <span class="border-t border-border" aria-hidden="true"></span>
-            <span class="text-sm tabular-nums text-muted-foreground">{companyPeriod(company.positions)}</span>
+          <div class="min-w-0 flex-1">
+            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3">
+              <span class="text-foreground">{company.companyName}</span>
+              <span class="border-t border-border transition-colors group-hover:border-foreground/20" aria-hidden="true"></span>
+              <span class="flex items-center gap-1.5 text-sm tabular-nums text-muted-foreground">
+                {companyPeriod(company.positions)}
+                <span aria-hidden="true" class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">↗</span>
+              </span>
+            </div>
+            <ul class="mt-2 flex flex-col gap-1.5">
+              {company.positions.map((position) => (
+                <li class="flex flex-col justify-between gap-x-4 text-sm sm:flex-row">
+                  <span class="text-foreground/80">{position.title}</span>
+                  <span class="shrink-0 tabular-nums text-muted-foreground">
+                    {formatDate(position.employmentPeriod.start)} to {position.employmentPeriod.end ? formatDate(position.employmentPeriod.end) : 'Present'}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul class="mt-2 flex flex-col gap-1.5">
-            {company.positions.map((position) => (
-              <li class="flex flex-col justify-between gap-x-4 text-sm sm:flex-row">
-                <span class="text-foreground/80">{position.title}</span>
-                <span class="shrink-0 tabular-nums text-muted-foreground">
-                  {formatDate(position.employmentPeriod.start)} to {position.employmentPeriod.end ? formatDate(position.employmentPeriod.end) : 'Present'}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        </a>
       </li>
     ))}
   </ul>
