@@ -10,8 +10,8 @@ const svg = `
     </defs>
     <rect width="1200" height="630" fill="#FBFBFA"/>
     <rect x="566" y="-84" width="706" height="560" rx="166" fill="#F8F8F7" stroke="#F5F5F3" stroke-width="2"/>
-    <path d="M716 -84H1272V342H806C756.294 342 716 301.706 716 252V-84Z" fill="#1265FF"/>
-    <text x="-18" y="674" fill="#E7E7E5" font-family="Geist, Arial, sans-serif" font-size="276" font-weight="430" letter-spacing="-13">${profile.name.split(' ')[0]}</text>
+    <path d="M716 -84H1272V342H806C756.294 342 716 301.706 716 252V-84Z" fill="#5D18EB"/>
+    <text x="-18" y="604" fill="#E7E7E5" font-family="Geist, Arial, sans-serif" font-size="276" font-weight="430" letter-spacing="-13">${profile.name.split(' ')[0]}</text>
   </svg>`;
 
 await writeFile(new URL('../public/og-card.png', import.meta.url), await sharp(Buffer.from(svg)).png().toBuffer());
