@@ -46,7 +46,7 @@ const jsonLd = serializeJsonLd(
   ),
 );
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title));
 // Trust-anchor pages stay reachable from every footer and the command menu.
 const footerLinks = [
   { href: '/about', label: 'About' },
@@ -83,6 +83,7 @@ const commandItems = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
+    <slot name="head" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />

@@ -6,7 +6,7 @@ import PageHeader from '../components/PageHeader.astro';
 export const prerender = false;
 
 // Bump when the practices below change, not on every deploy.
-const updated = '4 September 2026';
+const updated = '5 September 2026';
 ---
 <Base
   title="Privacy | Kartik Labhshetwar"
@@ -39,9 +39,10 @@ const updated = '4 September 2026';
 
   <h2 class="mt-11 text-2xl font-semibold">GitHub activity</h2>
   <p class="mt-3 text-base">
-    The homepage loads public contribution history from github-contributions-api.jogruber.de and recent public
-    events from GitHub. These services receive standard request metadata such as your IP address and user agent.
-    The activity card is decorative and the rest of the site still works if either request is blocked.
+    The homepage loads public contribution history and recent GitHub events through this site's Cloudflare
+    server, which caches successful responses. Your browser does not contact the contribution API directly.
+    Repository avatars still load from GitHub, which receives standard request metadata such as your IP address
+    and user agent for those images. The rest of the site works if activity data is unavailable.
   </p>
 
   <h2 class="mt-11 text-2xl font-semibold">Hosting and storage on your device</h2>

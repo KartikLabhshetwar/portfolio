@@ -113,9 +113,6 @@ function describeDay({ count, date }: Contribution) {
   return `${count} ${noun} on ${DATE_FORMAT.format(new Date(`${date}T00:00:00`))}`;
 }
 
-const CALENDAR_API = "https://github-contributions-api.jogruber.de/v4";
-const EVENTS_API = "https://api.github.com/users";
-
 type ApiDay = { date: string; count: number; level: number };
 type PushEvent = {
   type: string;
@@ -123,8 +120,8 @@ type PushEvent = {
   payload?: { commits?: unknown[] };
 };
 
-async function fetchCalendar(login: string) {
-  const res = await fetch(`${CALENDAR_API}/${login}?y=last`);
+async function fetchCalendar(login: string, signal?: AbortSignal) {
+  const res = await fetch(`/api/github/${encodeURIComponent(login)}?resource=calendar`, { signal });
   if (!res.ok) return null;
 
   const days: ApiDay[] = (await res.json())?.contributions ?? [];
@@ -142,8 +139,8 @@ async function fetchCalendar(login: string) {
   }));
 }
 
-async function fetchRepos(login: string): Promise<RepoContribution[]> {
-  const res = await fetch(`${EVENTS_API}/${login}/events/public?per_page=100`);
+async function fetchRepos(login: string, signal?: AbortSignal): Promise<RepoContribution[]> {
+  const res = await fetch(`/api/github/${encodeURIComponent(login)}?resource=repos`, { signal });
   if (!res.ok) return [];
 
   const events: PushEvent[] = await res.json();
@@ -174,24 +171,39 @@ async function fetchRepos(login: string): Promise<RepoContribution[]> {
     });
 }
 
+type GitHubUserData = {
+  contributions?: Contribution[];
+  repos?: RepoContribution[];
+  calendarUnavailable?: boolean;
+};
+
+export async function loadGitHubUser(
+  login: string,
+  update: (data: GitHubUserData) => void,
+  signal?: AbortSignal,
+) {
+  // Each result renders immediately, even if the other service is slow or fails.
+  await Promise.allSettled([
+    fetchCalendar(login, signal)
+      .then((contributions) => update(contributions ? { contributions } : { calendarUnavailable: true }))
+      .catch(() => update({ calendarUnavailable: true })),
+    fetchRepos(login, signal).then((repos) => update({ repos })),
+  ]);
+}
+
 function useGitHubUser(login?: string) {
-  const [data, setData] = React.useState<{
-    contributions: Contribution[];
-    repos: RepoContribution[];
-  }>();
+  const [data, setData] = React.useState<GitHubUserData>();
 
   React.useEffect(() => {
     if (!login) return;
-    let active = true;
-
-    Promise.all([fetchCalendar(login), fetchRepos(login)])
-      .then(([contributions, repos]) => {
-        if (active && contributions) setData({ contributions, repos });
-      })
-      .catch(() => {});
+    const controller = new AbortController();
+    setData(undefined);
+    void loadGitHubUser(login, (result) => {
+      if (!controller.signal.aborted) setData((previous) => ({ ...previous, ...result }));
+    }, controller.signal);
 
     return () => {
-      active = false;
+      controller.abort();
     };
   }, [login]);
 
@@ -564,7 +576,10 @@ const GitHubActivity = ({
 
   const parsedYear = Number(contributions.at(-1)?.date.slice(0, 4));
   const displayYear = year ?? (Number.isFinite(parsedYear) ? parsedYear : null);
-  const heading = `${total} contributions${displayYear ? ` in ${displayYear}` : ""}`;
+  const loading = username && !contributionsProp.length && !fetched?.contributions;
+  const heading = loading
+    ? (fetched?.calendarUnavailable ? "GitHub activity is temporarily unavailable" : "Loading GitHub activity...")
+    : `${total} contributions${displayYear ? ` in ${displayYear}` : ""}`;
 
   const gap = gapFor(cellSize);
   const columns = Math.min(
@@ -587,7 +602,7 @@ const GitHubActivity = ({
       style={{ width, ...style }}
       {...props}
     >
-      <p className="mb-4 text-base font-medium text-foreground px-1.5">
+      <p aria-live="polite" className="mb-4 text-base font-medium text-foreground px-1.5">
         {heading}
       </p>
 

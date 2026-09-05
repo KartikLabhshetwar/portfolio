@@ -7,7 +7,7 @@ import { getCollection } from 'astro:content';
 // On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
 export const prerender = false;
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title));
 // Keystatic stores entries as {slug}/index.mdoc, so id = "hello-world/index"
 // Strip the trailing /index to get clean slugs for URLs
 const toSlug = (id: string) => id.replace(/\/index$/, '');

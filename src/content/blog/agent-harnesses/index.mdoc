@@ -1,0 +1,91 @@
+---
+title: Why Everyone Is Building Their Own Agent Harness and Why You Should Care
+description: Why the code around your model decides whether an agent works.
+pubDate: 2026-09-05
+draft: false
+---
+
+In February 2026, LangChain improved its coding agent, deepagents-cli, from 52.8% to 66.5% on Terminal-Bench 2.0. That 13.7 percentage point jump moved it from outside the top 30 to the top five.
+
+The model stayed the same: GPT-5.2-Codex. The team only changed the harness, the software around it. [LangChain published the experiment and its results](https://www.langchain.com/blog/improving-deep-agents-with-harness-engineering).
+
+That result points to a shift in how we build AI products. Picking a capable model matters. So does everything that helps it do useful work.
+
+## What is an agent harness?
+
+An agent harness turns a model that generates text into a system that can complete a task.
+
+It gives the model tools, decides what information to include, manages execution, and checks the result. It also handles the less exciting parts: timeouts, permissions, retries, logs, and knowing when to stop.
+
+For a coding agent, the model might suggest a change. The harness lets it read the repository, edit a file, run tests, inspect a failure, and try again.
+
+A good harness makes that loop dependable. It gives the model useful feedback and limits what it can do when it gets something wrong.
+
+## The same model can produce very different results
+
+LangChain found a common failure: the agent wrote code, read it back, decided it looked right, and stopped. It often skipped testing.
+
+The team added clearer instructions to build, verify, and fix. They also added a check before completion, better information about the environment, and reminders when the agent kept repeating a failed approach. These changes helped the model use abilities it already had. [The experiment describes each change](https://www.langchain.com/blog/improving-deep-agents-with-harness-engineering).
+
+This is why I care about harness engineering. A model upgrade can help, but it is not the only way to improve an agent. Sometimes the missing piece is a test result, a clearer tool, or a limit on repeated attempts.
+
+## Harness improvements can compound
+
+When a production agent fails, you learn something about the task and the system around it.
+
+If it edits the wrong files, tighten the tool permissions. If it loses track of requirements, make those requirements easier to retrieve. If it reports success too early, add a check that can prove whether the work is complete.
+
+Turn useful lessons into tests and small changes. Future runs benefit from them, and many of those improvements remain useful when you switch models.
+
+There is a catch: fixes can become clutter. A rule that helped an older model may confuse a newer one. Keep measuring and remove rules that no longer help.
+
+OpenAI described this change in engineering work in its own Codex experiment. A team that started with three engineers and grew to seven produced a repository with roughly a million lines across code, tooling, and documentation. Humans directed the work while Codex wrote it. The engineers spent their effort defining the environment and building feedback loops. [Their account explains what worked and what broke](https://openai.com/index/harness-engineering/).
+
+The useful lesson is the change in where engineers spend their time. Reliable execution needs a well-designed environment.
+
+## Why a framework is only the starting point
+
+Frameworks can give you an agent loop, tool calling, and integrations. They save time. They cannot decide what success means for your product.
+
+A support agent needs different permissions from a coding agent. A research agent needs different checks from an agent that changes customer records. Each needs tools and context suited to its job.
+
+You still have to answer practical questions:
+
+- What can the agent read or change?
+- Which actions need approval?
+- What information should it load for this step?
+- How will you detect a bad result?
+- How much time and money can a task use?
+- What happens when a tool fails halfway through?
+
+Choosing a vendor runtime is also an architectural choice. Understand which parts of your system depend on it and what switching would require.
+
+## The parts that matter
+
+I find it useful to think about a harness in seven parts:
+
+1. **The agent loop.** How it plans, acts, checks, and retries.
+2. **Tools.** Clear operations with inputs the model can supply reliably.
+3. **Context and memory.** The information it needs now and what it can retrieve later.
+4. **Execution and permissions.** Where actions run and what they may change.
+5. **Coordination.** How separate agents divide work when that is useful.
+6. **Evaluation and tracing.** Tests for quality and records of what happened.
+7. **Prompts and model selection.** Instructions and model choices suited to each task.
+
+These are responsibilities, not seven services you need to build.
+
+Let the model reason about the task. Enforce permissions and validate inputs in the code that runs its tools. A prompt asking an agent to be careful is not an access control system.
+
+## When should you build your own?
+
+If you are prototyping, start with an existing agent such as Claude Code, Cursor, or Codex. Use it to find out whether the workflow is useful.
+
+If you are taking one workflow into production, first use the extension points you already have. Repository instructions, hooks, MCP tools, and focused agent definitions may cover the job. Build an evaluation set from real tasks before replacing the runtime.
+
+Consider a custom harness when you can name a clear limitation: poor results on your tasks, costs that do not work, missing permissions, incomplete audit records, or tools the existing system cannot support.
+
+A sustained improvement on your own evaluations is a stronger reason to build than a benchmark headline. There is no universal score gap that makes a rewrite worthwhile.
+
+Start with the smallest change that fixes a measured problem. Keep it if it improves results. Remove it if it adds more work than value.
+
+The model gives you intelligence. The harness helps turn it into a product people can trust.

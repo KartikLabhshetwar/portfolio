@@ -20,7 +20,7 @@ export const GET: APIRoute = async ({ site }) => {
     .join('\n');
 
   const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title),
   );
   const postLines = posts
     .map((p) => `- [${p.data.title}](${base}/blog/${p.id.replace(/\/index$/, '')}): ${p.data.description}`)

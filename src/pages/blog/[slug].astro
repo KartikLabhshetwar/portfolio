@@ -9,7 +9,7 @@ export const prerender = false;
 
 const slug = (p: { id: string }) => p.id.replace(/\/index$/, '');
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title));
 const index = posts.findIndex((p) => slug(p) === Astro.params.slug);
 if (index === -1) return Astro.rewrite('/404');
 const post = posts[index]!;

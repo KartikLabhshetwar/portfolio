@@ -11,14 +11,15 @@ export const prerender = false;
 
 const toSlug = (id: string) => id.replace(/\/index$/, '');
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()).slice(0, 4);
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title)).slice(0, 4);
 ---
 <Base>
+  <link slot="head" rel="preload" href="/api/github/kartik-mem0?resource=calendar" as="fetch" crossorigin="anonymous" />
   <PageHeader title={profile.name} description={profile.tagline} />
   <CareerLine />
 
   <div class="py-10 lg:py-12">
-    <GitHubActivity client:visible username="kartik-mem0" />
+    <GitHubActivity client:load username="kartik-mem0" />
   </div>
 
   <section class="flex flex-col gap-4">

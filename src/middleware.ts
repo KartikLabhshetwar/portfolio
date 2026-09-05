@@ -33,7 +33,7 @@ function markdown(body: string, status = 200): Response {
 
 async function loadSite(base: string): Promise<MarkdownSite> {
   const posts: MarkdownPost[] = (await getCollection('blog', ({ data }) => !data.draft))
-    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title))
     .map((p) => ({
       slug: p.id.replace(/\/index$/, ''),
       title: p.data.title,

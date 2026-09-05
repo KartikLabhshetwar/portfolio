@@ -34,7 +34,7 @@ export const GET: APIRoute = async ({ site }) => {
     .join('\n\n');
 
   const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title),
   );
   const postsMd = posts
     .map((p) => {

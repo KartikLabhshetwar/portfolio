@@ -42,7 +42,7 @@ export type MarkdownSite = {
 export const MARKDOWN_CONTENT_TYPE = 'text/markdown; charset=utf-8';
 
 // Mirrors the date shown on /privacy; both move only when the practices change.
-const PRIVACY_UPDATED = '4 September 2026';
+const PRIVACY_UPDATED = '5 September 2026';
 
 function normalize(pathname: string): string {
   const trimmed = pathname.replace(/\/+$/, '');
@@ -72,7 +72,7 @@ ${links}`;
 }
 
 function home(site: MarkdownSite): string {
-  const writing = site.posts.slice(0, 3).map((p) => postLine(site.base, p)).join('\n');
+  const writing = site.posts.slice(0, 4).map((p) => postLine(site.base, p)).join('\n');
   return `${identity(site)}
 
 [Work history](${site.base}/work)
@@ -197,7 +197,7 @@ Each article shows a unique view count stored in Upstash Redis. A random first-p
 
 ## GitHub activity
 
-The homepage loads public contribution history from github-contributions-api.jogruber.de and recent public events from GitHub. These services receive standard request metadata such as your IP address and user agent. The activity card is decorative and the rest of the site still works if either request is blocked.
+The homepage loads public contribution history and recent GitHub events through this site's Cloudflare server, which caches successful responses. Your browser does not contact the contribution API directly. Repository avatars still load from GitHub, which receives standard request metadata such as your IP address and user agent for those images. The rest of the site works if activity data is unavailable.
 
 ## Hosting and storage on your device
 
