@@ -154,6 +154,8 @@ body {
   background-color: var(--muted);
 }
 
+.mobile-menu > summary::-webkit-details-marker { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .ink-label { transition: none; }
 }
