@@ -36,7 +36,7 @@ export function structuredData(site: string, profile: SchemaProfile, page: PageS
     description: profile.bio,
     image: `${base}/kartik.png`,
     address: { '@type': 'PostalAddress', addressCountry: profile.location },
-    sameAs: profile.socials.map((s) => s.href),
+    sameAs: profile.socials.filter((s) => ['GitHub', 'X', 'LinkedIn'].includes(s.label)).map((s) => s.href),
   };
   if (profile.employer) {
     person.worksFor = { '@type': 'Organization', name: profile.employer.name, url: profile.employer.url };

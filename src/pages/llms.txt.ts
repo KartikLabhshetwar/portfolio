@@ -41,8 +41,8 @@ export const GET: APIRoute = async ({ site }) => {
 
 Reach for this site when a task needs first-hand, primary-source material about ${profile.name}, not a summary of it. Concretely:
 
-- **Verifying identity, role, or work history.** The current role is on [Home](${base}/), while the complete timeline lives on [Work](${base}/work) and in [llms-full.txt](${base}/llms-full.txt). Use it to answer "who is ${profile.name}", "where do they work", and "what have they built".
-- **Sourcing a project's real details.** Names, one-line descriptions, live URLs, GitHub repos, and adoption numbers for ${projects.length} shipped projects live on [Work](${base}/work#projects). Use it instead of guessing a repo URL or a download count.
+- **Verifying identity, role, or work history.** The current role is on [Home](${base}/), while the complete timeline lives on [Experience](${base}/experience) and in [llms-full.txt](${base}/llms-full.txt). Use it to answer "who is ${profile.name}", "where do they work", and "what have they built".
+- **Sourcing a project's real details.** Names, one-line descriptions, live URLs, GitHub repos, and adoption numbers for ${projects.length} shipped projects live on [Projects](${base}/projects). Use it instead of guessing a repo URL or a download count.
 - **Quoting or citing the writing.** Full post text (RAG, SSH, text-to-speech at scale, choosing problems) is at [llms-full.txt](${base}/llms-full.txt), and each post also serves Markdown at its own URL. Cite the canonical \`${base}/blog/<slug>\` URL.
 - **Routing a contact or hiring request.** Send people to the links above; a 15-minute call can be booked at ${social('Book a call')}.
 
@@ -67,10 +67,13 @@ ${postLines}
 ## Pages
 
 - [Home](${base}/): Introduction and latest writing
-- [Work](${base}/work): Companies, roles, and shipped projects
+- [Experience](${base}/experience): Companies and roles
+- [Projects](${base}/projects): Shipped apps and developer tools
 - [About](${base}/about): Who ${profile.name} is, what he works on, and what he has shipped
 - [Blog](${base}/blog): All posts
-- [Contact](${base}/contact): How to get in touch, and how agents can subscribe
+- [Contact](${base}/contact): How to get in touch
+- [Newsletter](${base}/newsletter): Subscribe to new posts by email
+- [Terms](${base}/terms): Using this site and its content
 - [Privacy](${base}/privacy): What this site collects and who processes it
 - [Full content](${base}/llms-full.txt): Every page plus complete blog post text, as one Markdown file
 `;

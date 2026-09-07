@@ -33,7 +33,7 @@ const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', mo
       <Content />
     </div>
     <div class="mt-8 flex items-center justify-between gap-4">
-      <time datetime={post.data.pubDate.toISOString()} class="text-sm text-muted-foreground">Published {date}</time>
+      <time datetime={post.data.pubDate.toISOString()} class="text-xs text-muted-foreground">Published {date}</time>
       <PostViews slug={slug(post)} />
     </div>
   </article>

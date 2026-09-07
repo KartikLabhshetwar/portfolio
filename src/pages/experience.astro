@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+
+export const prerender = false;
+---
+<Base
+  title="Experience | Kartik Labhshetwar"
+  description="Kartik Labhshetwar's software engineering experience at Mem0 and Turbo ML, building AI memory infrastructure, SDKs, and product workflows."
+  schemaType="ProfilePage"
+  toc={false}
+>
+  <PageHeader title="Experience" description="My work so far." />
+  <div class="mt-8">
+    <ExperienceList />
+  </div>
+</Base>
+
+<script is:inline>
+  // Old /work#projects links retain their fragment through the permanent redirect.
+  if (location.hash === '#projects') location.replace('/projects');
+</script>

@@ -2,7 +2,7 @@
 interface Props { slug: string; }
 const { slug } = Astro.props;
 ---
-<span data-post-views data-slug={slug} class="hidden text-sm text-muted-foreground" aria-live="polite">
+<span data-post-views data-slug={slug} class="hidden text-xs text-muted-foreground" aria-live="polite">
   <span data-post-views-count></span>&nbsp;<span data-post-views-label>views</span>
 </span>
 

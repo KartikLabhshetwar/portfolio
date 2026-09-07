@@ -45,7 +45,7 @@ async function loadSite(base: string): Promise<MarkdownSite> {
 }
 
 export const onRequest = defineMiddleware(async (ctx, next) => {
-  if (SKIP.test(ctx.url.pathname)) return next();
+  if (SKIP.test(ctx.url.pathname) || /\.(?:txt|xml)$/.test(ctx.url.pathname)) return next();
 
   const accept = ctx.request.headers.get('accept');
   const chosen = negotiate(accept, PRODUCES);

@@ -13,23 +13,24 @@ const toSlug = (id: string) => id.replace(/\/index$/, '');
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title)).slice(0, 4);
 ---
-<Base>
+<Base schemaType="ProfilePage">
   <link slot="head" rel="preload" href="/api/github/kartik-mem0?resource=calendar" as="fetch" crossorigin="anonymous" />
   <PageHeader title={profile.name} description={profile.tagline} />
   <CareerLine />
 
-  <div class="py-10 lg:py-12">
+  <div class="py-8 sm:py-10 lg:py-12">
     <GitHubActivity client:load username="kartik-mem0" />
   </div>
 
   <section class="flex flex-col gap-4">
     <div class="flex items-baseline justify-between gap-4">
-      <p>Writing</p>
-      <a href="/blog" class="text-sm text-muted-foreground hover:text-foreground hover:underline">All writing</a>
+      <h2 class="text-base font-normal tracking-tight">Writing</h2>
+      <a href="/blog" class="ink-link inline-flex min-h-6 items-center text-sm text-muted-foreground"><span class="ink-label">All writing</span></a>
     </div>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-5">
       {posts.map((post) => (
         <BlogCard
+          headingLevel="h3"
           title={post.data.title}
           description={post.data.description}
           pubDate={post.data.pubDate}

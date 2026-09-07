@@ -1,8 +1,8 @@
 ---
-interface Props { title: string; description: string; pubDate: Date; slug: string; }
-const { title, description, slug } = Astro.props;
+interface Props { title: string; description: string; pubDate: Date; slug: string; headingLevel?: 'h2' | 'h3'; }
+const { title, description, slug, headingLevel: Heading = 'h2' } = Astro.props;
 ---
 <a href={`/blog/${slug}`} class="group flex flex-col rounded-md ring-offset-2">
-  <p class="text-foreground underline decoration-transparent underline-offset-4 transition-[text-decoration-color] group-hover:decoration-foreground/30 group-focus-visible:decoration-foreground/30">{title}</p>
-  <p class="text-muted-foreground">{description}</p>
+  <Heading class="text-sm font-normal leading-6 text-foreground underline decoration-transparent underline-offset-4 transition-[text-decoration-color] group-hover:decoration-foreground/30 group-focus-visible:decoration-foreground/30">{title}</Heading>
+  <p class="text-sm leading-relaxed text-muted-foreground">{description}</p>
 </a>

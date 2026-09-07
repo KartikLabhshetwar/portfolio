@@ -5,60 +5,37 @@ import { profile } from '../data/profile';
 import { projects } from '../data/projects';
 import { experience } from '../data/experience';
 
-// On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
 export const prerender = false;
-
-const current = experience.find((e) => e.isCurrentEmployer);
-const currentTitle = current?.positions[0]?.title;
-const shipped = projects.length;
-const withImpact = projects.filter((p) => p.impact && p.impact !== 'Latest').length;
+const current = experience.find((company) => company.isCurrentEmployer)!;
+const featured = projects.filter((project) => ['bettershot', 'screenshot-studio', 'lazycommit'].includes(project.id));
 ---
-<Base
-  title="About | Kartik Labhshetwar"
-  description="Kartik Labhshetwar is a software engineer at Mem0 in India, building the memory layer for AI agents and shipping open-source developer tools."
-  schemaType="ProfilePage"
-  backHref="/"
->
-  <PageHeader
-    title="About"
-    description={`I'm ${profile.name}, a software engineer in ${profile.location}. I build memory infrastructure for AI agents as a ${currentTitle} at ${current?.companyName}, then turn the problems I notice into products of my own.`}
-  />
-
-  <h2 class="mt-11 text-2xl font-semibold">What I work on</h2>
-  <p class="mt-3 text-base">
-    At Mem0, I work across retrieval, SDKs, plugins, and the self-hosted server. I care about the unglamorous
-    details that make infrastructure trustworthy: relevant search results, lower latency, safer defaults, clean
-    migrations, and releases teams can depend on. Before Mem0, I built scheduling and messaging workflows for
-    an AI assistant at Turbo ML.
-  </p>
-
-  <h2 class="mt-11 text-2xl font-semibold">What I've built</h2>
-  <p class="mt-3 text-base">
-    I have shipped {shipped} projects, with measurable adoption across {withImpact} of them. Screenshot Studio
-    serves 20k+ monthly users, BetterShot has 15k+ downloads, and Lazy Commit has passed 195k+ downloads on npm.
-    Most began as a recurring annoyance in my own workflow. I built the smallest useful fix, shipped it, and
-    kept improving the ones people returned to.
-    <a href="/work#projects" class="underline underline-offset-4">See all projects</a>.
-  </p>
-
-  <h2 class="mt-11 text-2xl font-semibold">What I write</h2>
-  <p class="mt-3 text-base">
-    I write from work I have done: scaling text to speech for 25,000 daily users, grounding LLMs with retrieval,
-    securing remote servers, and choosing product ideas worth building. Each post includes the tradeoffs, bugs,
-    and fixes that made the final system work.
-    <a href="/blog" class="underline underline-offset-4">Read the blog</a>.
-  </p>
-
-  <h2 class="mt-11 text-2xl font-semibold">Elsewhere</h2>
-  <ul class="mt-3 flex flex-col gap-2">
-    {profile.socials.map((s) => (
-      <li>
-        <a href={s.href} target="_blank" rel="noopener noreferrer" class="text-base underline-offset-4 hover:underline">{s.label} ↗</a>
-      </li>
-    ))}
-  </ul>
-
-  <p class="mt-6 text-base text-muted-foreground">
-    The fastest way to reach me is on <a href="/contact" class="underline underline-offset-4">the contact page</a>.
-  </p>
+<Base title="About | Kartik Labhshetwar" description="Meet Kartik Labhshetwar, a software engineer in India building AI memory infrastructure, apps, and developer tools." schemaType="ProfilePage">
+  <PageHeader title="About" description={`I'm ${profile.name}, a software engineer based in ${profile.location}.`} />
+  <div class="page-copy">
+    <h2>What I work on</h2>
+    <p>
+      I'm a {current.positions[0].title} at {current.companyName}, building memory infrastructure for AI agents.
+      My work spans SDKs, retrieval, editor integrations, and the self-hosted server.
+      <a href="/experience">See my experience</a>.
+    </p>
+    <h2>What I've built</h2>
+    <p>I build apps and developer tools for problems I run into. A few of them:</p>
+    <ul class="flex flex-col gap-3">
+      {featured.map((project) => (
+        <li>
+          <a href={project.liveLink ?? project.githubLink}>{project.title}</a>
+          {project.impact && <span class="text-sm"> · {project.impact}</span>}
+          <p>{project.description}</p>
+        </li>
+      ))}
+    </ul>
+    <p><a href="/projects">All {projects.length} projects</a>.</p>
+    <h2>What I write</h2>
+    <p>
+      I write about AI systems, infrastructure, and what I learn building software.
+      <a href="/blog">Read the latest posts</a> or <a href="/newsletter">get them by email</a>.
+    </p>
+    <h2>Get in touch</h2>
+    <p>For roles, collaborations, or a conversation about something you're building, <a href="/contact">get in touch</a>.</p>
+  </div>
 </Base>

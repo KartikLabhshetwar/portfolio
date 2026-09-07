@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+
+export const prerender = false;
+---
+<Base title="Newsletter | Kartik Labhshetwar" description="Get Kartik Labhshetwar's latest writing about software and building things by email. Free to subscribe, with an unsubscribe link in every email.">
+  <PageHeader title="Newsletter" description="New posts, straight to your inbox." />
+  <div class="mt-8"><NewsletterForm /></div>
+  <p class="mt-4 text-sm leading-6 text-muted-foreground">
+    Your email is used to send the newsletter through Kit.
+    <a href="/privacy" class="underline underline-offset-4">Privacy details</a>.
+  </p>
+  <p class="mt-6 text-sm text-muted-foreground">
+    <a href="/blog" class="ink-link"><span class="ink-label">Read the latest posts</span></a>
+  </p>
+</Base>

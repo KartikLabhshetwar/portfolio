@@ -119,8 +119,8 @@ html {
 }
 
 body {
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  line-height: 1.6;
 }
 
 ::selection {
@@ -132,22 +132,57 @@ body {
   outline-offset: 3px;
 }
 
+.ink-label {
+  background: linear-gradient(color-mix(in srgb, var(--signal) 12%, transparent)) bottom / 100% 0 no-repeat;
+  box-shadow: inset 0 -0.12em transparent;
+  transition: background-size 200ms ease-out, box-shadow 200ms ease-out, color 200ms ease-out;
+}
+
+.ink-link[aria-current] .ink-label {
+  color: var(--foreground);
+  box-shadow: inset 0 -0.12em color-mix(in srgb, var(--signal) 45%, transparent);
+}
+
+.ink-link:is(:hover, :focus-visible) .ink-label {
+  color: var(--foreground);
+  background-size: 100% 100%;
+  box-shadow: inset 0 -0.12em var(--signal);
+}
+
+.nav-link[aria-current] .nav-label {
+  color: var(--foreground);
+  background-color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-label { transition: none; }
+}
+
 .prose {
-  font-size: 1.0625rem;
+  font-size: 0.875rem;
   line-height: 1.75;
 }
+
+.page-copy h2 {
+  margin-top: 2rem;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+.page-copy p, .page-copy ul { margin-top: 0.5rem; color: var(--muted-foreground); }
+.page-copy a { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
 .prose :where(code, pre, kbd, samp) { font-family: var(--font-mono); }
 .prose :where(pre) { line-height: 1.5; }
 
 .article-prose {
   color: var(--foreground);
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  line-height: 1.75;
 }
 
 .article-prose :where(p) { margin: 0 0 1.25rem; }
-.article-prose :where(h2) { margin: 2.75rem 0 0.75rem; font-size: 1.5rem; line-height: 1.35; font-weight: 600; }
-.article-prose :where(h3) { margin: 2.5rem 0 0.625rem; font-size: 1.25rem; line-height: 1.4; font-weight: 600; }
+.article-prose :where(h2) { margin: 2rem 0 0.75rem; font-size: 1rem; line-height: 1.5; font-weight: 400; letter-spacing: -0.025em; }
+.article-prose :where(h3, h4) { margin: 1.5rem 0 0.5rem; font-size: 0.875rem; line-height: 1.5; font-weight: 500; }
 .article-prose :where(ul, ol) { margin: 0 0 1.25rem; padding-left: 1.25rem; }
 .article-prose :where(ul) { list-style: disc; }
 .article-prose :where(ol) { list-style: decimal; }

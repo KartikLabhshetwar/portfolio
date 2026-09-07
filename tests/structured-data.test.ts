@@ -49,6 +49,15 @@ describe('structuredData', () => {
     expect(node.about['@id']).toBe(`${base}/#person`);
   });
 
+  it('excludes email and booking actions from identity profiles', () => {
+    const socials = [...profile.socials,
+      { label: 'Email', href: 'mailto:hello@example.com' },
+      { label: 'Book a call', href: 'https://cal.com/example/15min' },
+    ];
+    const person = nodeOf(structuredData(base, { ...profile, socials }, page)['@graph'], 'Person');
+    expect(person.sameAs).toEqual(profile.socials.map((s) => s.href));
+  });
+
   it('marks blog posts as BlogPosting with dates and a publisher', () => {
     const data = structuredData(base, profile, {
       ...page,

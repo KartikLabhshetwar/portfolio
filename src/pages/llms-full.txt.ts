@@ -58,9 +58,13 @@ export const GET: APIRoute = async ({ site }) => {
 
 ## Experience
 
+${base}/experience
+
 ${experienceMd}
 
 ## Projects
+
+${base}/projects
 
 ${projectsMd}
 

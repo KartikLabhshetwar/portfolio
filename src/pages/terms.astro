@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Markdoc from '@markdoc/markdoc';
+import { policyUpdated, termsPolicy } from '../data/policies';
+
+export const prerender = false;
+---
+<Base title="Terms | Kartik Labhshetwar" description="Terms for using Kartik Labhshetwar's portfolio, writing, and newsletter, including content reuse, code licenses, and external links.">
+  <PageHeader title="Terms and conditions" description={`Last updated ${policyUpdated}.`} />
+  <div class="page-copy" set:html={Markdoc.renderers.html(Markdoc.transform(Markdoc.parse(termsPolicy)))} />
+</Base>

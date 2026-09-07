@@ -42,7 +42,8 @@ describe('pageMarkdown', () => {
     expect(md).toContain('# Kartik Labhshetwar');
     expect(md).toContain('> Software Engineer. I build from zero.');
     expect(md).toContain('- GitHub: https://github.com/KartikLabhshetwar');
-    expect(md).toContain(`[Work history](${base}/work)`);
+    expect(md).toContain(`[Experience](${base}/experience)`);
+    expect(md).toContain(`[Projects](${base}/projects)`);
     expect(md).not.toContain('## Experience');
     expect(md).not.toContain('## Projects');
     expect(md).not.toContain('### Alpha');
@@ -51,12 +52,19 @@ describe('pageMarkdown', () => {
     expect(md).not.toContain('/api/subscribe');
   });
 
-  it('renders work history and every project on the work page', () => {
-    const md = pageMarkdown('/work', site)!;
-    expect(md).toContain('# Work');
+  it('renders only work history on the experience page', () => {
+    const md = pageMarkdown('/experience', site)!;
+    expect(md).toContain('# Experience');
     expect(md).toContain('## [Mem0](https://mem0.ai)');
     expect(md).toContain('**Software Engineer** (Jan 2025 to Present)');
-    expect(md).toContain('## Projects');
+    expect(md).not.toContain('### Alpha');
+    expect(md).not.toContain('# Projects');
+  });
+
+  it('renders every project separately from experience', () => {
+    const md = pageMarkdown('/projects', site)!;
+    expect(md).toContain('# Projects');
+    expect(md).not.toContain('## [Mem0]');
     expect(md).toContain('### Alpha');
     expect(md).toContain('### Beta');
     expect(md).toContain('[Live](https://kartiklabhshetwar.com/a) · [GitHub](https://github.com/x/alpha)');
@@ -83,9 +91,9 @@ describe('pageMarkdown', () => {
     expect(md).toContain('Kartik Labhshetwar');
     expect(md).toContain('India');
     expect(md).toContain('Software Engineer at Mem0');
-    expect(md).toContain(`${base}/work#projects`);
+    expect(md).toContain(`${base}/projects`);
     expect(md).toContain(`${base}/contact`);
-    expect(md).toContain('- GitHub: https://github.com/KartikLabhshetwar');
+    expect(md).toContain(`${base}/newsletter`);
   });
 
   it('renders the contact page with every channel', () => {
@@ -113,14 +121,24 @@ describe('pageMarkdown', () => {
     }
   });
 
+  it('serves newsletter and current policies as Markdown', () => {
+    expect(pageMarkdown('/newsletter', site)).toContain(`${base}/api/subscribe`);
+    expect(pageMarkdown('/terms', site)).toContain('# Terms and conditions');
+    expect(pageMarkdown('/privacy', site)).toContain('7 September 2026');
+    expect(pageMarkdown('/privacy', site)).toContain('does not automatically delete');
+    expect(pageMarkdown('/privacy', site)).toContain('no automatic expiry');
+  });
+
   it('ignores trailing slashes', () => {
-    expect(pageMarkdown('/work/', site)).toBe(pageMarkdown('/work', site));
+    expect(pageMarkdown('/experience/', site)).toBe(pageMarkdown('/experience', site));
+    expect(pageMarkdown('/projects/', site)).toBe(pageMarkdown('/projects', site));
     expect(pageMarkdown('', site)).toBe(pageMarkdown('/', site));
   });
 
   it('returns null for paths with no markdown representation', () => {
     expect(pageMarkdown('/blog/nope', site)).toBeNull();
     expect(pageMarkdown('/nope', site)).toBeNull();
+    expect(pageMarkdown('/work', site)).toBeNull();
     expect(pageMarkdown('/api/visitors', site)).toBeNull();
   });
 });
@@ -130,11 +148,11 @@ describe('notFoundMarkdown', () => {
     const md = notFoundMarkdown(base);
     expect(md).toContain('# 404');
     expect(md).toContain('## Where to look next');
-    const paths = ['/', '/work', '/about', '/blog', '/contact', '/privacy', '/llms.txt', '/llms-full.txt', '/sitemap-index.xml'];
+    const paths = ['/', '/experience', '/projects', '/about', '/blog', '/contact', '/privacy', '/terms', '/newsletter', '/llms.txt', '/llms-full.txt', '/sitemap-index.xml'];
     for (const path of paths) {
       expect(md).toContain(`${base}${path}`);
     }
-    expect(md).not.toContain(`${base}/projects`);
+    expect(md).not.toContain(`${base}/work`);
     expect(md).toContain('Accept: text/markdown');
   });
 });

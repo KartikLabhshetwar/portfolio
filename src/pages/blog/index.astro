@@ -12,9 +12,9 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 // Strip the trailing /index to get clean slugs for URLs
 const toSlug = (id: string) => id.replace(/\/index$/, '');
 ---
-<Base title="Writing | Kartik Labhshetwar" description="Technical field notes from Kartik Labhshetwar on AI systems, infrastructure, and developer tools." toc="main h3" schemaType="CollectionPage" backHref="/">
-  <PageHeader title="Writing" description="Field notes from shipped work, with the architecture, tradeoffs, bugs, and fixes behind it." />
-  <div class="mt-10 flex flex-col gap-4">
+<Base title="Writing | Kartik Labhshetwar" description="Technical field notes from Kartik Labhshetwar on AI systems, infrastructure, and developer tools." toc={false} schemaType="CollectionPage" backHref="/">
+  <PageHeader title="Writing" description="Notes on building software." />
+  <div class="mt-8 flex flex-col gap-5">
     {posts.map((p) => <BlogCard title={p.data.title} description={p.data.description} pubDate={p.data.pubDate} slug={toSlug(p.id)} />)}
   </div>
 </Base>

@@ -21,11 +21,13 @@ const {
   wide = false,
   backHref,
   backLabel = 'Back',
+  noindex = false,
 } = Astro.props;
 const siteName = 'Kartik Labhshetwar';
 // Always point canonical at the configured production domain (Astro.site),
 // so a workers.dev or any mirror host can't compete for ranking.
-const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const canonical = new URL(pathname, Astro.site ?? Astro.url).href;
 // Social scrapers need an absolute image URL.
 const ogImage = new URL(image, Astro.site ?? Astro.url).href;
 // worksFor comes from the experience data rather than a second copy of it, so
@@ -34,7 +36,7 @@ const current = experience.find((e) => e.isCurrentEmployer);
 const jsonLd = serializeJsonLd(
   structuredData(
     (Astro.site ?? Astro.url).toString(),
-    { ...profile, employer: current && { name: current.companyName, url: current.companyWebsite } },
+    { ...profile, role: current?.positions[0]?.title ?? profile.role, employer: current && { name: current.companyName, url: current.companyWebsite } },
     {
       url: canonical,
       title,
@@ -47,23 +49,28 @@ const jsonLd = serializeJsonLd(
 );
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title));
-// Trust-anchor pages stay reachable from every footer and the command menu.
-const footerLinks = [
+const supportingPages = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
   { href: '/privacy', label: 'Privacy' },
+  { href: '/terms', label: 'Terms' },
 ];
 const footerSocials = ['LinkedIn', 'X', 'GitHub'].map((label) => profile.socials.find((social) => social.label === label)!);
 const meeting = profile.socials.find((social) => social.label === 'Book a call')!;
 const email = profile.socials.find((social) => social.label === 'Email')!;
+const navigation = [
+  { href: '/', label: 'Home' },
+  { href: '/experience', label: 'Experience' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Writing' },
+  { href: '/newsletter', label: 'Subscribe' },
+];
 const commandItems = [
-  { label: 'Home', href: '/', group: 'Pages' },
-  { label: 'Work', href: '/work', group: 'Pages' },
-  { label: 'Blog', href: '/blog', group: 'Pages' },
-  ...footerLinks.map((l) => ({ label: l.label, href: l.href, group: 'Pages' })),
+  ...navigation.map((l) => ({ ...l, group: 'Pages' })),
+  ...supportingPages.map((l) => ({ label: l.label, href: l.href, group: 'Pages' })),
   ...projects.map((p) => ({
     label: p.title,
-    href: p.liveLink ?? p.githubLink ?? '/work#projects',
+    href: p.liveLink ?? p.githubLink ?? '/projects',
     group: 'Projects',
     external: true,
     keywords: [p.description, p.impact].filter(Boolean) as string[],
@@ -86,13 +93,16 @@ const commandItems = [
     <slot name="head" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" type="text/markdown" href={canonical} title="Markdown (send Accept: text/markdown)" />
-    <script type="application/ld+json" is:inline set:html={jsonLd}></script>
+    {!noindex && <link rel="alternate" type="text/markdown" href={canonical} title="Markdown (send Accept: text/markdown)" />}
+    {!noindex && <script type="application/ld+json" is:inline set:html={jsonLd}></script>}
 
     <!-- Open Graph (LinkedIn, Discord, Slack, Facebook) -->
     <meta property="og:type" content={ogType} />
+    {datePublished && <meta property="article:published_time" content={datePublished} />}
     <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -131,17 +141,26 @@ const commandItems = [
     ></script>
   </head>
   <body class="min-h-screen bg-background text-foreground">
-    <main class:list={["mx-auto flex min-h-screen grow flex-col px-4 py-20", wide ? "max-w-4xl gap-8" : "max-w-xl"]}>
-      <div class="fixed top-1/2 right-2 z-40 hidden -translate-y-1/2 xl:block">
+    <main class:list={["mx-auto flex min-h-screen grow flex-col px-5 pt-4 pb-10 sm:px-4 sm:pt-6 sm:pb-20", wide ? "max-w-2xl gap-8" : "max-w-xl"]}>
+      {toc && <div class="fixed top-1/2 right-2 z-40 hidden -translate-y-1/2 xl:block">
         <!-- client:idle, not client:visible: the island renders empty until headings load,
              so a visibility trigger would never fire (zero-size element never intersects). -->
         <AutoTOCMinimap client:idle selector={toc} />
-      </div>
-      {backHref && (
-        <a href={backHref} class="mb-8 text-sm text-muted-foreground hover:text-foreground">{backLabel}</a>
+      </div>}
+      <nav aria-label="Main navigation" class:list={["primary-nav -ml-0.5 flex min-w-0 flex-wrap items-center gap-0.5 text-xs text-muted-foreground sm:-ml-2 sm:gap-3 sm:text-sm", { 'mb-5 sm:mb-6': !wide }]}>
+        {navigation.map((link) => (
+          <a
+            href={link.href}
+            aria-current={pathname === link.href ? 'page' : link.href === '/blog' && pathname.startsWith('/blog/') ? 'location' : undefined}
+            class="nav-link inline-flex min-h-10 items-center rounded-full hover:text-foreground"
+          ><span class="nav-label rounded-full px-0.5 py-1 sm:px-2">{link.label}</span></a>
+        ))}
+      </nav>
+      {backHref && backHref !== '/' && (
+        <a href={backHref} class="text-sm text-muted-foreground hover:text-foreground">{backLabel}</a>
       )}
       <slot />
-      <footer class="mt-auto flex flex-row flex-wrap gap-4 pt-12 text-base text-muted-foreground">
+      <footer class="mt-auto flex flex-row flex-wrap gap-4 pt-12 text-sm text-muted-foreground">
         <nav aria-label="Elsewhere" class="flex flex-wrap items-center gap-x-4 gap-y-2">
           <a href={email.href} class="hover:text-foreground hover:underline">Email</a>
           <a href={meeting.href} target="_blank" rel="noopener noreferrer" class="hover:text-foreground hover:underline">Book a meet</a>

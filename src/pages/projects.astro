@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ProjectList from '../components/ProjectList.astro';
+
+export const prerender = false;
+---
+<Base
+  title="Projects | Kartik Labhshetwar"
+  description="Explore Kartik Labhshetwar's shipped projects: BetterShot, Screenshot Studio, Lazy Commit, and other macOS apps, web products, and developer tools."
+  schemaType="CollectionPage"
+>
+  <PageHeader title="Projects" description="Things I've built and shipped." />
+  <ProjectList />
+</Base>

@@ -12,9 +12,8 @@ const companyPeriod = (positions: (typeof experience)[number]['positions']) => {
   return `${formatDate(first.employmentPeriod.start)} to ${current ? 'Present' : formatDate(positions[0].employmentPeriod.end!)}`;
 };
 ---
-<section class="flex flex-col gap-4">
-  <p class="text-muted-foreground">Companies</p>
-  <ul class="-mx-3 flex flex-col gap-2">
+<section id="experience" aria-label="Work experience" class="scroll-mt-16">
+  <ul class="-mx-3 flex flex-col gap-5">
     {experience.map((company) => (
       <li>
         <a
@@ -27,20 +26,22 @@ const companyPeriod = (positions: (typeof experience)[number]['positions']) => {
           <img src={company.companyLogo} alt="" class="size-7 rounded-full" />
           <div class="min-w-0 flex-1">
             <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3">
-              <span class="text-foreground">{company.companyName}</span>
+              <h2 class="text-base font-normal tracking-tight text-foreground">{company.companyName}</h2>
               <span class="border-t border-border transition-colors group-hover:border-foreground/20" aria-hidden="true"></span>
-              <span class="flex items-center gap-1.5 text-sm tabular-nums text-muted-foreground">
+              <span class="flex items-center gap-1.5 text-xs tabular-nums text-muted-foreground">
                 {companyPeriod(company.positions)}
                 <span aria-hidden="true" class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">↗</span>
               </span>
             </div>
             <ul class="mt-2 flex flex-col gap-1.5">
               {company.positions.map((position) => (
-                <li class="flex flex-col justify-between gap-x-4 text-sm sm:flex-row">
-                  <span class="text-foreground/80">{position.title}</span>
-                  <span class="shrink-0 tabular-nums text-muted-foreground">
-                    {formatDate(position.employmentPeriod.start)} to {position.employmentPeriod.end ? formatDate(position.employmentPeriod.end) : 'Present'}
-                  </span>
+                <li class="text-sm leading-6">
+                  <div class="flex flex-col justify-between gap-x-4 sm:flex-row">
+                    <span class="text-foreground/80">{position.title}</span>
+                    <span class="shrink-0 text-xs tabular-nums text-muted-foreground">
+                      {formatDate(position.employmentPeriod.start)} to {position.employmentPeriod.end ? formatDate(position.employmentPeriod.end) : 'Present'}
+                    </span>
+                  </div>
                 </li>
               ))}
             </ul>

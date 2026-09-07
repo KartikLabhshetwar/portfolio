@@ -6,6 +6,7 @@ import keystatic from '@keystatic/astro';
 import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import { readdirSync, readFileSync } from 'node:fs';
+import { parse } from 'yaml';
 
 const SITE = 'https://kartiklabhshetwar.com';
 
@@ -14,8 +15,11 @@ const SITE = 'https://kartiklabhshetwar.com';
 // patterns: can't discover them. Feed them in from the content directory.
 const blogPages = readdirSync('src/content/blog', { withFileTypes: true })
   .filter((d) => d.isDirectory())
-  .filter((d) => !/^\s*draft:\s*true\s*$/m.test(readFileSync(`src/content/blog/${d.name}/index.mdoc`, 'utf8')))
-  .map((d) => `${SITE}/blog/${d.name}/`);
+  .filter((d) => {
+    const [, frontmatter] = readFileSync(`src/content/blog/${d.name}/index.mdoc`, 'utf8').split(/^---\s*$/m);
+    return !parse(frontmatter ?? '')?.draft;
+  })
+  .map((d) => `${SITE}/blog/${d.name}`);
 const reactEntrypoints = [
   'react',
   'react-dom',
@@ -48,11 +52,15 @@ function dedupeReactInWorkerd() {
 
 export default defineConfig({
   site: SITE,
-  redirects: { '/projects': '/work#projects' },
+  trailingSlash: 'never',
+  redirects: { '/work': { destination: '/experience', status: 301 } },
   prefetch: { prefetchAll: true },
   adapter: cloudflare({ imageService: 'compile' }),
   session: { driver: sessionDrivers.lruCache() },
-  integrations: [react(), markdoc(), keystatic(), sitemap({ customPages: blogPages })],
+  integrations: [react(), markdoc(), keystatic(), sitemap({
+    customPages: blogPages,
+    filter: (url) => !/^\/(?:work|keystatic|api)(?:\/|$)/.test(new URL(url).pathname),
+  })],
   vite: {
     plugins: [tailwindcss(), dedupeReactInWorkerd()],
     resolve: {
