@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import CommandMenu from '../components/CommandMenu.tsx';
 import { AutoTOCMinimap } from '../components/auto-toc-minimap';
 import { profile } from '../data/profile';
@@ -85,11 +86,45 @@ const commandItems = [
 ];
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
+    <ClientRouter fallback="swap" />
+    <script>
+      import { navigate } from 'astro:transitions/client';
+
+      const isLegacyProjects = (url: URL) =>
+        url.origin === location.origin &&
+        ['/experience', '/work'].includes(url.pathname.replace(/\/+$/, '')) &&
+        url.hash === '#projects';
+
+      document.addEventListener('astro:before-preparation', (event) => {
+        if (isLegacyProjects(event.to)) {
+          event.to = new URL(`/projects${event.to.search}`, event.to);
+        }
+      });
+      const redirectLegacyProjects = () => {
+        if (isLegacyProjects(new URL(location.href))) {
+          const target = `/projects${location.search}`;
+          // Browser-created hash entries have no router state. Initialize a new document
+          // for those old links so back/forward navigation remains valid.
+          if (!history.state) return location.replace(target);
+          void navigate(target, { history: 'replace' });
+        }
+      };
+      document.addEventListener('astro:page-load', redirectLegacyProjects);
+      window.addEventListener('hashchange', redirectLegacyProjects);
+
+      document.addEventListener('astro:before-swap', (event) => {
+        // A newer navigation can skip the previous transition's visual snapshot.
+        void event.viewTransition.ready.catch(() => {});
+        const dark = document.documentElement.classList.contains('dark');
+        event.newDocument.documentElement.classList.toggle('dark', dark);
+        event.newDocument.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+      });
+    </script>
     <slot name="head" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -151,6 +186,7 @@ const commandItems = [
         {navigation.map((link) => (
           <a
             href={link.href}
+            data-astro-prefetch="viewport"
             aria-current={pathname === link.href ? 'page' : link.href === '/blog' && pathname.startsWith('/blog/') ? 'location' : undefined}
             class="nav-link inline-flex min-h-10 items-center rounded-full hover:text-foreground"
           ><span class="nav-label rounded-full px-0.5 py-1 sm:px-2">{link.label}</span></a>
@@ -170,6 +206,6 @@ const commandItems = [
         </nav>
       </footer>
     </main>
-    <CommandMenu client:idle items={commandItems} />
+    <CommandMenu client:idle items={commandItems} transition:persist />
   </body>
 </html>

@@ -1,5 +1,6 @@
 import { Command } from 'cmdk';
 import { useEffect, useState } from 'react';
+import { navigate } from 'astro:transitions/client';
 
 type Item = { label: string; href: string; group: string; external?: boolean; keywords?: string[] };
 
@@ -30,7 +31,7 @@ export default function CommandMenu({ items }: { items: Item[] }) {
   const go = (item: Item) => {
     setOpen(false);
     if (item.external) window.open(item.href, '_blank', 'noopener,noreferrer');
-    else window.location.href = item.href;
+    else void navigate(item.href);
   };
 
   return (

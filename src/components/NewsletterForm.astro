@@ -1,6 +1,6 @@
 <section id="newsletter" aria-label="Newsletter signup" class="w-full scroll-mt-8">
   <label for="newsletter-email" class="text-sm">Email address</label>
-  <form data-newsletter action="/api/subscribe" method="post" class="mt-2 flex flex-col gap-2 sm:flex-row">
+  <form data-newsletter data-astro-reload action="/api/subscribe" method="post" class="mt-2 flex flex-col gap-2 sm:flex-row">
     <input id="newsletter-email" type="email" name="email" required autocomplete="email" placeholder="you@example.com"
       class="min-h-11 min-w-0 flex-1 rounded-sm border border-input bg-transparent px-3 py-2 text-base placeholder:text-muted-foreground/60 sm:text-sm" />
     <button type="submit"
@@ -14,48 +14,50 @@
 </section>
 
 <script>
-  document.querySelectorAll<HTMLFormElement>('form[data-newsletter]').forEach((form) => {
-    const input = form.querySelector<HTMLInputElement>('input[name="email"]')!;
-    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
-    const status = form.parentElement!.querySelector<HTMLElement>('[data-newsletter-status]')!;
-    const setStatus = (msg: string, tone: 'ok' | 'err' | 'muted') => {
-      const color =
-        tone === 'ok' ? 'text-emerald-600 dark:text-emerald-400'
-        : tone === 'err' ? 'text-red-600 dark:text-red-400'
-        : 'text-zinc-600 dark:text-zinc-400';
-      status.className = `mt-2 text-sm empty:hidden ${color}`;
-      status.textContent = msg;
-    };
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLFormElement>('form[data-newsletter]').forEach((form) => {
+      const input = form.querySelector<HTMLInputElement>('input[name="email"]')!;
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+      const status = form.parentElement!.querySelector<HTMLElement>('[data-newsletter-status]')!;
+      const setStatus = (msg: string, tone: 'ok' | 'err' | 'muted') => {
+        const color =
+          tone === 'ok' ? 'text-emerald-600 dark:text-emerald-400'
+          : tone === 'err' ? 'text-red-600 dark:text-red-400'
+          : 'text-zinc-600 dark:text-zinc-400';
+        status.className = `mt-2 text-sm empty:hidden ${color}`;
+        status.textContent = msg;
+      };
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = input.value.trim();
-      if (!email) return;
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+        const email = input.value.trim();
+        if (!email) return;
 
-      const label = button.textContent;
-      button.disabled = true;
-      button.textContent = 'Subscribing…';
-      setStatus('', 'muted');
+        const label = button.textContent;
+        button.disabled = true;
+        button.textContent = 'Subscribing…';
+        setStatus('', 'muted');
 
-      try {
-        const res = await fetch('/api/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
-        });
-        const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-        if (data.ok) {
-          form.reset();
-          setStatus('Check your inbox to confirm your subscription.', 'ok');
-        } else {
-          setStatus(data.error || 'Something went wrong. Try again.', 'err');
+        try {
+          const res = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+          if (data.ok) {
+            form.reset();
+            setStatus('Check your inbox to confirm your subscription.', 'ok');
+          } else {
+            setStatus(data.error || 'Something went wrong. Try again.', 'err');
+          }
+        } catch {
+          setStatus('Network error. Try again.', 'err');
+        } finally {
+          button.disabled = false;
+          button.textContent = label;
         }
-      } catch {
-        setStatus('Network error. Try again.', 'err');
-      } finally {
-        button.disabled = false;
-        button.textContent = label;
-      }
+      };
     });
   });
 </script>

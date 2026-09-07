@@ -12,16 +12,19 @@ const { slug } = Astro.props;
     maximumFractionDigits: 2,
   }).format(views).toLowerCase();
 
-  document.querySelectorAll<HTMLElement>('[data-post-views]').forEach(async (element) => {
-    const slug = element.dataset.slug;
-    if (!slug) return;
-    try {
-      const response = await fetch(`/api/views/${encodeURIComponent(slug)}`, { method: 'POST' });
-      const data = await response.json() as { configured?: boolean; views?: number };
-      if (!data.configured || typeof data.views !== 'number') return;
-      element.querySelector<HTMLElement>('[data-post-views-count]')!.textContent = format(data.views);
-      element.querySelector<HTMLElement>('[data-post-views-label]')!.textContent = data.views === 1 ? 'view' : 'views';
-      element.classList.remove('hidden');
-    } catch {}
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLElement>('[data-post-views]').forEach(async (element) => {
+      const slug = element.dataset.slug;
+      if (!slug || element.dataset.viewRecorded) return;
+      element.dataset.viewRecorded = 'true';
+      try {
+        const response = await fetch(`/api/views/${encodeURIComponent(slug)}`, { method: 'POST' });
+        const data = await response.json() as { configured?: boolean; views?: number };
+        if (!data.configured || typeof data.views !== 'number') return;
+        element.querySelector<HTMLElement>('[data-post-views-count]')!.textContent = format(data.views);
+        element.querySelector<HTMLElement>('[data-post-views-label]')!.textContent = data.views === 1 ? 'view' : 'views';
+        element.classList.remove('hidden');
+      } catch {}
+    });
   });
 </script>

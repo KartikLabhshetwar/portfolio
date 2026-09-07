@@ -17,23 +17,28 @@
 </button>
 
 <script>
-  const btn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
-  const syncLabel = () => {
-    const dark = document.documentElement.classList.contains('dark');
-    const label = dark ? 'Use light theme' : 'Use dark theme';
-    btn?.setAttribute('aria-label', label);
-    btn?.setAttribute('title', label);
-    btn?.setAttribute('aria-pressed', String(dark));
-  };
-  const apply = () => {
-    const isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+  document.addEventListener('astro:page-load', () => {
+    const btn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+    const syncLabel = () => {
+      const dark = document.documentElement.classList.contains('dark');
+      const label = dark ? 'Use light theme' : 'Use dark theme';
+      btn?.setAttribute('aria-label', label);
+      btn?.setAttribute('title', label);
+      btn?.setAttribute('aria-pressed', String(dark));
+    };
+    const apply = () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+      syncLabel();
+    };
     syncLabel();
-  };
-  syncLabel();
-  btn?.addEventListener('click', () => {
-    if (!document.startViewTransition) return apply();
-    document.startViewTransition(apply);
+    if (btn) btn.onclick = () => {
+      if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return apply();
+      document.documentElement.classList.add('theme-transition');
+      const transition = document.startViewTransition(apply);
+      void transition.ready.catch(() => {});
+      void transition.finished.finally(() => document.documentElement.classList.remove('theme-transition')).catch(() => {});
+    };
   });
 </script>

@@ -16,8 +16,3 @@ export const prerender = false;
     <ExperienceList />
   </div>
 </Base>
-
-<script is:inline>
-  // Old /work#projects links retain their fragment through the permanent redirect.
-  if (location.hash === '#projects') location.replace('/projects');
-</script>
