@@ -178,21 +178,33 @@ body {
 
 .article-prose {
   color: var(--foreground);
-  font-size: 0.875rem;
-  line-height: 1.75;
+  font-size: 0.9375rem;
+  line-height: 1.8;
 }
 
-.article-prose :where(p) { margin: 0 0 1.25rem; }
-.article-prose :where(h2) { margin: 2rem 0 0.75rem; font-size: 1rem; line-height: 1.5; font-weight: 400; letter-spacing: -0.025em; }
-.article-prose :where(h3, h4) { margin: 1.5rem 0 0.5rem; font-size: 0.875rem; line-height: 1.5; font-weight: 500; }
-.article-prose :where(ul, ol) { margin: 0 0 1.25rem; padding-left: 1.25rem; }
+.article-prose :where(p) { margin: 0 0 1.5rem; }
+.article-prose :where(h2) { margin: 2.5rem 0 1rem; font-size: 1.125rem; line-height: 1.4; font-weight: 400; letter-spacing: -0.025em; }
+.article-prose :where(h3) { margin: 2rem 0 0.75rem; font-size: 1rem; line-height: 1.5; font-weight: 400; letter-spacing: -0.025em; }
+.article-prose :where(h4) { margin: 1.5rem 0 0.5rem; font-size: 0.9375rem; line-height: 1.5; font-weight: 400; letter-spacing: -0.025em; }
+.article-prose :where(ul, ol) { margin: 0 0 1.5rem; padding-left: 1.5rem; }
 .article-prose :where(ul) { list-style: disc; }
 .article-prose :where(ol) { list-style: decimal; }
+.article-prose :where(li) { margin-bottom: 0.5rem; }
+.article-prose :where(li):last-child { margin-bottom: 0; }
+.article-prose strong { font-weight: 450; letter-spacing: -0.025em; color: var(--foreground); }
 .article-prose :where(a) { text-decoration: underline; text-underline-offset: 3px; }
-.article-prose :where(blockquote) { margin: 0 0 1.25rem; border-left: 2px solid var(--border); padding-left: 1rem; color: var(--muted-foreground); }
-.article-prose :where(pre) { margin: 0 0 1.25rem; overflow-x: auto; border-radius: var(--radius); background: var(--muted); padding: 1rem; font: 0.8125rem/1.55 var(--font-mono); }
-.article-prose :where(:not(pre) > code) { border-radius: 0.2rem; background: var(--muted); padding: 0.1rem 0.3rem; font: 0.875em var(--font-mono); }
+.article-prose :where(blockquote) { margin: 1.5rem 0; border-left: 3px solid var(--border); padding: 0.75rem 1rem; color: var(--muted-foreground); background: color-mix(in srgb, var(--muted) 50%, transparent); border-radius: 0 var(--radius) var(--radius) 0; }
+.article-prose :where(blockquote p:last-child) { margin-bottom: 0; }
+.article-prose :where(hr) { margin: 2.5rem 0; border: none; border-top: 1px solid var(--border); }
+.article-prose :where(pre) { margin: 0 0 1.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius); background: var(--muted); padding: 1rem 1.25rem; font: 0.8125rem/1.6 var(--font-mono); }
+.article-prose :where(:not(pre) > code) { border-radius: 0.25rem; background: var(--muted); padding: 0.15rem 0.4rem; font: 0.85em var(--font-mono); word-break: break-word; }
 .article-prose :where(img) { margin: 2rem 0; border-radius: var(--radius); }
+
+@media (max-width: 640px) {
+  .article-prose { font-size: 0.9375rem; line-height: 1.75; }
+  .article-prose :where(pre) { margin-left: -1.25rem; margin-right: -1.25rem; border-radius: 0; padding: 1rem 1.25rem; font-size: 0.8125rem; }
+  .article-prose :where(h2) { font-size: 1.0625rem; }
+}
 
 /* command menu (cmdk) group heading */
 [cmdk-group-heading] {

@@ -5,9 +5,11 @@ pubDate: 2025-11-12
 draft: false
 ---
 
+![RAG system overview](/blog/what-is-rag/hero.png)
+
 Large language models are confidently wrong more often than most teams admit. They hallucinate citations, invent dates, and fabricate statistics with the same fluency they use for things they actually know. The core issue is structural: an LLM only has access to what it memorized during training. It cannot look something up.
 
-Retrieval-Augmented Generation fixes this by adding a search step before generation. Retrieve relevant documents, feed them into the prompt alongside the question, and the model's answer becomes grounded in evidence rather than static training memory.
+**Retrieval-Augmented Generation (RAG)** fixes this by adding a search step before generation. Retrieve relevant documents, feed them into the prompt alongside the question, and the model's answer becomes grounded in evidence rather than static training memory.
 
 This is not a new idea. Search engines have always paired retrieval with ranking. RAG applies the same principle to generation: the model writes, but the retriever decides what it writes *from*.
 
@@ -15,17 +17,19 @@ This is not a new idea. Search engines have always paired retrieval with ranking
 
 Three things changed.
 
-First, context windows grew large enough to hold meaningful retrieved content. A 128k-token window can absorb dozens of document chunks without truncation.
+**First,** context windows grew large enough to hold meaningful retrieved content. A 128k-token window can absorb dozens of document chunks without truncation.
 
-Second, embedding models got good. Semantic search over dense vectors now reliably surfaces the right passage for a natural-language question, not just keyword overlap.
+**Second,** embedding models got good. Semantic search over dense vectors now reliably surfaces the right passage for a natural-language question, not just keyword overlap.
 
-Third, the cost of retraining dropped from "prohibitive" to merely "expensive," but it is still too slow for knowledge that changes weekly. RAG sidesteps the retraining problem entirely. You update the documents, and the next query picks up the change.
+**Third,** the cost of retraining dropped from "prohibitive" to merely "expensive," but it is still too slow for knowledge that changes weekly. RAG sidesteps the retraining problem entirely. You update the documents, and the next query picks up the change.
 
 The real payoff: enterprise assistants that read internal docs, support bots that cite the current FAQ instead of last quarter's, research tools that ground claims in papers. Anywhere the model needs to be right, not just fluent.
 
 ## The architecture
 
-The pipeline is five steps: Query, Embed, Retrieve, (optionally) Rerank, Generate.
+![RAG pipeline architecture](/blog/what-is-rag/architecture.png)
+
+The pipeline is five steps: **Query, Embed, Retrieve, (optionally) Rerank, Generate.**
 
 Think of it as giving the model a librarian. The user asks a question. The query encoder translates it into a vector. The vector store acts as the library index. The retriever fetches the most relevant passages. The LLM writes an answer while quoting what the librarian handed it.
 
