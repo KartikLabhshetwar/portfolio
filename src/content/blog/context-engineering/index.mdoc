@@ -1,104 +1,70 @@
 ---
-title: Why Production Agents Read 100 Tokens for Every 1 They Write
-description: How better context makes agents more reliable and cheaper to run.
-pubDate: 2026-09-05
+title: Why Production Agents Read 100 Tokens for Every 1 They Write and Why It Changes Everything
+description: The model gives you intelligence. Context engineering decides whether that intelligence reaches your user.
+pubDate: 2026-05-07
 draft: false
 ---
 
-In July 2025, Manus shared a number that explains a lot about production agents: its average input-to-output token ratio was about 100 to 1.
+**Author**: Kartik ([@code_kartik](https://x.com/code_kartik))
 
-For every token its agent generated, it processed roughly a hundred input tokens. That was a measurement from Manus, not a rule for every agent. But it shows how much work can happen on the input side. [Manus explained the ratio in its context engineering write-up](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus).
+**Source**: [Original article on X](https://x.com/code_kartik/status/2052315696424779811)
 
-An agent reads a task, calls a tool, adds the result to its history, and reads again. As the run continues, the input grows. Much of it is information the agent has already seen.
+![Cover](/blog/context-engineering/hero.jpg)
 
-That makes context a product decision. What should the agent keep reading? What can it store elsewhere? What should it discard?
+In July 2025, Manus published one of the most quietly important numbers in agent engineering. Their average input-to-output token ratio in production: **100 to 1**.
 
-## What context engineering means
+For every token an agent generates, it reads a hundred. The model isn't really *generating* anymore it's reading, again and again, growing its context with every step.
 
-Prompt engineering focuses on the instructions you give a model. Context engineering covers the full set of information it receives during a task: instructions, conversation history, tool results, retrieved documents, and memory.
+Whoever wins on what goes into that context and what gets paged out wins the agent product. Regardless of which model they're using.
 
-Anthropic describes it as managing the tokens available during inference. The goal is to give the model useful information without filling its attention with material that does not help. [Its engineering guide explains the approach](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents).
+This discipline now has a name. It's called **context engineering**, and it has quietly replaced prompt engineering as the most important skill in production AI.
 
-In practice, this means deciding what to load, when to load it, and when to let it go.
+## What it actually is
 
-A coding agent usually does not need every file in the repository. It needs a map, the files relevant to the change, and a way to find more when necessary.
+Anthropic defined it in September 2025: *"context engineering refers to the set of strategies for curating and maintaining the optimal set of tokens during LLM inference."* Their framing of why it matters is worth quoting every token forces *"n² pairwise relationships"* in the model's attention. There is an attention budget, and every irrelevant token depletes it.
 
-## A bigger window does not guarantee better answers
+Walden Yan, co-founder of Cognition (Devin), said it more bluntly in June 2025: *"Context engineering is effectively the #1 job of engineers building AI agents."*
 
-A context window tells you how much input a model can accept. It does not tell you how reliably the model will use all of it.
+Andrej Karpathy publicly endorsed the term the same month. Six months later, Anthropic, OpenAI's Codex Frontier team, Manus, and LangChain had all converged on the same answer.
 
-In July 2025, Chroma published Context Rot, a study covering 18 models. It found that performance became less reliable as input length grew, even on relatively simple tasks. Distractors and the structure of the input also affected results. [The report includes the experiments and their limits](https://www.trychroma.com/research/context-rot).
+## Bigger context windows make agents dumber
 
-This does not mean long context is always bad. Some tasks need it. It means adding more information is not a free improvement.
+This is the contrarian part. Vendors compete on advertised context length 1M, 2M, 10M tokens like it's a feature. The data says otherwise.
 
-Before you fill a larger window, ask whether the extra material helps the next decision. A focused excerpt may be more useful than a complete archive.
+In July 2025, Chroma published "Context Rot," testing 18 frontier models including GPT-4.1, Claude 4 Opus and Sonnet, Gemini 2.5, and Qwen3. The headline finding: *"models do not use their context uniformly; their performance grows increasingly unreliable as input length grows."*
 
-## Four ways to improve context
+Even on simple retrieval, performance degrades non-uniformly. A single distractor reduces accuracy. Logically-organized haystacks perform *worse* than shuffled ones. On a memory task with 113K-token full prompts versus 300-token focused prompts, every model performed dramatically better with less.
 
-### 1. Reduce what stays in the window
+OpenAI's own MRCRv2 benchmark confirms it. Their previous-generation model dropped from ~88% accuracy at 256K tokens to ~37% at 512K-1M. The window grew. The reasoning collapsed.
 
-Old tool results often stop being useful. A file read from twenty steps ago may already be outdated. A long search result may contain one fact worth keeping.
+The race to a 10M-token window is a marketing story. The real race is being run on cache hit rates and compaction strategy.
 
-Keep the finding and its source. Clear the output when the agent no longer needs it. For longer tasks, summarize progress while preserving requirements, decisions, and unresolved questions.
+## The four moves the winners use
 
-Anthropic reported a 29% improvement from context editing alone on an internal agentic search evaluation. Combining it with a memory tool improved performance by 39%. In a separate 100-turn web search evaluation, context editing reduced token consumption by 84%. Those are results from specific evaluations, not guaranteed gains for every workflow. [The announcement separates the measurements](https://claude.com/blog/context-management).
+**Reduce.** Anthropic's context editing automatic clearing of stale tool calls improved performance by 39% over baseline and reduced token consumption by 84% on a 100-turn web search evaluation. Claude Code auto-compacts at ~95% capacity. Cursor, Amp, and OpenCode all ship variants.
 
-The important test is whether the agent can still finish correctly after you remove information.
+**Offload.** Manus treats the filesystem as *"the ultimate context: unlimited in size, persistent by nature, and directly operable by the agent itself."* OpenAI's Codex Frontier team learned the same lesson the hard way they tried a giant AGENTS.md and watched it rot. Their fix: *"treat AGENTS.md as the table of contents, not the encyclopedia."* A short ~100-line map; the actual knowledge lives in a structured docs/ directory the agent navigates on demand.
 
-### 2. Store information outside the conversation
+**Isolate.** Anthropic's research multi-agent system, with separate context windows per sub-agent, *"outperformed single-agent Claude Opus 4 by 90.2% on our internal research eval."* The architectural reason: each sub-agent gets a fresh, focused window instead of competing for attention in one mega-context.
 
-The context window does not need to be the agent's only storage.
+**Cache.** Manus calls KV-cache hit rate *"the single most important metric for a production-stage AI agent."* The math: cached input tokens cost 10x less than uncached. An agent looping 50 tool calls with a 10K-token system prompt sends 500K tokens of identical prefix. Without caching, that's $1.50 per turn at Sonnet pricing. With caching, $0.15. KV-cache hit rate isn't a nice-to-have. It's the line between viable and unviable economics.
 
-Files, databases, and search indexes can hold detailed information. The agent can keep a short reference and retrieve the relevant part when it needs it.
+## The Bitter Lesson kicker
 
-OpenAI's Codex team found that a giant instruction file became difficult to maintain. It moved detailed knowledge into a structured `docs/` directory and used an `AGENTS.md` file of roughly 100 lines as a map. [The team's account explains why this worked better](https://openai.com/index/harness-engineering/).
+Manus has rebuilt their agent framework four times soon to be five. Phil Schmid's December 2025 retrospective captured the lesson cleanly: *"in the last six months, their biggest performance gains didn't come from adding complex RAG pipelines or fancy routing logic. The gains came from removing things."*
 
-That is a useful pattern for any agent: keep directions nearby and load the details on demand.
+They removed complex tool definitions in favor of general shell execution. They removed management agents. They killed their todo.md after finding it wasted ~30% of tokens. As models improved, the harness shrank.
 
-### 3. Separate tasks that need separate context
+Peak Ji's framing: *"In the rising tide of model power, build speedboats, not pillars."*
 
-Some work is easier to divide. Three independent research questions do not always need to share every intermediate search result.
+## What this means for your team
 
-Give each worker a focused question and its own context. Ask it to return findings, sources, and anything it could not resolve. The coordinating agent can use those results without reading every step.
+ZipRecruiter now lists "context engineer" as a US job title with an average salary of $101,752. Gartner formally defined the role in 2026 and forecasts that by 2028, *"context engineering features will be built into 80% of software tools used to build AI applications."*
 
-Anthropic reported that its multi-agent research system outperformed a single-agent Claude Opus 4 setup by 90.2% on its internal research evaluation. The system also used more resources, and the result does not establish that separate context windows alone caused the gain. [Its report discusses both benefits and costs](https://www.anthropic.com/engineering/multi-agent-research-system).
+Lance Martin, who wrote the canonical taxonomy for context engineering at LangChain, was hired by Anthropic.
 
-Use separate agents when the work can be divided cleanly. For a small task, another agent may add more coordination than value.
+The signal is clear. If you're hiring "prompt engineers" or "AI engineers" without measuring KV-cache hit rate, compaction strategy, or context utilization, you're optimizing the wrong thing.
 
-### 4. Reuse input the model has already processed
+The model gives you intelligence. Context engineering decides whether that intelligence reaches your user.
 
-Prompt caching lets a provider reuse work on an unchanged input prefix. A stable set of instructions can be cheaper and faster to process across repeated calls.
-
-Manus highlighted cache hit rate as a key production metric. Its practical advice was to keep the prefix stable and avoid changes that invalidate reusable input. [The original post explains the cache behavior](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus).
-
-Here is a simple illustration. A 10,000-token prefix sent across 50 calls adds up to 500,000 input tokens. At an assumed rate of $3 per million tokens, that repeated prefix costs $1.50. At an assumed cached-read rate of $0.30 per million, the same volume costs $0.15.
-
-Those are totals across 50 calls, not costs per turn. They also exclude cache creation, uncached input, output tokens, and other charges. Actual savings depend on the provider and how often requests hit the cache.
-
-Measure cache reads and writes, not just the length of your prompt.
-
-## Better models may need less machinery
-
-It is tempting to answer every failure with another tool, another routing rule, or another agent.
-
-Sometimes that helps. Sometimes it adds more instructions and more chances to fail.
-
-As models improve, test whether old workarounds still earn their place. A general tool may replace several narrow ones. A direct workflow may replace a management layer. A short instruction may replace a long set of special cases.
-
-The goal is useful context and reliable execution. Complexity is only worthwhile when it helps you reach those goals.
-
-## What I would measure first
-
-Start with a few real tasks and record:
-
-- **Task success.** Did the agent produce a correct, usable result?
-- **Input and output tokens.** How much does it read compared with what it writes?
-- **Cache usage.** How much repeated input actually receives the cached rate?
-- **Context after cleanup.** Does the agent retain the facts it needs to continue?
-- **Cost and time per completed task.** Are improvements useful to the person waiting?
-
-Then change one thing. Clear stale tool results, shorten the initial instructions, or retrieve a smaller document section. Run the same tasks again.
-
-Keep the changes that improve quality, speed, or cost without losing required information.
-
-The model gives you intelligence. Context engineering decides what that intelligence has to work with.
+Build accordingly.

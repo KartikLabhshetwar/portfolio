@@ -1,91 +1,66 @@
 ---
-title: Why Everyone Is Building Their Own Agent Harness and Why You Should Care
-description: Why the code around your model decides whether an agent works.
-pubDate: 2026-09-05
+title: Why Everyone Is Suddenly Building Their Own Agent Harness and why you should care.
+description: The model gives you intelligence. The harness gives you a product.
+pubDate: 2026-05-02
 draft: false
 ---
 
-In February 2026, LangChain improved its coding agent, deepagents-cli, from 52.8% to 66.5% on Terminal-Bench 2.0. That 13.7 percentage point jump moved it from outside the top 30 to the top five.
+**Author**: Kartik ([@code_kartik](https://x.com/code_kartik))
 
-The model stayed the same: GPT-5.2-Codex. The team only changed the harness, the software around it. [LangChain published the experiment and its results](https://www.langchain.com/blog/improving-deep-agents-with-harness-engineering).
+**Source**: [Original article on X](https://x.com/code_kartik/status/2050631735529095575)
 
-That result points to a shift in how we build AI products. Picking a capable model matters. So does everything that helps it do useful work.
+![Cover](/blog/agent-harnesses/hero.jpg)
 
-## What is an agent harness?
+In February 2026, the LangChain team quietly published a result that should make every AI team rethink their roadmap. They took their open-source coding agent, deepagents-cli, from outside the Top 30 on Terminal-Bench 2.0 to the Top 5, a 13.7 point jump from 52.8% to 66.5%.
 
-An agent harness turns a model that generates text into a system that can complete a task.
+The underlying model never changed. It was GPT-5.2-Codex the entire time. They only changed the harness.
 
-It gives the model tools, decides what information to include, manages execution, and checks the result. It also handles the less exciting parts: timeouts, permissions, retries, logs, and knowing when to stop.
+That single result captures the most important shift in applied AI right now: the model is no longer the product. The harness is.
 
-For a coding agent, the model might suggest a change. The harness lets it read the repository, edit a file, run tests, inspect a failure, and try again.
+## What's an agent harness?
 
-A good harness makes that loop dependable. It gives the model useful feedback and limits what it can do when it gets something wrong.
+An agent harness is everything wrapping the LLM that turns it from a token generator into a working agent. The tool dispatch. The context management. The sandboxing. The planning loops. The sub-agent orchestration. The evals. The observability. The verification logic that decides when work is "done."
 
-## The same model can produce very different results
+When Claude Code's source map briefly leaked in March, the codebase came in at roughly 513,000 lines of TypeScript. The actual model API call? A few lines. Everything else is the harness.
 
-LangChain found a common failure: the agent wrote code, read it back, decided it looked right, and stopped. It often skipped testing.
+Mitchell Hashimoto, who coined the term in early 2026, defined it bluntly: anytime an agent makes a mistake, you engineer a solution so it never makes that mistake again. That fix lives in the harness.
 
-The team added clearer instructions to build, verify, and fix. They also added a check before completion, better information about the environment, and reminders when the agent kept repeating a failed approach. These changes helped the model use abilities it already had. [The experiment describes each change](https://www.langchain.com/blog/improving-deep-agents-with-harness-engineering).
+## Why models are commoditizing and harnesses aren't
 
-This is why I care about harness engineering. A model upgrade can help, but it is not the only way to improve an agent. Sometimes the missing piece is a test result, a clearer tool, or a limit on repeated attempts.
+Two things are happening at once.
 
-## Harness improvements can compound
+Frontier models are converging. Tool use, long context, reasoning, structured output they all do these well now, and prices are collapsing. Cursor's Composer 2 is 10x cheaper than Opus 4.6 with comparable benchmarks. Andrej Karpathy publicly retired the term "vibe coding" in February and renamed the practice **agentic engineering**, because writing code stopped being the bottleneck.
 
-When a production agent fails, you learn something about the task and the system around it.
+Meanwhile, harnesses compound. Every failure becomes a permanent fix a lint rule, a hook, a sub-agent, a context pattern. That improvement applies to every future run with every future model. Model releases reset the playing field on raw intelligence. Harness investment doesn't.
 
-If it edits the wrong files, tighten the tool permissions. If it loses track of requirements, make those requirements easier to retrieve. If it reports success too early, add a check that can prove whether the work is complete.
+The data backs this up everywhere you look. Stanford's IRIS Lab paired Claude Opus with an evolving harness and beat every hand-designed system on Terminal-Bench. Factory.ai's Droid hit state-of-the-art by beating the model labs at their own game same models, different harness. OpenAI's Frontier team shipped roughly a million lines of production code with three to seven engineers and zero hand-written code, with single agent runs working autonomously for six-plus hours. Their lead engineer's summary: "Humans steer. Agents execute." The hard problem became designing the environment, not writing the code.
 
-Turn useful lessons into tests and small changes. Future runs benefit from them, and many of those improvements remain useful when you switch models.
+## Why off-the-shelf frameworks aren't enough
 
-There is a catch: fixes can become clutter. A rule that helped an older model may confuse a newer one. Keep measuring and remove rules that no longer help.
+LangChain, CrewAI, AI SDK these are useful starting points, but every serious agent product has a custom harness sitting on top. **Claude Code, Cursor, Devin, Sourcegraph Amp, Factory Droid, Replit Agent, Vercel v0, Hermes Agent, OpenClaw** every one of them is opinionated, custom, and tuned to its specific domain.
 
-OpenAI described this change in engineering work in its own Codex experiment. A team that started with three engineers and grew to seven produced a repository with roughly a million lines across code, tooling, and documentation. Humans directed the work while Codex wrote it. The engineers spent their effort defining the environment and building feedback loops. [Their account explains what worked and what broke](https://openai.com/index/harness-engineering/).
+The reasons are concrete. Context windows need careful management Cursor's team spends weeks tuning per-model behavior. Tools need to be designed for LLMs, not humans Replit found function calling hit ceilings around argument complexity and switched to a restricted Python DSL with a 90%+ valid call rate. Evals must be tied to your product, not generic benchmarks. Token costs matter at scale and frontier labs have a structural conflict here, because every harness optimization that uses fewer tokens hurts their unit economics.
 
-The useful lesson is the change in where engineers spend their time. Reliable execution needs a well-designed environment.
+And then there's lock-in. Building your harness on a single vendor's runtime is itself a vendor decision.
 
-## Why a framework is only the starting point
+## The architecture, briefly
 
-Frameworks can give you an agent loop, tool calling, and integrations. They save time. They cannot decide what success means for your product.
+A production harness has roughly seven planes: the agent loop (ReAct, plan-execute, generate-test-repair), the tool layer purpose-built for LLMs, context and memory management with progressive disclosure, sandboxed execution with permission gating, multi-agent coordination, evals and tracing, and prompt and model routing.
 
-A support agent needs different permissions from a coding agent. A research agent needs different checks from an agent that changes customer records. Each needs tools and context suited to its job.
+The pattern shared by every successful harness: trust the LLM at the reasoning layer, enforce strictly at the tool boundary.
 
-You still have to answer practical questions:
+## So should you build one?
 
-- What can the agent read or change?
-- Which actions need approval?
-- What information should it load for this step?
-- How will you detect a bad result?
-- How much time and money can a task use?
-- What happens when a tool fails halfway through?
+If you're prototyping, no. Use Claude Code or Cursor or Codex as-is and ship.
 
-Choosing a vendor runtime is also an architectural choice. Understand which parts of your system depend on it and what switching would require.
+If you're moving to production in a single domain, customize via extension points AGENTS.md, hooks, MCP servers, sub-agent definitions. Build your eval suite *before* you write custom code.
 
-## The parts that matter
+Build your own when the math gets serious: when you see a sustained 15+ point gap between stock and custom on your evals, when per-task economics matter, when you need permissions and audit trails stock harnesses don't provide, or when your domain needs tools that just don't exist yet.
 
-I find it useful to think about a harness in seven parts:
+## The bottom line
 
-1. **The agent loop.** How it plans, acts, checks, and retries.
-2. **Tools.** Clear operations with inputs the model can supply reliably.
-3. **Context and memory.** The information it needs now and what it can retrieve later.
-4. **Execution and permissions.** Where actions run and what they may change.
-5. **Coordination.** How separate agents divide work when that is useful.
-6. **Evaluation and tracing.** Tests for quality and records of what happened.
-7. **Prompts and model selection.** Instructions and model choices suited to each task.
+In 2025, every team was racing to build agents. In 2026, the teams winning are the ones investing in the scaffolding around them.
 
-These are responsibilities, not seven services you need to build.
+The model gives you intelligence. The harness gives you a product.
 
-Let the model reason about the task. Enforce permissions and validate inputs in the code that runs its tools. A prompt asking an agent to be careful is not an access control system.
-
-## When should you build your own?
-
-If you are prototyping, start with an existing agent such as Claude Code, Cursor, or Codex. Use it to find out whether the workflow is useful.
-
-If you are taking one workflow into production, first use the extension points you already have. Repository instructions, hooks, MCP tools, and focused agent definitions may cover the job. Build an evaluation set from real tasks before replacing the runtime.
-
-Consider a custom harness when you can name a clear limitation: poor results on your tasks, costs that do not work, missing permissions, incomplete audit records, or tools the existing system cannot support.
-
-A sustained improvement on your own evaluations is a stronger reason to build than a benchmark headline. There is no universal score gap that makes a rewrite worthwhile.
-
-Start with the smallest change that fixes a measured problem. Keep it if it improves results. Remove it if it adds more work than value.
-
-The model gives you intelligence. The harness helps turn it into a product people can trust.
+Build accordingly.
