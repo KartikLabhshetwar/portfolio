@@ -13,6 +13,15 @@ export type Project = {
 
 // Ordered by what to lead with: the first six surface on the home page.
 export const projects: Project[] = [
+   {
+    id: 'qrtoolset',
+    title: 'QR Toolset',
+    kind: 'web',
+    description: 'Generate and customize QR codes with ease. Perfect for sharing links, contact information, and more.',
+    impact: '',
+    liveLink: 'https://www.qrtoolset.com',
+    githubLink: '',
+  },
   {
     id: 'bettershot',
     title: 'BetterShot',
