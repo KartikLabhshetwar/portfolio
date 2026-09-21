@@ -13,7 +13,15 @@ export type Project = {
 
 // Ordered by what to lead with: the first six surface on the home page.
 export const projects: Project[] = [
-   {
+  {
+    id: 'gazeveil',
+    title: 'GazeVeil',
+    kind: 'macOS',
+    description: 'Protect your Mac screen with a native blur that responds to head movement from compatible AirPods.',
+    impact: 'Latest',
+    githubLink: 'https://github.com/KartikLabhshetwar/GazeVeil',
+  },
+  {
     id: 'qrtoolset',
     title: 'QR Toolset',
     kind: 'web',
