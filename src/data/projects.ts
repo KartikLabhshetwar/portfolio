@@ -14,6 +14,13 @@ export type Project = {
 // Ordered by what to lead with: the first six surface on the home page.
 export const projects: Project[] = [
   {
+    id: 'usefulshelf',
+    title: 'UsefulShelf',
+    kind: 'web',
+    description: 'Discover reviewed apps and websites by category, and list your own product for people and AI search tools to find.',
+    liveLink: 'https://usefulshelf.co/',
+  },
+  {
     id: 'gazeveil',
     title: 'GazeVeil',
     kind: 'macOS',
