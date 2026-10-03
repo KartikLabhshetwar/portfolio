@@ -1,0 +1,98 @@
+---
+title: "How I Grew Screenshot Studio to 28k Monthly Visitors Without Ads"
+description: "The SEO basics, the Bing trick that gets you cited by AI chatbots, and the free-tool play that compounds."
+pubDate: 2026-10-03
+draft: false
+---
+
+This is the first issue of The Builder's Loop, my newsletter, so I'm starting with the question I get asked the most: how do my projects get traffic when I never pay for ads?
+
+[Screenshot Studio](https://screenshot-studio.com) sat at 5,000 to 7,000 monthly users for a long time. In the last 30 days it had 28,800 unique visitors, and it's still climbing. [UsefulShelf](https://usefulshelf.co), the newest thing I've shipped, pulled in 1,840 visitors and 6,850 page views in the last 7 days. None of that came from ads or a lucky viral tweet.
+
+![Screenshot Studio analytics for the last 30 days: 28.8k unique visitors](/blog/organic-growth-playbook/screenshot-studio-analytics.jpg)
+
+I may be wrong about some of the *why*. But this is exactly what I did, and it worked for me.
+
+## 1. Nail the basics
+
+The trick to SEO is that there is no trick. Most sites lose because they skip the fundamentals. Here's my checklist, checked against [Google's SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide):
+
+- **A unique title on every page.** Say what the page is, main keyword first, brand last: `Free Invoice Generator | Acme`. Keep it short: Google cuts long titles off.
+- **A meta description on every page.** One or two sentences on what the reader gets. It won't boost rankings, but it's the pitch that wins the click.
+- **One clear H1, then H2s for each section.** That's how people skim, and where your keywords naturally go.
+- **Clean URLs.** `/tools/invoice-generator`, not `/p?id=8723`.
+- **A sitemap, submitted to [Google Search Console](https://search.google.com/search-console).** Most frameworks generate one for you.
+- **One URL per page.** 301-redirect the `http` and `www` duplicates to one version and add a canonical tag pointing at it, so your ranking signals don't get split.
+- **`noindex` on sign-in, sign-up, and dashboards.** Don't also block them in `robots.txt`, or the crawler never sees the tag.
+- **Internal links with real anchor text.** "Free invoice templates" tells Google what's behind the link. "Click here" doesn't.
+- **Fast on mobile.** Google indexes your mobile site first. Run [PageSpeed Insights](https://pagespeed.web.dev) and fix what it flags, usually big images and too much JavaScript.
+- **Alt text on images,** for image search and screen readers.
+- **Real About, contact, privacy, and terms pages.** People and AI agents check them before they trust or recommend you.
+
+Skip the keywords meta tag, word-count targets, and keyword-stuffed domains. Google says none of them help.
+
+None of this is exciting. All of it compounds.
+
+## 2. Do your keyword research, and let AI do the grunt work
+
+You can't rank for words you never wrote. Find out what people in your niche actually type into search, then make sure those words show up in your titles, headings, and copy.
+
+My stack for this:
+
+- **[Ahrefs](https://ahrefs.com/keyword-generator)** to see what people search for in my niche and how hard each keyword is to rank for.
+- **[OpenSEO](https://github.com/every-app/open-seo)**, an open-source alternative to Ahrefs and Semrush that runs on your own DataForSEO key. I use it for keyword research too, and it ships an MCP server, so Claude Code can pull the data itself.
+
+Then comes the part that saves hours: hand the keyword list to your coding agent. I tell Claude Code "here are the keywords, work them into the page titles, headings, and meta descriptions wherever they fit naturally." What used to be an afternoon of copy edits is now one prompt.
+
+Keep it natural, though. Stuffing a keyword into every sentence reads badly to people and to search engines.
+
+## 3. The hidden engine: Bing
+
+Most people submit their site to Google Search Console and hope the traffic shows up. That's still worth doing. But think about how you search today. I barely open Google anymore. I ask ChatGPT.
+
+So the question isn't only "do I rank on Google?" It's "can a chatbot find me and cite me?"
+
+Here's what most people miss: a lot of that runs through Bing. ChatGPT's web search has leaned heavily on Bing's index, and Microsoft Copilot is built on top of Bing. If Bing hasn't indexed your page, there's a good chance those chatbots can't cite it, no matter how good it is.
+
+What I did:
+
+1. **Added my sites to [Bing Webmaster Tools](https://www.bing.com/webmasters).** If you're already on Google Search Console, you can import your sites from there in a couple of clicks.
+2. **Submitted the sitemap.**
+3. **Turned on [IndexNow](https://www.indexnow.org).** This is the part that matters. Instead of waiting for Bing to recrawl you, or resubmitting your sitemap by hand every time you ship something, IndexNow pings search engines the moment a page is added or changed. Set it up once and forget about it. If you're on Cloudflare, its Crawler Hints setting can send those pings for you.
+
+Once my sites were properly indexed on Bing, with the right keywords on the pages, they started getting cited in AI chatbot answers. Seeing your own product come up as the answer to someone's question feels really good.
+
+My honest take: I can't prove exactly how each chatbot picks its sources. But the pattern was clear enough for me. Fix Bing, show up in chatbots.
+
+## 4. Give away a free tool in your niche
+
+This one is less about tags and more about people.
+
+Build a small free tool that your audience actually needs, close to whatever you sell. Free tools get searched for, bookmarked, shared, and linked to, which is exactly what search engines reward. And every visit is someone who now knows your name.
+
+For me, that's [UsefulShelf](https://usefulshelf.co). It's a directory of reviewed apps and websites, sorted by category, and anyone can list their own product. Listings are built to be SEO-friendly, so a listed product can show up on Google for its relevant keywords and get picked up by AI search tools too. Builders get a free distribution channel. I get a site that grows every time someone adds to it.
+
+That's how it got to 1,840 visitors in the last 7 days, with people spending well over a minute per visit.
+
+![UsefulShelf analytics for the last 7 days: 1.84k visitors, 1.99k visits, 6.85k views, 1m 41s average visit](/blog/organic-growth-playbook/usefulshelf-analytics.jpg)
+
+One builder who listed their site went for a paid dofollow link and watched their domain rating (Ahrefs' score for how strong a site's backlinks are) go from 0 to 18 in 5 days.
+
+Don't want to build a tool? List your product on directories like this one. Same idea from the other side: a relevant page that links back to you and ranks for your keywords.
+
+The free tool helps your users, your users help your rankings, and your rankings bring more users. That's the whole loop.
+
+## Where I learned all this
+
+Screenshot Studio taught me every lesson above. For a long time it sat at 5,000 to 7,000 monthly users. Then I went back and applied this playbook: fixed the basics, did the keyword work, got it indexed properly on Bing. It's now at 28,800 unique visitors a month and still growing. Let's see where it goes.
+
+## The whole playbook
+
+- Get the basics right: unique titles and descriptions, a sitemap, one canonical URL per page, `noindex` on private pages, a fast mobile site, real trust pages.
+- Research the keywords in your niche and let your agent work them in.
+- Submit to Bing Webmaster Tools and turn on IndexNow, not just Google.
+- Give away something useful for free, or get listed where your audience already looks.
+
+Nothing here is clever. That's the point. Most of your competitors skip the boring stuff, so doing it well is already an edge.
+
+If you try any of this, [tell me how it goes](/contact).
