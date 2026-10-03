@@ -44,6 +44,7 @@ describe('postToEmail', () => {
   it('frames the post with the newsletter banner and social footer', () => {
     const email = postToEmail(post('Body.'), base);
     expect(email.html.startsWith(`<img src="${base}/newsletter/banner.png"`)).toBe(true);
+    expect(email.html).not.toMatch(/banner\.png"[^>]*(width="|max-width)/);
     expect(email.html).toContain('href="https://x.com/code_kartik"');
     expect(email.html).toContain("The Builder's Loop by Kartik Labhshetwar");
   });

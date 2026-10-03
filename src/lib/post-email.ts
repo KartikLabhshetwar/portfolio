@@ -20,7 +20,7 @@ function absolutize(html: string, base: string): string {
 }
 
 function banner(base: string): string {
-  return `<img src="${base}/newsletter/banner.png" alt="${profile.newsletter} by ${profile.name}" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:12px;margin:0 0 24px">`;
+  return `<img src="${base}/newsletter/banner.png" alt="${profile.newsletter} by ${profile.name}" style="display:block;width:100%;height:auto;border:0;border-radius:12px;margin:0 0 24px">`;
 }
 
 function footer(): string {
