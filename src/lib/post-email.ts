@@ -28,7 +28,12 @@ function footer(): string {
     .filter((s) => FOOTER_LINKS.includes(s.label))
     .map((s) => `<a href="${s.href}" style="color:#FBFBFA;font-weight:600;text-decoration:none">${s.label}</a>`)
     .join(' &nbsp;·&nbsp; ');
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:32px;background:#5D18EB;border-radius:12px"><tr><td align="center" style="padding:28px 24px;color:#FBFBFA;font-size:14px;line-height:1.6"><p style="margin:0 0 8px">${links}</p><p style="margin:0;opacity:0.8">© ${new Date().getFullYear()} ${profile.newsletter} by ${profile.name}</p></td></tr></table>`;
+  const line = 'max-width:none;text-align:center;color:#FBFBFA;font-size:14px;line-height:1.6';
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:32px;background:#5D18EB;border-radius:12px"><tr><td align="center" style="padding:28px 24px;text-align:center;color:#FBFBFA"><p style="margin:0 auto 8px;${line}">${links}</p><p style="margin:0 auto;${line};opacity:0.8">© ${new Date().getFullYear()} ${profile.newsletter} by ${profile.name}</p></td></tr></table>`;
+}
+
+function withoutHero(body: string, slug: string): string {
+  return body.replace(new RegExp(`^!\\[[^\\]]*\\]\\(/blog/${slug}/hero\\.\\w+\\)\\s*`, 'm'), '');
 }
 
 export function postToEmail(post: PostInput, baseUrl: string): PostEmail {
@@ -37,7 +42,7 @@ export function postToEmail(post: PostInput, baseUrl: string): PostEmail {
 
   // Kit wraps this in its own email template, which adds the unsubscribe link
   // and postal address under our footer.
-  const rendered = Markdoc.renderers.html(Markdoc.transform(Markdoc.parse(post.body)));
+  const rendered = Markdoc.renderers.html(Markdoc.transform(Markdoc.parse(withoutHero(post.body, post.slug))));
 
   return {
     subject: post.title,

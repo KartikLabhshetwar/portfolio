@@ -49,6 +49,20 @@ describe('postToEmail', () => {
     expect(email.html).toContain("The Builder's Loop by Kartik Labhshetwar");
   });
 
+  it('colors every footer line itself so the email template cannot override it', () => {
+    const email = postToEmail(post('Body.'), base);
+    const footerLines = email.html.match(/<p style="margin:0 auto[^"]*"/g) ?? [];
+    expect(footerLines).toHaveLength(2);
+    for (const p of footerLines) expect(p).toContain('color:#FBFBFA');
+  });
+
+  it('drops the post hero because the banner already heads the email', () => {
+    const email = postToEmail(post('![Hero](/blog/my-post/hero.jpg)\n\nIntro.\n\n![Chart](/blog/my-post/chart.jpg)'), base);
+    expect(email.html).not.toContain('hero.jpg');
+    expect(email.html).toContain(`src="${base}/blog/my-post/chart.jpg"`);
+    expect(email.html).toContain('Intro.');
+  });
+
   it('tolerates a trailing slash on the base url', () => {
     const email = postToEmail(post('[x](/blog/other)'), 'https://kartiklabhshetwar.com/');
     expect(email.html).toContain(`href="${base}/blog/other"`);
