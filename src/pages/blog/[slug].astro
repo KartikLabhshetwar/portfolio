@@ -2,6 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import PostViews from '../../components/PostViews.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
+import { profile } from '../../data/profile';
 import { getCollection, render } from 'astro:content';
 
 // On demand so the Accept-negotiation middleware runs (see src/middleware.ts).
@@ -37,4 +39,10 @@ const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', mo
       <PostViews slug={slug(post)} />
     </div>
   </article>
+
+  <aside class="mt-12 border-t border-border pt-8">
+    <h2 class="text-base font-medium">Get the next post in your inbox</h2>
+    <p class="mt-1 mb-4 text-sm text-muted-foreground">{profile.newsletter}: notes on building and growing products, sent when a new post goes up.</p>
+    <NewsletterForm />
+  </aside>
 </Base>
