@@ -41,6 +41,13 @@ describe('postToEmail', () => {
     expect(email.html).toContain('Read this on the web');
   });
 
+  it('frames the post with the newsletter banner and social footer', () => {
+    const email = postToEmail(post('Body.'), base);
+    expect(email.html.startsWith(`<img src="${base}/newsletter/banner.png"`)).toBe(true);
+    expect(email.html).toContain('href="https://x.com/code_kartik"');
+    expect(email.html).toContain("The Builder's Loop by Kartik Labhshetwar");
+  });
+
   it('tolerates a trailing slash on the base url', () => {
     const email = postToEmail(post('[x](/blog/other)'), 'https://kartiklabhshetwar.com/');
     expect(email.html).toContain(`href="${base}/blog/other"`);
