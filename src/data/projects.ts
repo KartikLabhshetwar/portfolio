@@ -14,6 +14,15 @@ export type Project = {
 // Ordered by what to lead with: the first six surface on the home page.
 export const projects: Project[] = [
   {
+    id: 'betterwispr',
+    title: 'BetterWispr',
+    kind: 'macOS',
+    description: 'Dictate into any Mac app with a hotkey. Speech is transcribed on-device and cleaned of filler words. An open-source Wispr Flow alternative.',
+    impact: 'Latest',
+    liveLink: 'https://betterwispr.com/',
+    githubLink: 'https://github.com/opennookorg/betterwispr',
+  },
+  {
     id: 'usefulshelf',
     title: 'UsefulShelf',
     kind: 'web',
