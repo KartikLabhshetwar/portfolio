@@ -1,0 +1,26 @@
+---
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+<a
+  href={project.liveLink ?? project.githubLink}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="group grid min-w-0 gap-2 rounded-3xl bg-[color-mix(in_srgb,var(--muted)_65%,var(--background))] p-2 [overflow-wrap:anywhere] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+>
+  <div class="flex items-baseline gap-3 px-2 py-1">
+    <h2 class="text-base font-medium leading-6 tracking-tight text-foreground">{project.title}</h2>
+    <span class="text-xs text-muted-foreground">{project.kind}</span>
+    <span aria-hidden="true" class="ml-auto text-lg text-muted-foreground group-hover:text-foreground group-focus-visible:text-foreground motion-safe:transition-transform motion-safe:duration-[180ms] motion-safe:ease-out motion-safe:group-hover:translate-x-[2px] motion-safe:group-hover:-translate-y-[2px] motion-safe:group-focus-visible:translate-x-[2px] motion-safe:group-focus-visible:-translate-y-[2px]">↗</span>
+  </div>
+  <div class="rounded-3xl bg-background p-4">
+    <p class="text-sm leading-6 text-muted-foreground">{project.description}</p>
+    {project.impact && <p class="mt-3 text-xs leading-5 text-muted-foreground">{project.impact}</p>}
+  </div>
+  <span class="sr-only">Opens in a new tab</span>
+</a>

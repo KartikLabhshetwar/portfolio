@@ -1,45 +1,11 @@
 ---
 import { projects } from '../data/projects';
+import ProjectCard from './ProjectCard.astro';
 ---
-<ul class="project-list page-content" aria-label="Projects">
+<ul class="project-list page-content grid gap-5" aria-label="Projects">
   {projects.map((project) => (
     <li class="min-w-0">
-      <a
-        href={project.liveLink ?? project.githubLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="project-card group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
-      >
-        <div class="project-heading">
-          <h2 class="text-base font-normal leading-6 tracking-tight text-foreground">{project.title}</h2>
-          <span class="text-xs text-muted-foreground">{project.kind}</span>
-          <span aria-hidden="true" class="project-arrow ml-auto text-lg text-muted-foreground group-hover:text-foreground group-focus-visible:text-foreground">↗</span>
-        </div>
-        <div class="project-copy">
-          <p class="text-sm leading-6 text-muted-foreground">{project.description}</p>
-          {project.impact && <p class="mt-3 text-xs leading-5 text-muted-foreground">{project.impact}</p>}
-        </div>
-        <span class="sr-only">Opens in a new tab</span>
-      </a>
+      <ProjectCard project={project} />
     </li>
   ))}
 </ul>
-
-<style>
-  .project-list { display: grid; gap: 1.25rem; }
-  .project-card {
-    display: grid;
-    gap: 0.5rem;
-    min-width: 0;
-    padding: 1.25rem;
-    border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
-    border-radius: 1rem;
-    background: color-mix(in srgb, var(--muted) 25%, var(--background));
-    overflow-wrap: anywhere;
-  }
-  .project-heading { display: flex; align-items: baseline; gap: 0.75rem; }
-  @media (prefers-reduced-motion: no-preference) {
-    .project-arrow { transition: transform 180ms ease-out; }
-    .project-card:is(:hover, :focus-visible) .project-arrow { transform: translate(2px, -2px); }
-  }
-</style>
