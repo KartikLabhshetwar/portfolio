@@ -1,16 +1,16 @@
 ---
 import { projects } from '../data/projects';
 ---
-<ul class="page-content grid grid-cols-1 gap-5 sm:grid-cols-2" aria-label="Projects">
+<ul class="project-list page-content" aria-label="Projects">
   {projects.map((project) => (
     <li class="min-w-0">
       <a
         href={project.liveLink ?? project.githubLink}
         target="_blank"
         rel="noopener noreferrer"
-        class="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors duration-200 hover:border-muted-foreground/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+        class="project-row group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
       >
-        <div class="aspect-video overflow-hidden border-b border-border bg-muted">
+        <div class="project-preview aspect-video overflow-hidden rounded-lg border border-border bg-muted">
           {project.image ? (
             <img
               src={project.image}
@@ -27,17 +27,37 @@ import { projects } from '../data/projects';
             </div>
           )}
         </div>
-        <div class="flex flex-1 flex-col gap-2 p-5">
-          <span class="text-xs text-muted-foreground">{project.kind}</span>
-          <h2 class="flex items-start justify-between gap-3 text-base font-medium leading-6 text-foreground">
-            {project.title}
-            <span aria-hidden="true" class="text-muted-foreground transition-colors group-hover:text-foreground group-focus-visible:text-foreground">↗</span>
-          </h2>
-          <p class="text-sm leading-6 text-muted-foreground">{project.description}</p>
-          {project.impact && <p class="mt-auto pt-2 text-xs leading-5 text-muted-foreground">{project.impact}</p>}
+        <div class="min-w-0">
+          <div class="flex items-center gap-3">
+            <h2 class="text-base font-normal leading-6 tracking-tight text-foreground">{project.title}</h2>
+            <span class="text-xs text-muted-foreground">{project.kind}</span>
+            <span aria-hidden="true" class="project-arrow ml-auto text-lg text-muted-foreground group-hover:text-foreground group-focus-visible:text-foreground">↗</span>
+          </div>
+          <p class="mt-2 text-sm leading-6 text-muted-foreground">{project.description}</p>
+          {project.impact && <p class="mt-3 text-xs leading-5 text-muted-foreground">{project.impact}</p>}
           <span class="sr-only">Opens in a new tab</span>
         </div>
       </a>
     </li>
   ))}
 </ul>
+
+<style>
+  .project-list > li + li { border-top: 1px solid var(--border); }
+  .project-list > li:first-child .project-row { padding-top: 0; }
+  .project-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    border-radius: 0.25rem;
+  }
+  @media (min-width: 640px) {
+    .project-row { grid-template-columns: 10rem minmax(0, 1fr); gap: 1.25rem; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .project-arrow { transition: transform 180ms ease-out; }
+    .project-row:is(:hover, :focus-visible) .project-arrow { transform: translate(2px, -2px); }
+  }
+</style>
