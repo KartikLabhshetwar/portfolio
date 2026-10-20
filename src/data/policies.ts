@@ -1,3 +1,5 @@
+import { profile } from './profile';
+
 // Shared by the HTML pages and their Markdown representations.
 export const policyUpdated = '20 October 2026';
 
@@ -7,13 +9,11 @@ Kartik Labhshetwar runs this personal portfolio, blog, and free newsletter. You 
 
 ## Newsletter
 
-When you [subscribe](/newsletter), your email address and the page you signed up from are sent to Kit to manage your subscription and deliver new posts. You receive a confirmation email before joining the mailing list. Kit may record email delivery and engagement information as part of its service.
+[${profile.newsletter}](${profile.newsletterUrl}) is a newsletter hosted on Substack. This site links to Substack and does not collect your email address here. When you follow the link, you leave this site. Substack collects subscription information and handles email delivery under its [privacy policy](https://substack.com/privacy), including its use of cookies and analytics.
 
-Every newsletter includes an unsubscribe link. Unsubscribing stops future newsletters; it does not automatically delete your subscriber record. [Contact me](/contact) to request deletion. See [Kit's explanation of unsubscribing and deletion](https://help.kit.com/en/articles/2502654-how-to-remove-subscribers-from-your-email-list).
+As the newsletter publisher, I can access subscriber information that Substack shares with me, including your name and email address. I use this information to publish the newsletter, manage subscriptions, and respond to subscription questions.
 
-## Analytics
-
-Databuddy measures page views, navigation, link clicks, interactions, and page performance. Its script receives request and browser information to provide these analytics. You can block the analytics script and still use the site. See [Databuddy's privacy policy](https://www.databuddy.cc/privacy).
+Use the unsubscribe link in Substack emails to stop receiving the newsletter. Unsubscribing does not necessarily delete your Substack account or all subscription records. For questions or requests about newsletter data I can access, [contact me](/contact). For information Substack holds for its own purposes, use the privacy controls and contact details in its privacy policy.
 
 ## Article views and browser storage
 
@@ -21,17 +21,17 @@ The article counter uses a random first-party cookie named \`reader_id\`, which 
 
 Your theme preference is stored in your browser's local storage. Clearing site data removes this preference and the reader cookie.
 
-## Hosting and abuse prevention
+## Hosting
 
-Cloudflare hosts the site and processes requests, including IP addresses and request metadata. When newsletter rate limiting is enabled, Upstash stores an IP-based attempt counter with a ten-minute expiry to limit signup abuse. Hosting and service providers apply their own retention practices to operational records.
+Cloudflare hosts the site and processes requests, including IP addresses and request metadata. Hosting and service providers apply their own retention practices to operational records.
 
 ## External services
 
-Following links to GitHub, Cal.com, social profiles, or project sites takes you to services with their own privacy policies.
+Following links to Substack, GitHub, Cal.com, social profiles, or project sites takes you to services with their own privacy policies.
 
 ## Your choices
 
-You can unsubscribe, clear browser storage, or block analytics. To ask about information held about you, request a correction or deletion, or raise a privacy concern, [contact me](/contact). The date above changes when this policy is updated.
+You can unsubscribe or clear browser storage. To ask about information held about you, request a correction or deletion, or raise a privacy concern, [contact me](/contact). The date above changes when this policy is updated.
 `;
 
 export const termsPolicy = `## About these terms
@@ -44,11 +44,11 @@ You may link to this site and share short excerpts with attribution and a link t
 
 ## Using the site
 
-Do not disrupt the site, bypass access controls, abuse the signup form, or subscribe someone else's email address without permission. Ordinary browsing, linking, and responsible access to public content are welcome.
+Do not disrupt the site or bypass access controls. Ordinary browsing, linking, and responsible access to public content are welcome.
 
 ## Newsletter
 
-The newsletter is free. Subscribe with an address you control and confirm your subscription by email. You can unsubscribe at any time. There is no guaranteed publishing schedule. The [privacy policy](/privacy) explains how subscription data is handled.
+[${profile.newsletter}](${profile.newsletterUrl}) is a free newsletter hosted on Substack. Subscribe with an address you control and manage your subscription there. You can unsubscribe using the link in newsletter emails. Substack's [terms](https://substack.com/tos) and [privacy policy](https://substack.com/privacy) apply when you use its service. There is no guaranteed publishing schedule. My [privacy policy](/privacy) explains how this site and the newsletter handle data.
 
 ## Accuracy and external links
 

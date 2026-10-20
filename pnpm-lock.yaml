@@ -108,6 +108,12 @@ importers:
       '@types/node':
         specifier: ^26.0.0
         version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.17)
       playwright:
         specifier: ^1.61.1
         version: 1.61.1

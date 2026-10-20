@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { profile } from '../src/data/profile';
 import { notFoundMarkdown, pageMarkdown, type MarkdownSite } from '../src/lib/page-markdown';
 
 const base = 'https://kartiklabhshetwar.com';
@@ -10,6 +11,7 @@ const site: MarkdownSite = {
     role: 'Software Engineer',
     bio: 'I build from zero.',
     location: 'India',
+    newsletterUrl: profile.newsletterUrl,
     socials: [
       { label: 'GitHub', href: 'https://github.com/KartikLabhshetwar' },
       { label: 'X', href: 'https://x.com/code_kartik' },
@@ -123,16 +125,17 @@ describe('pageMarkdown', () => {
     expect(md).toContain('https://x.com/code_kartik');
     expect(md).toContain('https://linkedin.com/in/kartikcode');
     expect(md).toContain('https://github.com/KartikLabhshetwar');
-    expect(md).toContain(`${base}/api/subscribe`);
+    expect(md).toContain(profile.newsletterUrl);
   });
 
   it('renders the privacy page covering every processor the site uses', () => {
     const md = pageMarkdown('/privacy', site)!;
     expect(md).toContain('# Privacy');
-    for (const processor of ['Kit', 'Databuddy', 'Upstash', 'Cloudflare']) {
+    for (const processor of ['Substack', 'Upstash', 'Cloudflare']) {
       expect(md).toContain(processor);
     }
     expect(md).not.toContain('activity chart');
+    expect(md).not.toMatch(/Databuddy|## Analytics|block analytics/i);
     expect(md).not.toContain('avatars load directly from GitHub');
     expect(md).toContain(`${base}/contact`);
   });
@@ -144,11 +147,20 @@ describe('pageMarkdown', () => {
   });
 
   it('serves newsletter and current policies as Markdown', () => {
-    expect(pageMarkdown('/newsletter', site)).toContain(`${base}/api/subscribe`);
+    expect(pageMarkdown('/newsletter', site)).toContain(profile.newsletterUrl);
     expect(pageMarkdown('/terms', site)).toContain('# Terms and conditions');
     expect(pageMarkdown('/privacy', site)).toContain('20 October 2026');
-    expect(pageMarkdown('/privacy', site)).toContain('does not automatically delete');
+    expect(pageMarkdown('/privacy', site)).toContain('does not collect your email address');
     expect(pageMarkdown('/privacy', site)).toContain('no automatic expiry');
+  });
+
+  it('routes newsletter subscriptions to Substack without the removed signup workflow', () => {
+    for (const path of ['/newsletter', '/contact', '/privacy', '/terms']) {
+      const md = pageMarkdown(path, site)!;
+      expect(md).toContain(profile.newsletterUrl);
+      expect(md).not.toContain('/api/subscribe');
+      expect(md).not.toMatch(/\bKit\b|signup form|POST/);
+    }
   });
 
   it('ignores trailing slashes', () => {

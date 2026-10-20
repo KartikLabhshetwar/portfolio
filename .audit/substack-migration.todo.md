@@ -1,0 +1,10 @@
+- [x] Trace the newsletter code, callers, tests, dependencies, and configuration.
+- [x] Choose a single Substack URL in profile data and a plain subscription link.
+- [x] Blocking first steps. Inspect shared dependency usage and existing dirty files.
+- [x] Independent workstreams. Delegate the isolated migration; parent verifies the result.
+- [x] Shared mutable state. Use an exclusive worktree and apply only its reviewed diff.
+- [x] Smallest safe decomposition. One owner because the deletion and callers are coupled.
+- [x] Remove Kit workflow and update all references.
+- [x] Run tests, type check, production build, and browser checks.
+- [x] Inspect the final diff and report remaining external cleanup.
+- [x] Skip PR and deployment. The requested artifact is the local portfolio change.

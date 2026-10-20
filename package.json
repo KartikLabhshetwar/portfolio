@@ -10,7 +10,6 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
-    "newsletter": "node --env-file-if-exists=.env scripts/send-newsletter.ts",
     "generate-types": "wrangler types"
   },
   "dependencies": {
@@ -48,6 +47,8 @@
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.1.8",
     "@types/node": "^26.0.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "playwright": "^1.61.1",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.9.3",

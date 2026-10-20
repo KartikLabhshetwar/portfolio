@@ -1,6 +1,6 @@
 # Portfolio: common tasks. Run `make` (or `make help`) to list them.
 .DEFAULT_GOAL := help
-.PHONY: help install dev cms build preview check test clean deploy newsletter
+.PHONY: help install dev cms build preview check test clean deploy
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-9s\033[0m %s\n", $$1, $$2}'
@@ -33,6 +33,3 @@ clean: ## Remove build output and caches
 
 deploy: build ## Build and deploy to Cloudflare (needs `wrangler login`)
 	pnpm exec wrangler deploy
-
-newsletter: ## Draft a blog post as a Kit broadcast: `make newsletter SLUG=my-post`
-	pnpm newsletter $(SLUG)

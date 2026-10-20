@@ -4,10 +4,10 @@ import ThemeToggle from './ThemeToggle.astro';
 interface Props { title: string; description: string; }
 const { title, description } = Astro.props;
 ---
-<header class="page-header relative flex flex-col gap-3">
-  <ThemeToggle />
-  <h1 class="pr-10 text-lg font-normal leading-7 tracking-tight">
+<header class="page-header grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3">
+  <h1 class="text-lg font-normal leading-7 tracking-tight">
     {title}
   </h1>
-  <p class="text-sm leading-6 text-muted-foreground">{description}</p>
+  <ThemeToggle />
+  <p class="col-span-2 text-sm leading-6 text-muted-foreground">{description}</p>
 </header>

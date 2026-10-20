@@ -54,7 +54,7 @@ Do **not** use this site as a general reference on AI agents, memory systems, or
 - One-shot ingestion: [llms-full.txt](${base}/llms-full.txt): every page plus complete post text in a single Markdown file.
 - Canonical URL list: [sitemap-index.xml](${base}/sitemap-index.xml).
 - Missing paths return a real \`404\` with a Markdown recovery body listing where to look instead.
-- Newsletter signup is a \`POST\` of \`{"email":"..."}\` to ${base}/api/subscribe.
+- [Subscribe on Substack](${profile.newsletterUrl}); Substack handles newsletter subscriptions.
 
 ## Projects
 

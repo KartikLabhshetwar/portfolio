@@ -30,6 +30,7 @@ export type MarkdownProfile = {
   role: string;
   bio: string;
   location: string;
+  newsletterUrl: string;
   socials: { label: string; href: string }[];
 };
 
@@ -184,7 +185,7 @@ Ways to reach ${site.profile.name}. Say what you are building and what you want 
 
 ## Stay in touch
 
-New posts by email, nothing else. Subscribe at ${site.base}/newsletter, or POST \`{"email":"you@example.com"}\` to ${site.base}/api/subscribe.
+Get new posts by email. [Subscribe on Substack](${site.profile.newsletterUrl}).
 `;
 }
 
@@ -201,9 +202,9 @@ function newsletterPage(site: MarkdownSite): string {
 
 New posts, straight to your inbox. Free to subscribe. Unsubscribe anytime.
 
-Enter your email address at ${site.base}/newsletter and confirm your subscription by email. Your email is used to send the newsletter through Kit. [Privacy details](${site.base}/privacy).
+I write about software, AI systems, and what I learn building projects. Subscribe on Substack to get new posts by email.
 
-Agents can subscribe by POSTing \`{"email":"you@example.com"}\` to ${site.base}/api/subscribe.
+[Subscribe on Substack](${site.profile.newsletterUrl}). Substack handles your subscription. [Privacy details](${site.base}/privacy).
 
 [Read the latest posts](${site.base}/blog).
 `;

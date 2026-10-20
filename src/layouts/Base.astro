@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import { ClientRouter, fade } from 'astro:transitions';
 import CommandMenu from '../components/CommandMenu.tsx';
+import { minimalButtonClassName } from '../components/evil-buttons/minimal';
+import { cn } from '../lib/utils';
 import { AutoTOCMinimap } from '../components/auto-toc-minimap';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
@@ -43,12 +45,13 @@ const supportingPages = [
 const footerSocials = ['LinkedIn', 'X', 'GitHub'].map((label) => profile.socials.find((social) => social.label === label)!);
 const meeting = profile.socials.find((social) => social.label === 'Book a call')!;
 const email = profile.socials.find((social) => social.label === 'Email')!;
+const footerButtonClassName = cn(minimalButtonClassName, 'min-h-11 shrink-0 whitespace-nowrap px-1 text-xs min-[360px]:px-2 sm:min-h-9 sm:px-3 sm:text-sm');
 const navigation = [
-  { href: '/', label: 'Home' },
-  { href: '/experience', label: 'Experience' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/blog', label: 'Writing' },
-  { href: '/newsletter', label: 'Subscribe' },
+  { href: '/', label: 'Home', icon: 'M3 10a2 2 0 0 1 .75-1.56l7-5.6a2 2 0 0 1 2.5 0l7 5.6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2h-5v-7h-4v7H5a2 2 0 0 1-2-2Z' },
+  { href: '/experience', label: 'Experience', icon: 'M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2 M3 7h18v13H3Z M3 11a20 20 0 0 0 18 0 M10 12v3h4v-3' },
+  { href: '/projects', label: 'Projects', icon: 'M3 9V5a1 1 0 0 1 1-1h5l2 3h9a1 1 0 0 1 1 1v2 M3 20h16l3-10H6Z' },
+  { href: '/blog', label: 'Writing', icon: 'M12 20h9 M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4Z M15 5l3 3' },
+  { href: '/newsletter', label: 'Subscribe', icon: 'M3 5h18v14H3Z M3 6l9 7 9-7' },
 ];
 const breadcrumbs = pathname === '/' || noindex ? [] : [
   navigation[0],
@@ -71,7 +74,7 @@ const jsonLd = serializeJsonLd(
   ),
 );
 const commandItems = [
-  ...navigation.map((l) => ({ ...l, group: 'Pages' })),
+  ...navigation.map(({ href, label }) => ({ href, label, group: 'Pages' })),
   ...supportingPages.map((l) => ({ label: l.label, href: l.href, group: 'Pages' })),
   ...projects.map((p) => ({
     label: p.title,
@@ -166,18 +169,6 @@ const commandItems = [
       document.documentElement.classList.toggle('dark', dark);
       document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
     </script>
-    <script
-      is:inline
-      src="https://cdn.databuddy.cc/databuddy.js"
-      data-client-id="2cYj0B5Uv0T4q70DhnoAc"
-      data-track-hash-changes="true"
-      data-track-attributes="true"
-      data-track-outgoing-links="true"
-      data-track-interactions="true"
-      data-track-web-vitals="true"
-      crossorigin="anonymous"
-      async
-    ></script>
   </head>
   <body class="min-h-screen bg-background text-foreground">
     <main class:list={["mx-auto flex min-h-svh w-full grow flex-col px-5 pt-8 pb-32 sm:px-4 sm:pt-16", wide ? "max-w-2xl" : "max-w-lg", { 'justify-center': pathname === '/' }]}>
@@ -201,12 +192,12 @@ const commandItems = [
         </nav>
       )}
       <slot />
-      <footer class="mt-8 flex flex-col gap-2 border-t border-border pt-4 text-sm text-muted-foreground sm:mt-10">
-        <nav aria-label="Elsewhere" class="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <a href={email.href} class="hover:text-foreground hover:underline">Email</a>
-          <a href={meeting.href} target="_blank" rel="noopener noreferrer" class="hover:text-foreground hover:underline">Book a meet</a>
+      <footer class="mt-8 border-t border-border pt-5 sm:mt-10">
+        <nav aria-label="Elsewhere" class="flex items-center gap-1 sm:gap-2">
+          <a href={email.href} class={footerButtonClassName}>Email</a>
+          <a href={meeting.href} target="_blank" rel="noopener noreferrer" class={footerButtonClassName}>Book a meet</a>
           {footerSocials.map((s) => (
-            <a href={s.href} target="_blank" rel="noopener noreferrer" class="hover:text-foreground hover:underline">{s.label}</a>
+            <a href={s.href} target="_blank" rel="noopener noreferrer" class={footerButtonClassName}>{s.label}</a>
           ))}
         </nav>
       </footer>
@@ -215,9 +206,12 @@ const commandItems = [
       {navigation.map((link) => {
         const current = pathname === link.href ? 'page' : link.href === '/blog' && pathname.startsWith('/blog/') ? 'location' : undefined;
         return (
-          <a href={link.href} aria-current={current}>
-            <span class="dock-label">{link.label}</span>
-            {current && <span class="dock-active" aria-hidden="true" />}
+          <a href={link.href} aria-current={current} aria-label={link.label}>
+            {current && <span class="dock-selection" aria-hidden="true" />}
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d={link.icon} />
+            </svg>
+            <span class="dock-label" aria-hidden="true">{link.label}</span>
           </a>
         );
       })}

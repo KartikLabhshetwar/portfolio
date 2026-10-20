@@ -9,6 +9,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { Separator } from "@/components/ui/separator"
+import { MinimalButton } from "@/components/evil-buttons/minimal"
 import type { ChevronsUpDownIconHandle } from "@/components/chevrons-up-down-icon"
 import { ChevronsUpDownIcon } from "@/components/chevrons-up-down-icon"
 import { BriefcaseBusinessIcon, InfinityIcon } from "lucide-react"
@@ -167,78 +168,77 @@ export function ExperiencePositionItem({
       asChild
     >
       <div className="relative last:before:absolute last:before:h-full last:before:w-4 last:before:bg-background">
-        <CollapsibleTrigger
-          className={cn(
-            "group/experience-position not-prose block w-full text-left select-none",
-            "relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:rounded-lg hover:before:bg-muted/30",
-            "data-disabled:before:content-none"
-          )}
-        >
-          <div className="relative z-1 mb-1 flex items-start gap-3 text-base">
-            <div
-              className={cn(
-                "flex size-6 shrink-0 items-center justify-center rounded-lg",
-                "bg-muted text-muted-foreground",
-                "border border-muted-foreground/15 ring-1 ring-line ring-offset-1 ring-offset-background",
-                "[&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
-              )}
-            >
-              {position.icon ?? (
-                <BriefcaseBusinessIcon
-                />
-              )}
-            </div>
-
-            <h4 className="flex-1 font-medium text-balance text-foreground">
-              {position.title}
-            </h4>
-
-            <div className="shrink-0 text-muted-foreground group-disabled/experience-position:hidden [&_svg]:h-lh [&_svg]:w-4">
-              <ChevronsUpDownIcon ref={chevronsUpDownIconRef} duration={0.15} />
-            </div>
-          </div>
-
-          <dl className="relative z-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 pl-9 text-sm text-muted-foreground">
-            {position.employmentType && (
-              <>
-                <div>
-                  <dt className="sr-only">Employment Type</dt>
-                  <dd>{position.employmentType}</dd>
-                </div>
-
-                <Separator
-                  className="data-vertical:h-4 data-vertical:self-center"
-                  orientation="vertical"
-                />
-              </>
-            )}
-
-            <div>
-              <dt className="sr-only">Employment Period</dt>
-              <dd className="flex items-center gap-0.5 tabular-nums">
-                <span>{start}</span>
-                <span>:</span>
-                {isOngoing ? (
-                  <InfinityIcon className="size-4.5 translate-y-[0.5px]" aria-label="Present" />
-                ) : (
-                  <span>{end}</span>
+        <CollapsibleTrigger asChild>
+          <MinimalButton
+            arrow={false}
+            className="group/experience-position not-prose relative block h-auto w-full px-3 py-3 text-left select-none"
+          >
+            <div className="relative z-1 mb-1 flex items-start gap-3 text-base">
+              <div
+                className={cn(
+                  "flex size-6 shrink-0 items-center justify-center rounded-lg",
+                  "bg-neutral-50/10 text-neutral-50/70",
+                  "border border-white/15 ring-1 ring-white/10 ring-offset-1 ring-offset-transparent",
+                  "[&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
                 )}
-              </dd>
+              >
+                {position.icon ?? (
+                  <BriefcaseBusinessIcon
+                  />
+                )}
+              </div>
+
+              <h4 className="flex-1 font-medium text-balance text-neutral-50">
+                {position.title}
+              </h4>
+
+              <div className="shrink-0 text-neutral-50/70 group-disabled/experience-position:hidden [&_svg]:h-lh [&_svg]:w-4">
+                <ChevronsUpDownIcon ref={chevronsUpDownIconRef} duration={0.15} />
+              </div>
             </div>
 
-            {duration && (
-              <>
-                <Separator
-                  className="data-vertical:h-4 data-vertical:self-center"
-                  orientation="vertical"
-                />
-                <div>
-                  <dt className="sr-only">Duration</dt>
-                  <dd className="tabular-nums">{duration}</dd>
-                </div>
-              </>
-            )}
-          </dl>
+            <dl className="relative z-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 pl-9 text-sm text-neutral-50/70">
+              {position.employmentType && (
+                <>
+                  <div>
+                    <dt className="sr-only">Employment Type</dt>
+                    <dd>{position.employmentType}</dd>
+                  </div>
+
+                  <Separator
+                    className="data-vertical:h-4 data-vertical:self-center"
+                    orientation="vertical"
+                  />
+                </>
+              )}
+
+              <div>
+                <dt className="sr-only">Employment Period</dt>
+                <dd className="flex items-center gap-0.5 tabular-nums">
+                  <span>{start}</span>
+                  <span>:</span>
+                  {isOngoing ? (
+                    <InfinityIcon className="size-4.5 translate-y-[0.5px]" aria-label="Present" />
+                  ) : (
+                    <span>{end}</span>
+                  )}
+                </dd>
+              </div>
+
+              {duration && (
+                <>
+                  <Separator
+                    className="data-vertical:h-4 data-vertical:self-center"
+                    orientation="vertical"
+                  />
+                  <div>
+                    <dt className="sr-only">Duration</dt>
+                    <dd className="tabular-nums">{duration}</dd>
+                  </div>
+                </>
+              )}
+            </dl>
+          </MinimalButton>
         </CollapsibleTrigger>
 
         <CollapsibleContent className="overflow-hidden">

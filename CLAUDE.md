@@ -19,7 +19,8 @@ The lockfile is `pnpm-lock.yaml` and the version is pinned in `package.json` →
 
 - `src/data/*.ts`: profile, experience, projects (plain TS, not content collections).
 - `src/content/blog/<slug>/index.mdoc`: blog posts (Markdoc collection), editable via Keystatic at `/keystatic`.
-- `src/lib/kit.ts` + `src/lib/post-email.ts` + `scripts/send-newsletter.ts`: newsletter. Pure core (Kit transport, markdoc→email HTML) with thin shells over it: `src/pages/api/subscribe.ts` and the CLI.
+- `src/components/NewsletterSubscribe.astro`: plain link to the newsletter on Substack, configured by `profile.newsletterUrl` in `src/data/profile.ts`. Subscriptions and publishing are managed on Substack.
+- `src/lib/redis.ts`: shared Redis connection for article view counts.
 - `src/lib/env.ts`: `resolveEnv<T>()`, the one place that reads runtime secrets from `cloudflare:workers` with a `process.env` fallback.
 - `src/lib/accept.ts` + `src/middleware.ts`: Accept negotiation. Pure RFC 9110 parser with a thin middleware shell over it.
 - `src/lib/page-markdown.ts`: the Markdown representation of every HTML page (and the 404 body), built from the same data the pages render.
@@ -30,16 +31,15 @@ The lockfile is `pnpm-lock.yaml` and the version is pinned in `package.json` →
 
 - **Type:** Geist for UI, headings, and article body; system monospace only for code.
 - **Projects:** action-led, verb-first descriptions + an optional `impact` metric (downloads/DAU/"Latest").
-- **Newsletter:** subscribing posts to `/api/subscribe` (server route → Kit v4 API with `KIT_API_KEY` + `KIT_FORM_ID`). Sending a post as email is `pnpm newsletter <slug>`, which creates a **draft** broadcast in Kit that you review and send by hand: so a double-run leaves two drafts, never two sends. Single vs double opt-in is a setting on the Kit form, not in this code.
+- **Newsletter:** `/newsletter` and article subscription links send readers to `profile.newsletterUrl` on Substack. The site does not collect emails or send newsletters. Publish and manage subscribers in Substack; no newsletter API keys or sending scripts are needed.
 - **Agent-readiness (don't regress these):** every HTML page serves Markdown from the same URL when the request sends `Accept: text/markdown` (<https://acceptmarkdown.com>), with `Vary: Accept` on every response and `406` when nothing acceptable can be produced. That negotiation happens in `src/middleware.ts`, and **Astro middleware only runs for on-demand routes**: so the eight page routes plus `src/pages/404.astro` carry `export const prerender = false`. Removing that line silently drops the page out of negotiation. Add a page → add its route to `pageMarkdown()` too, plus the 404's link list and `/llms.txt`. A 404 also answers in Markdown for any client that never named `text/html` (curl, crawlers), which is what makes the recovery body reachable without a custom Accept header.
 - **Sitemap:** `@astrojs/sitemap` can't see on-demand *dynamic* routes, so blog URLs come from `customPages` in `astro.config.mjs`, read straight from `src/content/blog/`. Static on-demand routes (`/`, `/about`, `/work`, `/blog`, `/contact`, `/privacy`) it still finds on its own.
-- **Trust anchors:** `/about`, `/contact`, `/privacy` are the pages agents check before recommending a site, so each needs real content (500+ characters) in the raw HTML. They are linked from the footer and ⌘K, deliberately not from the top nav. `/privacy` describes what the code actually does: update it when a processor (Kit, Databuddy, Cloudflare) is added or dropped, and bump the date on that page and `PRIVACY_UPDATED` in `src/lib/page-markdown.ts` together.
+- **Trust anchors:** `/about`, `/contact`, `/privacy` are the pages agents check before recommending a site, so each needs real content (500+ characters) in the raw HTML. They are linked from the footer and ⌘K, deliberately not from the top nav. `/privacy` describes what the code actually does: update it when a processor (Substack, Upstash, Cloudflare) is added or dropped, and update the shared `policyUpdated` date in `src/data/policies.ts`.
 - **Commits:** conventional style (`feat:`, `fix:`…), no AI attribution footer. Default branch is `main`; work happens on feature branches.
 
 ## Env vars (`.env` locally, Cloudflare dashboard in prod: see `.env.example`)
 
-- `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`: newsletter rate limit (runtime, via `cloudflare:workers` env).
-- `KIT_API_KEY` / `KIT_FORM_ID`: newsletter (runtime for `/api/subscribe` via `cloudflare:workers` env; `KIT_API_KEY` is also read from `.env` by `pnpm newsletter`). Without them the form replies "not configured".
+- `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`: article view counts (runtime, via `cloudflare:workers` env).
 - `MUX_TOKEN_ID` / `MUX_TOKEN_SECRET`: in `.env` but **unused by any code** (leftover). Safe to delete unless a Mux feature is planned.
 
 Never log secret values. There are no `console.*` statements anywhere in `src/`: keep it that way; if you must debug a secret, log only `Boolean(value)` and remove it before committing. `scripts/` is exempt: those are CLIs and are expected to print.

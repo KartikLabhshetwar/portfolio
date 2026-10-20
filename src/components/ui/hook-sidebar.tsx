@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ComponentProps } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "../../lib/utils";
+import { MinimalButton } from "../evil-buttons/minimal";
 
 const CORNER = 6;
 const DASH =
@@ -211,15 +212,21 @@ export function HookSidebar({
               {text}
             </a>
           ) : (
-            <button
+            <MinimalButton
+              arrow={false}
               key={`${index}-${text}`}
               {...rowProps}
               ref={setRef}
+              className={cn(
+                rowProps.className,
+                "h-auto justify-start text-neutral-50 hover:text-neutral-50",
+                isActive ? "ring-1 ring-neutral-50/40" : "opacity-70 hover:opacity-100",
+              )}
               type="button"
               aria-current={isActive ? "true" : undefined}
             >
               {text}
-            </button>
+            </MinimalButton>
           );
         })}
       </div>

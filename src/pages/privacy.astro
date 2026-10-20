@@ -6,7 +6,7 @@ import { policyUpdated, privacyPolicy } from '../data/policies';
 
 export const prerender = false;
 ---
-<Base title="Privacy | Kartik Labhshetwar" description="How this portfolio and newsletter handle email addresses, analytics, article views, cookies, and requests to delete data.">
+<Base title="Privacy | Kartik Labhshetwar" description="How this portfolio and its Substack newsletter handle subscriber information, article views, cookies, and privacy requests.">
   <PageHeader title="Privacy" description={`Last updated ${policyUpdated}.`} />
   <div class="page-content page-copy" set:html={Markdoc.renderers.html(Markdoc.transform(Markdoc.parse(privacyPolicy)))} />
 </Base>

@@ -1,0 +1,12 @@
+---
+import { profile } from '../data/profile';
+import { minimalButtonClassName } from './evil-buttons/minimal';
+import { cn } from '../lib/utils';
+---
+<section id="newsletter" aria-label="Newsletter subscription" class="w-full scroll-mt-8">
+  <a href={profile.newsletterUrl}
+    class={cn(minimalButtonClassName, "min-h-11 h-auto py-2")}>
+    Subscribe on Substack
+  </a>
+  <p class="mt-2 text-xs text-muted-foreground">Substack handles your subscription. Free to subscribe. Unsubscribe anytime.</p>
+</section>

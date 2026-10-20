@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { resolveEnv } from '../../../lib/env';
-import { getRedis, type RedisEnv } from '../../../lib/ratelimit';
+import { getRedis, type RedisEnv } from '../../../lib/redis';
 import { trackPostView } from '../../../lib/post-views';
 
 export const prerender = false;

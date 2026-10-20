@@ -139,67 +139,96 @@ body {
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  width: max-content;
-  max-width: calc(100% - 2rem);
-  padding: 0.375rem;
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-  background: var(--popover);
-  box-shadow: 0 4px 24px #0000000d, 0 1px 3px #0000000a;
+  isolation: isolate;
+  width: 304px;
+  max-width: calc(100% - 1rem);
+  height: 80px;
+  padding-inline: 12px;
+  align-items: center;
+}
+
+.page-dock::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset-inline: 40px;
+  height: 30px;
+  background: var(--muted);
 }
 
 .page-dock a {
   position: relative;
   display: flex;
-  min-height: 44px;
+  width: 56px;
+  height: 56px;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 0.625rem;
-  border-radius: 0.625rem;
-  color: var(--muted-foreground);
-  font-size: 0.75rem;
-  line-height: 1;
-}
-
-.page-dock a:is(:active, :focus-visible) { background: var(--muted); color: var(--foreground); }
-.page-dock a[aria-current] { color: var(--foreground); }
-.dock-active {
-  view-transition-name: dock-active;
-  position: absolute;
-  bottom: 0.25rem;
-  width: 3px;
-  height: 3px;
   border-radius: 50%;
-  background: currentColor;
+  color: var(--muted-foreground);
 }
 
+.page-dock a::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.page-dock a[href="/"] svg { fill: currentColor; stroke: none; }
+.page-dock a[aria-current] { color: var(--foreground); }
+.page-dock a[aria-current]::before { width: 76px; height: 76px; }
+.page-dock a:focus-visible { outline-offset: 10px; }
+
+.dock-selection {
+  view-transition-name: dock-selection;
+  position: absolute;
+  z-index: -1;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--background);
+}
+
+.dock-label {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--popover);
+  color: var(--foreground);
+  font-size: 12px;
+  line-height: 1.25;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+}
+
+.page-dock a:focus-visible .dock-label { opacity: 1; transform: none; }
 .theme-transition .page-dock,
-.theme-transition .dock-active { view-transition-name: none; }
-
-@media (max-width: 374px) {
-  .page-dock a { padding-inline: 0.375rem; font-size: 0.6875rem; }
-}
+.theme-transition .dock-selection { view-transition-name: none; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .page-dock a { transition: background-color 160ms, color 160ms; }
-  .dock-label { transition: transform 180ms ease-out; }
-  ::view-transition-group(dock-active) {
+  .page-dock a { transition: color 160ms; }
+  .dock-label { transition: opacity 160ms, transform 160ms; }
+  ::view-transition-group(dock-selection) {
     animation-duration: 240ms;
     animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .page-dock a:hover { background: var(--muted); color: var(--foreground); }
-}
-
-@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-  .page-dock a:hover .dock-label { transform: translateY(-1px); }
-  .page-dock a:active .dock-label { transform: none; }
+  .page-dock a:hover { color: var(--foreground); }
+  .page-dock a:hover .dock-label { opacity: 1; transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(dock-active) { animation: none; }
+  ::view-transition-group(dock-selection) { animation: none; }
 }
 
 .ink-label {
