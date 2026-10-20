@@ -18,6 +18,7 @@
     "@astrojs/markdoc": "^1.0.6",
     "@astrojs/react": "^5.0.7",
     "@fontsource-variable/geist": "^5.3.0",
+    "@hyperframes/studio": "^0.8.134",
     "@keystatic/astro": "^5.1.0",
     "@keystatic/core": "^0.5.50",
     "@markdoc/markdoc": "^0.5.9",
@@ -37,7 +38,8 @@
     "sharp": "^0.34.5",
     "tailwind-merge": "^3.6.0",
     "wrangler": "^4.105.0",
-    "yaml": "^2.9.0"
+    "yaml": "^2.9.0",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

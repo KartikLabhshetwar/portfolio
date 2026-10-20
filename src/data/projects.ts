@@ -3,9 +3,8 @@ export type Project = {
   title: string;
   kind: string;
   description: string;
-  // Headline metric shown as an accent on the card (downloads, DAU, "Latest").
-  // GitHub stars render automatically from the live count, so put non-star
-  // impact here. Leave undefined to let stars speak for themselves.
+  image?: string;
+  // Adoption figures supplied by the project owner.
   impact?: string;
   liveLink?: string;
   githubLink?: string;
@@ -15,15 +14,17 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: 'betterwispr',
+    image: '/projects/betterwispr.webp',
     title: 'BetterWispr',
     kind: 'macOS',
     description: 'Dictate into any Mac app with a hotkey. Speech is transcribed on-device and cleaned of filler words. An open-source Wispr Flow alternative.',
-    impact: 'Latest',
+    impact: '2,000+ downloads · 400+ GitHub stars',
     liveLink: 'https://betterwispr.com/',
     githubLink: 'https://github.com/opennookorg/betterwispr',
   },
   {
     id: 'usefulshelf',
+    image: '/projects/usefulshelf.webp',
     title: 'UsefulShelf',
     kind: 'web',
     description: 'Discover reviewed apps and websites by category, and list your own product for people and AI search tools to find.',
@@ -31,6 +32,7 @@ export const projects: Project[] = [
   },
   {
     id: 'gazeveil',
+    image: '/projects/gazeveil.webp',
     title: 'GazeVeil',
     kind: 'macOS',
     description: 'Protect your Mac screen with a native blur that responds to head movement from compatible AirPods.',
@@ -39,6 +41,7 @@ export const projects: Project[] = [
   },
   {
     id: 'qrtoolset',
+    image: '/projects/qrtoolset.webp',
     title: 'QR Toolset',
     kind: 'web',
     description: 'Generate and customize QR codes with ease. Perfect for sharing links, contact information, and more.',
@@ -48,24 +51,27 @@ export const projects: Project[] = [
   },
   {
     id: 'bettershot',
+    image: '/projects/bettershot.webp',
     title: 'BetterShot',
     kind: 'macOS',
     description: 'Capture, annotate, and polish screenshots in a native macOS app. An open-source CleanShot X alternative.',
-    impact: '15k+ downloads',
+    impact: '20k+ installs · 2,400 GitHub stars',
     liveLink: 'https://www.bettershot.site',
     githubLink: 'https://github.com/KartikLabhshetwar/better-shot',
   },
   {
     id: 'screenshot-studio',
+    image: '/projects/screenshot-studio.webp',
     title: 'Screenshot Studio',
     kind: 'web',
     description: 'Turn raw screenshots into share-ready visuals with polished backgrounds, precise spacing, and instant export. No account or watermark.',
-    impact: '20k+ monthly users',
+    impact: '30k monthly active users · 1,000+ GitHub stars',
     liveLink: 'https://screenshot-studio.com',
     githubLink: 'https://github.com/KartikLabhshetwar/screenshot-studio',
   },
   {
     id: 'zoomies',
+    image: '/projects/zoomies.webp',
     title: 'Zoomies',
     kind: 'macOS',
     description: 'See live CPU load as a tiny animal sprinting across your macOS menu bar. Native, playful, and lightweight.',
@@ -74,6 +80,7 @@ export const projects: Project[] = [
   },
   {
     id: 'oneurl',
+    image: '/projects/oneurl.webp',
     title: 'OneURL',
     kind: 'web',
     description: 'Put every link on one fast, shareable profile. Open source and self-hostable.',
@@ -83,6 +90,7 @@ export const projects: Project[] = [
   },
   {
     id: 'lazycommit',
+    image: '/projects/lazycommit.webp',
     title: 'Lazy Commit',
     kind: 'package',
     description: 'Write clear Git commit messages from the CLI with AI, based on the changes you actually made.',
@@ -92,6 +100,7 @@ export const projects: Project[] = [
   },
   {
     id: 'mind-mentor',
+    image: '/projects/mind-mentor.webp',
     title: 'Mind Mentor AI',
     kind: 'web',
     description: 'Study with an AI tutor that adapts each explanation to what you know and where you are stuck.',
@@ -101,6 +110,7 @@ export const projects: Project[] = [
   },
   {
     id: 'foliox',
+    image: '/projects/foliox.webp',
     title: 'FolioX',
     kind: 'web',
     description: 'Turn a GitHub profile into a polished developer portfolio in seconds.',
@@ -109,6 +119,7 @@ export const projects: Project[] = [
   },
   {
     id: 'doable',
+    image: '/projects/doable.webp',
     title: 'Doable',
     kind: 'web',
     description: 'Turn a prompt into organized team tasks, then plan, assign, and ship the work.',
@@ -117,6 +128,7 @@ export const projects: Project[] = [
   },
   {
     id: 'mercurius',
+    image: '/projects/mercurius.webp',
     title: 'Mercurius',
     kind: 'web',
     description: 'Start an anonymous chat room that disappears after 10 minutes. No account and no history.',
@@ -125,6 +137,7 @@ export const projects: Project[] = [
   },
   {
     id: 'quotick',
+    image: '/projects/quotick.webp',
     title: 'Quotick',
     kind: 'extension',
     description: 'Convert quotes to backticks the moment you type a template literal in VS Code.',
@@ -134,6 +147,7 @@ export const projects: Project[] = [
   },
   {
     id: 'linkpreview',
+    image: '/projects/linkpreview.webp',
     title: 'Link Preview',
     kind: 'web',
     description: 'See how a link will look on X, Slack, Discord, LinkedIn, and WhatsApp before you share it.',
@@ -142,6 +156,7 @@ export const projects: Project[] = [
   },
   {
     id: 'readmelingo',
+    image: '/projects/readmelingo.webp',
     title: 'ReadMeLingo',
     kind: 'CLI',
     description: "Translate a repository's README and docs into more than 40 languages from the CLI.",
@@ -150,6 +165,7 @@ export const projects: Project[] = [
   },
   {
     id: 'fleethq',
+    image: '/projects/fleethq.webp',
     title: 'FleetHQ',
     kind: 'web',
     description: 'Plan drone missions, monitor fleets in real time, and control access across a team.',
@@ -158,6 +174,7 @@ export const projects: Project[] = [
   },
   {
     id: 'rebatr',
+    image: '/projects/rebatr.webp',
     title: 'Rebatr',
     kind: 'web',
     description: 'Put more than 100 AI models into live debates and compare their logic, evidence, and persuasion.',
@@ -166,6 +183,7 @@ export const projects: Project[] = [
   },
   {
     id: 'donezo',
+    image: '/projects/donezo.webp',
     title: 'Donezo',
     kind: 'web',
     description: 'Turn a week of completed work into a concise review delivered to your inbox.',
@@ -174,6 +192,7 @@ export const projects: Project[] = [
   },
   {
     id: 'overwhelm',
+    image: '/projects/overwhelm.webp',
     title: 'Overwhelm Breaker',
     kind: 'web',
     description: 'Turn an overwhelming project into small tasks and focused work sessions.',
@@ -182,6 +201,7 @@ export const projects: Project[] = [
   },
   {
     id: 'satya-check',
+    image: '/projects/satya-check.webp',
     title: 'SatyaCheck',
     kind: 'web',
     description: 'Check claims in your browser and trace the evidence before you share them.',
@@ -190,6 +210,7 @@ export const projects: Project[] = [
   },
   {
     id: 'gocache',
+    image: '/projects/gocache.webp',
     title: 'Gocache',
     kind: 'Go',
     description: 'A fast in-memory cache in Go, built to understand how Redis works under the hood.',
@@ -197,6 +218,7 @@ export const projects: Project[] = [
   },
   {
     id: 'learnx',
+    image: '/projects/learnx.webp',
     title: 'LearnX',
     kind: 'web',
     description: 'A course marketplace that connects educators and learners from enrollment through delivery.',

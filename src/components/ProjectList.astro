@@ -1,22 +1,42 @@
 ---
 import { projects } from '../data/projects';
 ---
-<ul class="-mx-3 mt-8 flex flex-col gap-1" aria-label="Projects">
+<ul class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2" aria-label="Projects">
   {projects.map((project) => (
-    <li>
+    <li class="min-w-0">
       <a
         href={project.liveLink ?? project.githubLink}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`${project.title}: ${project.description}`}
-        class="group flex cursor-pointer items-center gap-3 rounded-full px-3 py-2 transition-colors duration-200 hover:bg-muted active:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        class="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors duration-200 hover:border-muted-foreground/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
       >
-        <span class="min-w-0 shrink break-words text-foreground sm:truncate">{project.title}</span>
-        <span class="min-w-4 flex-1 border-t border-border transition-colors group-hover:border-foreground/20" aria-hidden="true"></span>
-        <span class="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground">
-          {project.kind}
-          <span aria-hidden="true" class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">↗</span>
-        </span>
+        <div class="aspect-video overflow-hidden border-b border-border bg-muted">
+          {project.image ? (
+            <img
+              src={project.image}
+              alt=""
+              width="800"
+              height="450"
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-contain"
+            />
+          ) : (
+            <div class="flex h-full items-center justify-center p-6" aria-hidden="true">
+              <span class="text-center text-2xl font-medium tracking-tight text-muted-foreground">{project.title}</span>
+            </div>
+          )}
+        </div>
+        <div class="flex flex-1 flex-col gap-2 p-5">
+          <span class="text-xs text-muted-foreground">{project.kind}</span>
+          <h2 class="flex items-start justify-between gap-3 text-base font-medium leading-6 text-foreground">
+            {project.title}
+            <span aria-hidden="true" class="text-muted-foreground transition-colors group-hover:text-foreground group-focus-visible:text-foreground">↗</span>
+          </h2>
+          <p class="text-sm leading-6 text-muted-foreground">{project.description}</p>
+          {project.impact && <p class="mt-auto pt-2 text-xs leading-5 text-muted-foreground">{project.impact}</p>}
+          <span class="sr-only">Opens in a new tab</span>
+        </div>
       </a>
     </li>
   ))}

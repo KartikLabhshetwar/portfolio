@@ -13,15 +13,13 @@ import { serializeJsonLd, structuredData } from '../lib/structured-data';
 // `schemaType`/`datePublished` shape the page's JSON-LD node.
 const {
   title = 'Kartik Labhshetwar · Software Engineer',
-  description = 'Kartik Labhshetwar builds memory infrastructure for AI agents at Mem0 and ships developer tools people keep using.',
+  description = profile.bio,
   image = '/og-card.png',
   ogType = 'website',
   toc = 'main h2',
   schemaType,
   datePublished,
   wide = false,
-  backHref,
-  backLabel = 'Back',
   noindex = false,
 } = Astro.props;
 const siteName = 'Kartik Labhshetwar';
@@ -34,20 +32,6 @@ const ogImage = new URL(image, Astro.site ?? Astro.url).href;
 // worksFor comes from the experience data rather than a second copy of it, so
 // a job change updates the schema too.
 const current = experience.find((e) => e.isCurrentEmployer);
-const jsonLd = serializeJsonLd(
-  structuredData(
-    (Astro.site ?? Astro.url).toString(),
-    { ...profile, role: current?.positions[0]?.title ?? profile.role, employer: current && { name: current.companyName, url: current.companyWebsite } },
-    {
-      url: canonical,
-      title,
-      description,
-      image: ogImage,
-      type: schemaType,
-      datePublished,
-    },
-  ),
-);
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title));
 const supportingPages = [
@@ -66,6 +50,26 @@ const navigation = [
   { href: '/blog', label: 'Writing' },
   { href: '/newsletter', label: 'Subscribe' },
 ];
+const breadcrumbs = pathname === '/' || noindex ? [] : [
+  navigation[0],
+  ...(pathname.startsWith('/blog/') ? [navigation.find((link) => link.href === '/blog')!] : []),
+  { href: pathname, label: [...navigation, ...supportingPages].find((link) => link.href === pathname)?.label ?? title.split(' | ')[0] },
+];
+const jsonLd = serializeJsonLd(
+  structuredData(
+    (Astro.site ?? Astro.url).toString(),
+    { ...profile, role: current?.positions[0]?.title ?? profile.role, employer: current && { name: current.companyName, url: current.companyWebsite } },
+    {
+      url: canonical,
+      title,
+      description,
+      image: ogImage,
+      type: schemaType,
+      datePublished,
+      breadcrumbs,
+    },
+  ),
+);
 const commandItems = [
   ...navigation.map((l) => ({ ...l, group: 'Pages' })),
   ...supportingPages.map((l) => ({ label: l.label, href: l.href, group: 'Pages' })),
@@ -176,45 +180,28 @@ const commandItems = [
     ></script>
   </head>
   <body class="min-h-screen bg-background text-foreground">
-    <main class:list={["mx-auto flex min-h-screen grow flex-col px-5 pt-4 pb-10 sm:px-4 sm:pt-6 sm:pb-20", wide ? "max-w-2xl gap-8" : "max-w-xl"]}>
+    <main class:list={["mx-auto flex min-h-screen grow flex-col px-5 pt-8 pb-32 sm:px-4 sm:pt-16", wide ? "max-w-2xl" : "max-w-lg"]}>
       {toc && <div class="fixed top-1/2 right-2 z-40 hidden -translate-y-1/2 xl:block">
         <!-- client:idle, not client:visible: the island renders empty until headings load,
              so a visibility trigger would never fire (zero-size element never intersects). -->
         <AutoTOCMinimap client:idle selector={toc} />
       </div>}
-      <details class:list={["mobile-menu sm:hidden", { 'mb-5': !wide }]}>
-        <summary class="flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
-          </svg>
-          Menu
-        </summary>
-        <nav aria-label="Main navigation" class="mt-2 grid gap-1 text-sm text-muted-foreground">
-          {navigation.map((link) => (
-            <a
-              href={link.href}
-              data-astro-prefetch="viewport"
-              aria-current={pathname === link.href ? 'page' : link.href === '/blog' && pathname.startsWith('/blog/') ? 'location' : undefined}
-              class="flex min-h-11 items-center rounded-lg px-3 hover:bg-muted hover:text-foreground aria-[current]:bg-muted aria-[current]:text-foreground"
-            >{link.label}</a>
-          ))}
+      {breadcrumbs.length > 0 && (
+        <nav aria-label="Breadcrumb" class="mb-7 text-xs leading-6 text-muted-foreground sm:mb-9">
+          <ol class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            {breadcrumbs.map((crumb, index) => (
+              <li class="inline-flex min-w-0 items-baseline gap-2">
+                {index > 0 && <span aria-hidden="true" class="text-muted-foreground/60">/</span>}
+                {index === breadcrumbs.length - 1
+                  ? <span aria-current="page" class="break-words text-foreground">{crumb.label}</span>
+                  : <a href={crumb.href} class="hover:text-foreground hover:underline">{crumb.label}</a>}
+              </li>
+            ))}
+          </ol>
         </nav>
-      </details>
-      <nav aria-label="Main navigation" class:list={["primary-nav -ml-2 hidden min-w-0 flex-wrap items-center gap-3 text-sm text-muted-foreground sm:flex", { 'mb-6': !wide }]}>
-        {navigation.map((link) => (
-          <a
-            href={link.href}
-            data-astro-prefetch="viewport"
-            aria-current={pathname === link.href ? 'page' : link.href === '/blog' && pathname.startsWith('/blog/') ? 'location' : undefined}
-            class="nav-link inline-flex min-h-10 items-center rounded-full hover:text-foreground"
-          ><span class="nav-label rounded-full px-0.5 py-1 sm:px-2">{link.label}</span></a>
-        ))}
-      </nav>
-      {backHref && backHref !== '/' && (
-        <a href={backHref} class="text-sm text-muted-foreground hover:text-foreground">{backLabel}</a>
       )}
       <slot />
-      <footer class="mt-auto flex flex-row flex-wrap gap-4 pt-12 text-sm text-muted-foreground">
+      <footer class="mt-8 flex flex-col gap-2 border-t border-border pt-4 text-sm text-muted-foreground sm:mt-10">
         <nav aria-label="Elsewhere" class="flex flex-wrap items-center gap-x-4 gap-y-2">
           <a href={email.href} class="hover:text-foreground hover:underline">Email</a>
           <a href={meeting.href} target="_blank" rel="noopener noreferrer" class="hover:text-foreground hover:underline">Book a meet</a>
@@ -224,6 +211,11 @@ const commandItems = [
         </nav>
       </footer>
     </main>
+    <nav aria-label="Main navigation" class="page-dock">
+      {navigation.map((link) => (
+        <a href={link.href} aria-current={pathname === link.href ? 'page' : link.href === '/blog' && pathname.startsWith('/blog/') ? 'location' : undefined}>{link.label}</a>
+      ))}
+    </nav>
     <CommandMenu client:idle items={commandItems} transition:persist />
   </body>
 </html>

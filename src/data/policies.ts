@@ -1,5 +1,5 @@
 // Shared by the HTML pages and their Markdown representations.
-export const policyUpdated = '7 September 2026';
+export const policyUpdated = '20 October 2026';
 
 export const privacyPolicy = `## This site
 
@@ -25,9 +25,9 @@ Your theme preference is stored in your browser's local storage. Clearing site d
 
 Cloudflare hosts the site and processes requests, including IP addresses and request metadata. When newsletter rate limiting is enabled, Upstash stores an IP-based attempt counter with a ten-minute expiry to limit signup abuse. Hosting and service providers apply their own retention practices to operational records.
 
-## GitHub and external services
+## External services
 
-The activity chart loads public GitHub data through this site's server. Some avatars load directly from GitHub, which receives normal request metadata. Following links to GitHub, Cal.com, social profiles, or project sites takes you to services with their own privacy policies.
+Following links to GitHub, Cal.com, social profiles, or project sites takes you to services with their own privacy policies.
 
 ## Your choices
 

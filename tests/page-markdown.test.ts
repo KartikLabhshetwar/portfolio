@@ -109,9 +109,11 @@ describe('pageMarkdown', () => {
   it('renders the privacy page covering every processor the site uses', () => {
     const md = pageMarkdown('/privacy', site)!;
     expect(md).toContain('# Privacy');
-    for (const processor of ['Kit', 'Databuddy', 'Upstash', 'GitHub', 'Cloudflare']) {
+    for (const processor of ['Kit', 'Databuddy', 'Upstash', 'Cloudflare']) {
       expect(md).toContain(processor);
     }
+    expect(md).not.toContain('activity chart');
+    expect(md).not.toContain('avatars load directly from GitHub');
     expect(md).toContain(`${base}/contact`);
   });
 
@@ -124,7 +126,7 @@ describe('pageMarkdown', () => {
   it('serves newsletter and current policies as Markdown', () => {
     expect(pageMarkdown('/newsletter', site)).toContain(`${base}/api/subscribe`);
     expect(pageMarkdown('/terms', site)).toContain('# Terms and conditions');
-    expect(pageMarkdown('/privacy', site)).toContain('7 September 2026');
+    expect(pageMarkdown('/privacy', site)).toContain('20 October 2026');
     expect(pageMarkdown('/privacy', site)).toContain('does not automatically delete');
     expect(pageMarkdown('/privacy', site)).toContain('no automatic expiry');
   });

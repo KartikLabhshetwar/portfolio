@@ -2,8 +2,6 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import BlogCard from '../components/BlogCard.astro';
-import GitHubActivity from '../components/ui/github-activity';
-import CareerLine from '../components/CareerLine.astro';
 import { profile } from '../data/profile';
 import { getCollection } from 'astro:content';
 
@@ -14,15 +12,9 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime() || a.data.title.localeCompare(b.data.title)).slice(0, 4);
 ---
 <Base schemaType="ProfilePage">
-  <link slot="head" rel="preload" href="/api/github/KartikLabhshetwar?resource=calendar" as="fetch" crossorigin="anonymous" />
   <PageHeader title={profile.name} description={profile.tagline} />
-  <CareerLine />
 
-  <div class="py-8 sm:py-10 lg:py-12">
-    <GitHubActivity client:load username="KartikLabhshetwar" />
-  </div>
-
-  <section class="flex flex-col gap-4">
+  <section class="mt-8 flex flex-col gap-4 sm:mt-10">
     <div class="flex items-baseline justify-between gap-4">
       <h2 class="text-base font-normal tracking-tight">Writing</h2>
       <a href="/blog" class="ink-link inline-flex min-h-6 items-center text-sm text-muted-foreground"><span class="ink-label">All writing</span></a>

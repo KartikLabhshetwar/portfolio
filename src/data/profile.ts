@@ -3,7 +3,7 @@ export const profile = {
   role: 'Member of Technical Staff at Mem0',
   tagline: 'I ship things people love using.',
   newsletter: "The Builder's Loop",
-  bio: 'I build memory infrastructure for AI agents at Mem0 and turn recurring problems into developer tools people keep using.',
+  bio: 'I build open-source tools for screenshots, voice typing, and the small things that make a workday easier.',
   location: 'India',
   // Topics this site is an authority on, for the Person node's knowsAbout.
   knowsAbout: [

@@ -20,6 +20,7 @@ export type PageSchema = {
   image: string;
   type?: 'WebPage' | 'CollectionPage' | 'BlogPosting' | 'ProfilePage' | 'ContactPage' | 'AboutPage';
   datePublished?: string;
+  breadcrumbs?: { href: string; label: string }[];
 };
 
 export function structuredData(site: string, profile: SchemaProfile, page: PageSchema) {
@@ -68,6 +69,7 @@ export function structuredData(site: string, profile: SchemaProfile, page: PageS
     author: { '@id': personId },
   };
   if (type === 'BlogPosting') {
+    node['@id'] = `${page.url}#article`;
     node.publisher = { '@id': personId };
     node.mainEntityOfPage = { '@id': page.url };
   } else {
@@ -81,7 +83,33 @@ export function structuredData(site: string, profile: SchemaProfile, page: PageS
     node.dateModified = page.datePublished;
   }
 
-  return { '@context': 'https://schema.org', '@graph': [person, website, node] };
+  const graph = [person, website, node];
+  if (page.breadcrumbs?.length) {
+    const breadcrumbId = `${page.url}#breadcrumb`;
+    const webPage = type === 'BlogPosting' ? {
+      '@type': 'WebPage',
+      '@id': page.url,
+      url: page.url,
+      name: page.title,
+      isPartOf: { '@id': siteId },
+      mainEntity: { '@id': node['@id'] },
+      breadcrumb: { '@id': breadcrumbId },
+    } : node;
+    webPage.breadcrumb = { '@id': breadcrumbId };
+    if (type === 'BlogPosting') graph.push(webPage);
+    graph.push({
+      '@type': 'BreadcrumbList',
+      '@id': breadcrumbId,
+      itemListElement: page.breadcrumbs.map((crumb, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: crumb.label,
+        item: new URL(crumb.href, `${base}/`).href,
+      })),
+    });
+  }
+
+  return { '@context': 'https://schema.org', '@graph': graph };
 }
 
 /** JSON safe to drop inside a <script> tag. */

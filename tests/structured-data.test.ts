@@ -105,6 +105,46 @@ describe('structuredData', () => {
     expect(node.isPartOf['@id']).toBe(`${base}/#website`);
   });
 
+  it('describes the visible breadcrumb trail with absolute URLs and ordered positions', () => {
+    const graph = structuredData(base, profile, {
+      ...page, url: `${base}/projects`, type: 'CollectionPage',
+      breadcrumbs: [{ href: '/', label: 'Home' }, { href: '/projects', label: 'Projects' }],
+    })['@graph'];
+    expect(nodeOf(graph, 'BreadcrumbList').itemListElement).toEqual([
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${base}/` },
+      { '@type': 'ListItem', position: 2, name: 'Projects', item: `${base}/projects` },
+    ]);
+    expect(nodeOf(graph, 'CollectionPage').breadcrumb).toEqual({ '@id': `${base}/projects#breadcrumb` });
+  });
+
+  it('connects a blog article to a WebPage carrying its parent and title breadcrumb trail', () => {
+    const url = `${base}/blog/first`;
+    const graph = structuredData(base, profile, {
+      ...page, url, title: 'First post', type: 'BlogPosting',
+      breadcrumbs: [{ href: '/', label: 'Home' }, { href: '/blog', label: 'Writing' }, { href: '/blog/first', label: 'First post' }],
+    })['@graph'];
+    const article = nodeOf(graph, 'BlogPosting');
+    const webPage = nodeOf(graph, 'WebPage');
+    expect(article['@id']).toBe(`${url}#article`);
+    expect(article.mainEntityOfPage).toEqual({ '@id': webPage['@id'] });
+    expect(article.breadcrumb).toBeUndefined();
+    expect(webPage.mainEntity).toEqual({ '@id': article['@id'] });
+    expect(webPage.breadcrumb).toEqual({ '@id': `${url}#breadcrumb` });
+    expect(nodeOf(graph, 'BreadcrumbList').itemListElement).toEqual([
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${base}/` },
+      { '@type': 'ListItem', position: 2, name: 'Writing', item: `${base}/blog` },
+      { '@type': 'ListItem', position: 3, name: 'First post', item: url },
+    ]);
+  });
+
+  it('omits breadcrumbs when there is no trail, including the home page', () => {
+    for (const breadcrumbs of [undefined, []]) {
+      const graph = structuredData(base, profile, { ...page, breadcrumbs })['@graph'];
+      expect(nodeOf(graph, 'BreadcrumbList')).toBeUndefined();
+      expect(nodeOf(graph, 'WebPage').breadcrumb).toBeUndefined();
+    }
+  });
+
   it('tolerates a trailing slash on the site url', () => {
     const person = nodeOf(structuredData(`${base}/`, profile, page)['@graph'], 'Person') as any;
     expect(person['@id']).toBe(`${base}/#person`);

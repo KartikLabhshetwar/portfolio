@@ -26,11 +26,10 @@ const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', mo
   schemaType="BlogPosting"
   datePublished={post.data.pubDate.toISOString()}
   wide
-  backHref="/blog"
 >
-  <PageHeader title={post.data.title} description={post.data.description} href="/blog" compact />
+  <PageHeader title={post.data.title} description={post.data.description} compact />
 
-  <article>
+  <article class="mt-10 sm:mt-12">
     <div id="prose-content" class="article-prose">
       <Content />
     </div>

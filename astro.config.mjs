@@ -53,6 +53,7 @@ function dedupeReactInWorkerd() {
 export default defineConfig({
   site: SITE,
   trailingSlash: 'never',
+  devToolbar: { enabled: false },
   redirects: { '/work': { destination: '/experience', status: 301 } },
   prefetch: { prefetchAll: true },
   adapter: cloudflare({ imageService: 'compile' }),
