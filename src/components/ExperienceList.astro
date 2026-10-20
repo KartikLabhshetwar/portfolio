@@ -6,16 +6,11 @@ const formatDate = (value: string) => {
   const [part, year] = value.split('.');
   return year ? month.format(new Date(Date.UTC(Number(year), Number(part) - 1))) : value;
 };
-const companyPeriod = (positions: (typeof experience)[number]['positions']) => {
-  const first = positions.at(-1)!;
-  const current = positions.find((position) => !position.employmentPeriod.end);
-  return `${formatDate(first.employmentPeriod.start)} to ${current ? 'Present' : formatDate(positions[0].employmentPeriod.end!)}`;
-};
 ---
 <section id="experience" aria-label="Work experience" class="scroll-mt-16">
-  <ul class="-mx-3 flex flex-col gap-5">
+  <ul class="-mx-3 -my-2 flex flex-col gap-8">
     {experience.map((company) => (
-      <li>
+      <li class="experience-company" data-company={company.id}>
         <a
           href={company.companyWebsite}
           target="_blank"
@@ -25,17 +20,13 @@ const companyPeriod = (positions: (typeof experience)[number]['positions']) => {
         >
           <img src={company.companyLogo} alt="" class="size-7 rounded-full" />
           <div class="min-w-0 flex-1">
-            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
               <h2 class="text-base font-normal tracking-tight text-foreground">{company.companyName}</h2>
-              <span class="border-t border-border transition-colors group-hover:border-foreground/20" aria-hidden="true"></span>
-              <span class="flex items-center gap-1.5 text-xs tabular-nums text-muted-foreground">
-                {companyPeriod(company.positions)}
-                <span aria-hidden="true" class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">↗</span>
-              </span>
+              <span aria-hidden="true" class="company-arrow text-sm opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">↗</span>
             </div>
-            <ul class="mt-2 flex flex-col gap-1.5">
+            <ul class="mt-3">
               {company.positions.map((position) => (
-                <li class="text-sm leading-6">
+                <li class:list={["experience-role text-sm leading-6", { 'current-role': !position.employmentPeriod.end }]}>
                   <div class="flex flex-col justify-between gap-x-4 sm:flex-row">
                     <span class="text-foreground/80">{position.title}</span>
                     <span class="shrink-0 text-xs tabular-nums text-muted-foreground">
@@ -51,3 +42,41 @@ const companyPeriod = (positions: (typeof experience)[number]['positions']) => {
     ))}
   </ul>
 </section>
+
+<style>
+  .experience-company { --branch-color: var(--signal); }
+  .experience-company[data-company="mem0"] { --branch-color: #8b5cf6; }
+  .experience-company[data-company="turboml"] { --branch-color: #d95a37; }
+  :global(.dark) .experience-company[data-company="mem0"] { --branch-color: #b9a0ff; }
+  :global(.dark) .experience-company[data-company="turboml"] { --branch-color: #ff9a76; }
+  .company-arrow { color: var(--branch-color); }
+
+  .experience-role {
+    position: relative;
+    padding-left: 1.5rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .experience-role:last-child { padding-bottom: 0; }
+
+  .experience-role:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-left: 1px dashed color-mix(in srgb, var(--branch-color) 50%, var(--border));
+  }
+
+  .experience-role::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1rem;
+    height: 0.75rem;
+    border-left: 1px dashed var(--branch-color);
+    border-bottom: 1px dashed var(--branch-color);
+    border-bottom-left-radius: 0.5rem;
+  }
+
+  .experience-role:not(.current-role)::after { opacity: 0.65; }
+</style>

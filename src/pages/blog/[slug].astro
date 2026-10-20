@@ -27,9 +27,9 @@ const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', mo
   datePublished={post.data.pubDate.toISOString()}
   wide
 >
-  <PageHeader title={post.data.title} description={post.data.description} compact />
+  <PageHeader title={post.data.title} description={post.data.description} />
 
-  <article class="mt-10 sm:mt-12">
+  <article class="page-content">
     <div id="prose-content" class="article-prose">
       <Content />
     </div>

@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { ClientRouter } from 'astro:transitions';
+import { ClientRouter, fade } from 'astro:transitions';
 import CommandMenu from '../components/CommandMenu.tsx';
 import { AutoTOCMinimap } from '../components/auto-toc-minimap';
 import { profile } from '../data/profile';
@@ -90,7 +90,7 @@ const commandItems = [
 ];
 ---
 <!doctype html>
-<html lang="en" transition:animate="none">
+<html lang="en" transition:name="root" transition:animate={fade({ duration: '0.18s' })}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -180,7 +180,7 @@ const commandItems = [
     ></script>
   </head>
   <body class="min-h-screen bg-background text-foreground">
-    <main class:list={["mx-auto flex min-h-screen grow flex-col px-5 pt-8 pb-32 sm:px-4 sm:pt-16", wide ? "max-w-2xl" : "max-w-lg"]}>
+    <main class:list={["mx-auto flex min-h-svh w-full grow flex-col px-5 pt-8 pb-32 sm:px-4 sm:pt-16", wide ? "max-w-2xl" : "max-w-lg", { 'justify-center': pathname === '/' }]}>
       {toc && <div class="fixed top-1/2 right-2 z-40 hidden -translate-y-1/2 xl:block">
         <!-- client:idle, not client:visible: the island renders empty until headings load,
              so a visibility trigger would never fire (zero-size element never intersects). -->
@@ -211,10 +211,16 @@ const commandItems = [
         </nav>
       </footer>
     </main>
-    <nav aria-label="Main navigation" class="page-dock">
-      {navigation.map((link) => (
-        <a href={link.href} aria-current={pathname === link.href ? 'page' : link.href === '/blog' && pathname.startsWith('/blog/') ? 'location' : undefined}>{link.label}</a>
-      ))}
+    <nav aria-label="Main navigation" class="page-dock" transition:name="page-dock" transition:animate="none">
+      {navigation.map((link) => {
+        const current = pathname === link.href ? 'page' : link.href === '/blog' && pathname.startsWith('/blog/') ? 'location' : undefined;
+        return (
+          <a href={link.href} aria-current={current}>
+            <span class="dock-label">{link.label}</span>
+            {current && <span class="dock-active" aria-hidden="true" />}
+          </a>
+        );
+      })}
     </nav>
     <CommandMenu client:idle items={commandItems} transition:persist />
   </body>

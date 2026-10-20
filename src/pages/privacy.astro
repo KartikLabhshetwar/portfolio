@@ -8,5 +8,5 @@ export const prerender = false;
 ---
 <Base title="Privacy | Kartik Labhshetwar" description="How this portfolio and newsletter handle email addresses, analytics, article views, cookies, and requests to delete data.">
   <PageHeader title="Privacy" description={`Last updated ${policyUpdated}.`} />
-  <div class="page-copy" set:html={Markdoc.renderers.html(Markdoc.transform(Markdoc.parse(privacyPolicy)))} />
+  <div class="page-content page-copy" set:html={Markdoc.renderers.html(Markdoc.transform(Markdoc.parse(privacyPolicy)))} />
 </Base>
