@@ -85,6 +85,26 @@ describe('pageMarkdown', () => {
     expect(md).toContain('## Body');
   });
 
+  it('links to two other posts after an article without recommending the current post', () => {
+    const posts = [...site.posts,
+      { ...site.posts[1], slug: 'third', title: 'Third' },
+      { ...site.posts[1], slug: 'fourth', title: 'Fourth' },
+    ];
+    const md = pageMarkdown('/blog/first', { ...site, posts })!;
+    const reading = md.split('## Keep reading')[1];
+    expect(reading).toContain(`[Second](${base}/blog/second)`);
+    expect(reading).toContain(`[Third](${base}/blog/third)`);
+    expect(reading).not.toContain(`${base}/blog/first`);
+    expect(reading).not.toContain(`${base}/blog/fourth`);
+    expect(reading).toContain(`[All writing](${base}/blog)`);
+  });
+
+  it('keeps the writing index reachable when there are no other posts', () => {
+    const md = pageMarkdown('/blog/first', { ...site, posts: [site.posts[0]] })!;
+    expect(md).not.toContain('## Keep reading');
+    expect(md).toContain(`[All writing](${base}/blog)`);
+  });
+
   it('renders the about page as a trust anchor', () => {
     const md = pageMarkdown('/about', site)!;
     expect(md).toContain('# About');

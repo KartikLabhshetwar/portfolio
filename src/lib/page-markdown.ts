@@ -123,6 +123,7 @@ ${site.posts.map((p) => postLine(site.base, p)).join('\n')}
 }
 
 function blogPost(site: MarkdownSite, post: MarkdownPost): string {
+  const otherPosts = site.posts.filter((entry) => entry.slug !== post.slug).slice(0, 2);
   return `# ${post.title}
 
 > ${post.description}
@@ -130,6 +131,10 @@ function blogPost(site: MarkdownSite, post: MarkdownPost): string {
 ${post.pubDate.toISOString().slice(0, 10)} · ${site.base}/blog/${post.slug} · by ${site.profile.name}
 
 ${post.body.trim()}
+
+${otherPosts.length ? `## Keep reading\n\n${otherPosts.map((entry) => postLine(site.base, entry)).join('\n')}\n\n` : ''}[All writing](${site.base}/blog)
+
+[Get the next post by email](${site.base}/newsletter)
 `;
 }
 

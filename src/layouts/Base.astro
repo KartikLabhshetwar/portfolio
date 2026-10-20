@@ -12,9 +12,9 @@ import { serializeJsonLd, structuredData } from '../lib/structured-data';
 // `image` is the social card; pages (e.g. blog posts) can pass their own.
 // `schemaType`/`datePublished` shape the page's JSON-LD node.
 const {
-  title = 'Kartik Labhshetwar · Software Engineer',
-  description = profile.bio,
-  image = '/og-card.png',
+  title = profile.name,
+  description = 'Open-source apps, developer tools, and notes on building software.',
+  image = '/og-profile.png',
   ogType = 'website',
   toc = 'main h2',
   schemaType,
@@ -22,7 +22,7 @@ const {
   wide = false,
   noindex = false,
 } = Astro.props;
-const siteName = 'Kartik Labhshetwar';
+const siteName = profile.name;
 // Always point canonical at the configured production domain (Astro.site),
 // so a workers.dev or any mirror host can't compete for ranking.
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
