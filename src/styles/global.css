@@ -211,7 +211,15 @@ body {
 
 .page-dock a:focus-visible .dock-label { opacity: 1; transform: none; }
 .theme-transition .page-dock,
-.theme-transition .dock-selection { view-transition-name: none; }
+.theme-transition .dock-selection,
+.theme-transition .page-dock svg { view-transition-name: none; }
+
+::view-transition-group(dock-selection) { z-index: 1; }
+::view-transition-group(dock-icon-home),
+::view-transition-group(dock-icon-experience),
+::view-transition-group(dock-icon-projects),
+::view-transition-group(dock-icon-writing),
+::view-transition-group(dock-icon-subscribe) { z-index: 2; }
 
 @media (prefers-reduced-motion: no-preference) {
   .page-dock a { transition: color 160ms; }

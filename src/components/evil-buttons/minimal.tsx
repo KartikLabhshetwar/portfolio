@@ -8,10 +8,10 @@ export interface MinimalButtonProps
 }
 
 export const minimalButtonClassName = cn(
-  "group/minimal inline-flex h-9 cursor-pointer items-center justify-center gap-2 rounded-[10px] px-4 text-sm font-medium text-neutral-50 outline-none select-none",
-  "bg-linear-to-b from-[#353535] to-[#272727] shadow-[0_0_0_1px_rgb(0_0_0/0.9),inset_0_0_0_1px_rgb(255_255_255/0.06),inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(0_0_0/0.25),0_4px_12px_-4px_rgb(0_0_0/0.4)]",
-  "motion-reduce:transition-none transition-[scale,filter,box-shadow] duration-300 ease-[cubic-bezier(0.34,1.35,0.64,1)] not-disabled:hover:brightness-110",
-  "not-disabled:active:scale-[0.97] not-disabled:active:brightness-95 not-disabled:active:duration-100 not-disabled:active:ease-out not-disabled:active:shadow-[0_0_0_1px_rgb(0_0_0/0.9),inset_0_0_0_1px_rgb(255_255_255/0.05),inset_0_1px_0_rgb(255_255_255/0.08),0_0_1px_rgb(0_0_0/0.2),0_1px_3px_-2px_rgb(0_0_0/0.3)] motion-reduce:not-disabled:active:scale-100",
+  "group/minimal inline-flex h-9 cursor-pointer items-center justify-center gap-2 rounded-[10px] px-4 text-sm font-medium text-foreground dark:text-neutral-50 outline-none select-none",
+  "bg-linear-to-b from-white to-[#f0efed] shadow-[0_0_0_1px_rgb(0_0_0/0.12),inset_0_1px_0_rgb(255_255_255/0.9),0_1px_2px_rgb(0_0_0/0.06),0_4px_12px_-4px_rgb(0_0_0/0.1)] dark:from-[#353535] dark:to-[#272727] dark:shadow-[0_0_0_1px_rgb(0_0_0/0.9),inset_0_0_0_1px_rgb(255_255_255/0.06),inset_0_1px_0_rgb(255_255_255/0.14),0_1px_2px_rgb(0_0_0/0.25),0_4px_12px_-4px_rgb(0_0_0/0.4)]",
+  "motion-reduce:transition-none transition-[scale,filter,box-shadow] duration-300 ease-[cubic-bezier(0.34,1.35,0.64,1)] not-disabled:hover:brightness-[0.98] dark:not-disabled:hover:brightness-110",
+  "not-disabled:active:scale-[0.97] not-disabled:active:brightness-95 not-disabled:active:duration-100 not-disabled:active:ease-out not-disabled:active:shadow-[0_0_0_1px_rgb(0_0_0/0.14),inset_0_1px_2px_rgb(0_0_0/0.06),0_1px_1px_rgb(0_0_0/0.04)] dark:not-disabled:active:shadow-[0_0_0_1px_rgb(0_0_0/0.9),inset_0_0_0_1px_rgb(255_255_255/0.05),inset_0_1px_0_rgb(255_255_255/0.08),0_0_1px_rgb(0_0_0/0.2),0_1px_3px_-2px_rgb(0_0_0/0.3)] motion-reduce:not-disabled:active:scale-100",
   "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
 );
 
@@ -37,7 +37,7 @@ const MinimalButton = React.forwardRef<HTMLButtonElement, MinimalButtonProps>(
           strokeWidth="1.75"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="size-3.5 text-neutral-50/45 transition-[translate,color] duration-150 motion-reduce:transition-none group-hover/minimal:translate-x-0.5 group-hover/minimal:text-neutral-50/75"
+          className="size-3.5 text-foreground/55 dark:text-neutral-50/45 transition-[translate,color] duration-150 motion-reduce:transition-none group-hover/minimal:translate-x-0.5 group-hover/minimal:text-foreground/80 dark:group-hover/minimal:text-neutral-50/75"
         >
           <path d="m6 4 4 4-4 4" />
         </svg>

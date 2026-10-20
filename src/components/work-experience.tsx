@@ -177,8 +177,8 @@ export function ExperiencePositionItem({
               <div
                 className={cn(
                   "flex size-6 shrink-0 items-center justify-center rounded-lg",
-                  "bg-neutral-50/10 text-neutral-50/70",
-                  "border border-white/15 ring-1 ring-white/10 ring-offset-1 ring-offset-transparent",
+                  "bg-foreground/5 text-foreground/70 dark:bg-neutral-50/10 dark:text-neutral-50/70",
+                  "border border-black/10 dark:border-white/15 ring-1 ring-black/5 dark:ring-white/10 ring-offset-1 ring-offset-transparent",
                   "[&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
                 )}
               >
@@ -188,16 +188,16 @@ export function ExperiencePositionItem({
                 )}
               </div>
 
-              <h4 className="flex-1 font-medium text-balance text-neutral-50">
+              <h4 className="flex-1 font-medium text-balance text-foreground dark:text-neutral-50">
                 {position.title}
               </h4>
 
-              <div className="shrink-0 text-neutral-50/70 group-disabled/experience-position:hidden [&_svg]:h-lh [&_svg]:w-4">
+              <div className="shrink-0 text-foreground/70 dark:text-neutral-50/70 group-disabled/experience-position:hidden [&_svg]:h-lh [&_svg]:w-4">
                 <ChevronsUpDownIcon ref={chevronsUpDownIconRef} duration={0.15} />
               </div>
             </div>
 
-            <dl className="relative z-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 pl-9 text-sm text-neutral-50/70">
+            <dl className="relative z-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 pl-9 text-sm text-foreground/70 dark:text-neutral-50/70">
               {position.employmentType && (
                 <>
                   <div>
