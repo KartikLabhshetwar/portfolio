@@ -171,7 +171,7 @@ const commandItems = [
     </script>
   </head>
   <body class="min-h-screen bg-background text-foreground">
-    <main class:list={["mx-auto flex min-h-svh w-full grow flex-col px-5 pt-8 pb-32 sm:px-4 sm:pt-16", wide ? "max-w-2xl" : "max-w-lg", { 'justify-center': pathname === '/' }]}>
+    <main class:list={["mx-auto flex min-h-svh w-full grow flex-col justify-center px-5 pt-8 pb-32 sm:px-4 sm:pt-16", wide ? "max-w-2xl" : "max-w-lg"]}>
       {toc && <div class="fixed top-1/2 right-2 z-40 hidden -translate-y-1/2 xl:block">
         <!-- client:idle, not client:visible: the island renders empty until headings load,
              so a visibility trigger would never fire (zero-size element never intersects). -->
