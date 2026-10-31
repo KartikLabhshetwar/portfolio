@@ -6,14 +6,14 @@ export const experience: ExperienceItemType[] = [
     companyName: 'Mem0',
     companyLogo: '/logos/mem0.png',
     companyWebsite: 'https://mem0.ai',
-    isCurrentEmployer: true,
+    isCurrentEmployer: false,
     positions: [
       {
         id: 'mem0-mts',
         title: 'Member of Technical Staff',
-        summary: 'I build SDKs and editor integrations, improve memory search, and harden the self-hosted server.',
+        summary: 'I built SDKs and editor integrations, improved memory search, and hardened the self-hosted server.',
         employmentType: 'Full-time',
-        employmentPeriod: { start: '04.2026' },
+        employmentPeriod: { start: '04.2026', end: '10.2026' },
         description: `- Merged 83 PRs (+55K/−21K lines across 656 files), spanning the Python & TypeScript SDKs, vector stores, self-hosted server, editor plugins, CLI, and docs.
 - Patched a critical Remote Code Execution vulnerability (unsafe pickle deserialization) in the FAISS vector store, closing a long-open security issue.
 - Hardened the self-hosted server: enforced admin-role auth on /configure and /reset (403 for non-admins), upgraded to PostgreSQL 17 + pgvector 0.8.2, and shipped a migration guide.

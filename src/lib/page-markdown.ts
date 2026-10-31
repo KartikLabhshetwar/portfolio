@@ -140,8 +140,8 @@ ${otherPosts.length ? `## Keep reading\n\n${otherPosts.map((entry) => postLine(s
 }
 
 function aboutPage(site: MarkdownSite): string {
-  const current = site.experience[0];
-  const title = current?.positions[0]?.title ?? site.profile.role;
+  const latest = site.experience[0];
+  const title = latest?.positions[0]?.title ?? site.profile.role;
   const featured = site.projects.filter((project) => ['bettershot', 'screenshot-studio', 'lazycommit'].includes(project.id));
   return `# About
 
@@ -149,7 +149,7 @@ I'm ${site.profile.name}, a software engineer based in ${site.profile.location}.
 
 ## What I work on
 
-I'm a ${title} at ${current?.companyName ?? 'Mem0'}, building memory infrastructure for AI agents. My work spans SDKs, retrieval, editor integrations, and the self-hosted server. [See my experience](${site.base}/experience).
+Most recently I was a ${title} at ${latest?.companyName ?? 'Mem0'}, building memory infrastructure for AI agents. My work spanned SDKs, retrieval, editor integrations, and the self-hosted server. [See my experience](${site.base}/experience).
 
 ## What I've built
 
